@@ -6,11 +6,8 @@ var Cache = require('./cache');
 var CACHE = new Cache();
 // var session = require('express-session');
 
-//This is just used for test, we will replace it with Redis or mongo
-GLOBAL_CACHE = {};
-
-router.use(function(req, res, next){
-    
+//This will be matched first.
+router.use(function(req, res, next){    
     //input check
     console.log(req.method);
     if(req.method == 'POST'){
@@ -44,6 +41,12 @@ router.post('/', function(req, res, next) {
 
 });
 
+//Each route can have a err handler.
+//FIXME: need to find a way to make error auto handled.
+//Maybe we can add this:
+//router.use(function(err, req, res, next){
+// DO MAGIC
+//})
 router.get('/:id', function(req, res, next){
     
     id = req.params.id;
@@ -58,10 +61,13 @@ router.get('/:id', function(req, res, next){
             req["state"] = CACHE.restore(req.params.id);
         }else{
             console.log("can't restore a session");
+            //Jump to error handle.
             next(new Error());
         }
     }
-    
+    //Jump to next handle.
+    //next('route') used to jump out this route, all the following handler
+    //will be ignored.
     next();
 }, function(req, res, next) {
     console.log(req.params.id);
