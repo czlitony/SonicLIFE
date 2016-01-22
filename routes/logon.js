@@ -77,7 +77,7 @@ router.get('/:id', function(req, res, next){
     var err = new Error('Not Found');
     err.status = 404;
     console.error(err.stack);
-    res.status(err.status).send('Something broke!');
+    res.status(err.status).send('Wrong session_id');
 })
 
 router.delete('/:id', function(req, res, next){
