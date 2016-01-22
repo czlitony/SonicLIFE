@@ -10,6 +10,12 @@ var CACHE = new Cache();
 //This will be matched first.
 router.use(function(req, res, next){    
     //input check
+    if(!req.is('application/json')){
+        var err = new Error('expect a json format');
+        err.status = 401;
+        next(err);
+    }
+
     console.log(req.method);
     if(req.method == 'POST'){
         console.log("Check request body");
@@ -28,7 +34,7 @@ router.use(function(req, res, next){
     next();
 }, function(err, req, res, next){
     // console.error(err.stack);
-    res.status(err.status).send(err.message);
+    res.status(err.status).json({'message' : err.message});
 });
 
 router.post('/', function(req, res, next) {
@@ -75,10 +81,10 @@ router.get('/:id', function(req, res, next){
     res.send(req['state']);
 
 }, function(err, req, res, next) {
-    var err = new Error('Not Found');
+    var err = new Error('Wrong session_id');
     err.status = 404;
-    console.error(err.stack);
-    res.status(err.status).send('Wrong session_id');
+    // console.error(err.stack);
+    res.status(err.status).json({'message' : err.message});
 })
 
 router.delete('/:id', function(req, res, next){
@@ -90,19 +96,83 @@ router.delete('/:id', function(req, res, next){
     }else{
         throw new Error("id is null");
     }
-    res.send("success");
+    res.json({'status':true});
 
 }, function(err, req, res, next) {
-    var err = new Error('Not Found');
+    var err = new Error('session id not existed.');
     err.status = 404;
     console.error(err.stack);
-    res.status(err.status).send('session id not existed.');
+    res.status(err.status).json({'message' : err.message});
 })
 
 router.post('/register', function(req, res, next){
     body = req.body;
-    db.insert('user', body);
-    res.status(200).send();
+    if(!check_register_request(req, ['username', 'password'])){
+        var err = new Error('Unexpected input');
+        console.log('Unexpected input')
+        err.status = 401;
+        next(err);
+    }
+
+    result = db.find('user', { 'username' : body['username']});
+    result.toArray(function(err, documents){
+        if(err){
+            console.log(err.message)
+            next(err);
+        }
+        if(documents.length == 0){
+            db.insert('user', body);
+
+            res.status(200).json();
+        }else{
+            res.status(400).json({'message':'user existed.'});
+        }
+    })
+
+
+},function(err, req, res, next){
+    // res.status(err.status).json({'message' : err.message});
+    // res.status(err.status).send("Error");
+    res.send(err.message);
 })
 
+function check_register_request(req, target_list){
+    console.log(Object.keys(req.body));
+    for(itr in Object.keys(req.body)){
+        console.log(itr);
+        if(!target_list.includes(itr)){
+            return false;
+        }
+    }
+    return true;
+}
+
+if (!Array.prototype.includes) {
+  Array.prototype.includes = function(searchElement /*, fromIndex*/ ) {
+    'use strict';
+    var O = Object(this);
+    var len = parseInt(O.length) || 0;
+    if (len === 0) {
+      return false;
+    }
+    var n = parseInt(arguments[1]) || 0;
+    var k;
+    if (n >= 0) {
+      k = n;
+    } else {
+      k = len + n;
+      if (k < 0) {k = 0;}
+    }
+    var currentElement;
+    while (k < len) {
+      currentElement = O[k];
+      if (searchElement === currentElement ||
+         (searchElement !== searchElement && currentElement !== currentElement)) { // NaN !== NaN
+        return true;
+      }
+      k++;
+    }
+    return false;
+  };
+}
 module.exports = router;

@@ -36,6 +36,10 @@ DataBase.prototype.close = function(){
     this.db.close();
 }
 
+DataBase.prototype.find = function(collection, target){
+    return this.db.collection(collection).find(target);
+}
+
 var dataBase = new DataBase();
 
 module.exports = dataBase;
