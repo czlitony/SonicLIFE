@@ -14,6 +14,25 @@ Cache.prototype.restore = function(key) {
     }
 }
 
+Cache.prototype.hasUser = function(username){
+    key = Object.keys(this.cache);
+    var found = false;
+    var ptr = null;
+    key.forEach(function(item){
+        if(this.cache[item]['username'] == username){
+            found = true;
+            ptr = item;
+            return;
+        }
+    }.bind(this));
+
+    if(found){
+        return ptr;
+    }
+
+    return null;
+}
+
 Cache.prototype.delete = function(key) {
     // body...
     delete this.cache[key];
