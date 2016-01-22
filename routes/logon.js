@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var uuid = require('node-uuid');  
 var Cache = require('./cache');
+var db = require('./db');
 
 var CACHE = new Cache();
 // var session = require('express-session');
@@ -96,6 +97,12 @@ router.delete('/:id', function(req, res, next){
     err.status = 404;
     console.error(err.stack);
     res.status(err.status).send('session id not existed.');
+})
+
+router.post('/register', function(req, res, next){
+    body = req.body;
+    db.insert('user', body);
+    res.status(200).send();
 })
 
 module.exports = router;
