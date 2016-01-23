@@ -14,9 +14,11 @@ log4js.configure({
             category: 'dateFileLog'  
         }//日期文件格式  
     ],  
+    
     replaceConsole: true,   //替换console.log  
+    
     levels:{  
-        dateFileLog: 'INFO'  
+        dateFileLog: 'DEBUG'  
     }  
 });  
   

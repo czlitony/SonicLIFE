@@ -5,6 +5,7 @@ var Cache = require('./cache');
 var db = require('./db');
 var logger = require('./log').logger;  
 
+var check_request_content = require('./util').check_request_content;
 const crypto = require('crypto');
 
 var CACHE = new Cache();
@@ -13,8 +14,8 @@ var CACHE = new Cache();
 //This will be matched first.
 router.use(function(req, res, next){    
     //input check
-    logger.info('pre check');
-    if(!req.is('application/json')){
+    logger.debug('pre check');
+    if( req.body == null && !req.is('application/json')){
         var err = new Error('expect a json format');
         err.status = 401;
         next(err);
@@ -22,11 +23,11 @@ router.use(function(req, res, next){
         return;
     }
 
-    console.log(req.method);
+    logger.debug(req.method);
     if(req.method == 'POST'){
-        console.log("Check request body");
+        logger.debug("Check request body");
         if(req.body.hasOwnProperty('username') && req.body.hasOwnProperty('password')){
-            console.log('input match');
+            logger.debug('input match');
         }else{
             var err = new Error('Unexpected input');
             err.status = 403;
@@ -34,23 +35,20 @@ router.use(function(req, res, next){
             return;
         }
     }else if(req.method == 'GET'){
-        console.log("get a GET request");
+        logger.debug("get a GET request");
     }else if(req.method == 'DELETE'){
-        console.log("get a DELETE request");
+        logger.debug("get a DELETE request");
     }
     next();
-}, function(err, req, res, next){
-    // console.error(err.stack);
-    res.status(err.status).json({'message' : err.message});
 });
 
 router.post('/', function(req, res, next) {
 
     body = req.body;
 
-    if(!check_register_request(req, ['username', 'password'])){
+    if(!check_request_content(req, ['username', 'password'])){
         var err = new Error('Unexpected input');
-        console.log('Unexpected input')
+        logger.error('Unexpected input')
         err.status = 401;
         next(err);
         return;
@@ -60,13 +58,13 @@ router.post('/', function(req, res, next) {
     result.toArray(function(err, documents){
         
         if(err){
-            console.log(err.message);
+            logger.error(err.message);
             next(err);
             return;
         }
 
         if(documents.length == 1){
-            console.log(documents[0]);
+            logger.info('User found: ' + documents[0]);
             salt = documents[0]['salt'];
             record = {};
             var hash = crypto.createHash('sha256');
@@ -82,9 +80,13 @@ router.post('/', function(req, res, next) {
                         'session_id' : uuid.v1()
                     };
 
-                    CACHE.save(result['session_id'], {'state': true, 'username': documents[0]['username']});
+                    CACHE.save(result['session_id'], {'state': true, 
+                                                      'username': documents[0]['username'],
+                                                      'role' : documents[0]['role']
+                                                  });
                     CACHE.dump();
                 }
+                logger.info('user '+ body['username'] +' created');
                 res.json(result);
             }else{
                 res.status(400).json({'message' : 'wrong password'});
@@ -102,65 +104,25 @@ router.post('/', function(req, res, next) {
 //router.use(function(err, req, res, next){
 // DO MAGIC
 //})
-router.get('/:id', function(req, res, next){
-    
-    id = req.params.id;
-
-    if(id === undefined){
-        console.log('create a new session');
-        
-    }else{
-        console.log('restore my session');
-        console.log(req.params.id);
-        if (CACHE.restore(req.params.id)){
-            req["state"] = CACHE.restore(req.params.id);
-        }else{
-            console.log("can't restore a session");
-            //Jump to error handle.
-            next(new Error());
-        }
-    }
-    //Jump to next handle.
-    //next('route') used to jump out this route, all the following handler
-    //will be ignored.
-    next();
-}, function(req, res, next) {
-    console.log(req.params.id);
+router.get('/:id', check_session_id, function(req, res, next) {
+    logger.debug(req.params.id);
     res.send(req['state']);
+});
 
-}, function(err, req, res, next) {
-    var err = new Error('Wrong session_id');
-    err.status = 404;
-    // console.error(err.stack);
-    res.status(err.status).json({'message' : err.message});
-})
+router.delete('/:id', check_session_id, function(req, res, next){
 
-router.delete('/:id', function(req, res, next){
-    id = req.params.id;
-
-    if(id && CACHE.hasKey(id)){
-        CACHE.delete(id);
-        CACHE.dump();
-    }else{
-        // throw new Error("id is null");
-        next(new Error("id is null"));
-        return;
-    }
+    id = req.params.id;;
+    CACHE.delete(id);
+    CACHE.dump();
     res.json({'status':true});
-
-}, function(err, req, res, next) {
-    var err = new Error('session id not existed.');
-    err.status = 404;
-    console.error(err.stack);
-    res.status(err.status).json({'message' : err.message});
-})
+});
 
 router.post('/register', function(req, res, next){
     
     body = req.body;
-    if(!check_register_request(req, ['username', 'password'])){
+    if(!check_request_content(req, ['username', 'password'])){
         var err = new Error('Unexpected input');
-        console.log('Unexpected input')
+        logger.error('Unexpected input');
         err.status = 401;
         next(err);
         return;
@@ -170,7 +132,7 @@ router.post('/register', function(req, res, next){
     result.toArray(function(err, documents){
         
         if(err){
-            console.log(err.message);
+            logger.error(err.message);
             next(err);
             return;
         }
@@ -186,56 +148,50 @@ router.post('/register', function(req, res, next){
             record['salt'] = salt;
             record['role'] = 'user';
 
-            db.insert('user', record);
-            res.status(200).json();
+            var promise_result = db.insert('user', record);
+            promise_result.then(function(err, result){
+                console.log(err);
+                console.log(result);
+                res.status(200).json();
+            });
+            
         }else{
             res.status(400).json({'message':'user existed.'});
         }
     })
 
-},function(err, req, res, next){
-    res.status(err.status).json({'message' : err.message});
-})
+});
 
-function check_register_request(req, target_list){
-    console.log(Object.keys(req.body));
-    l = Object.keys(req.body)
-    for(var i=0; i< l.length; i++){
-        // console.log(itr);
-        if(!target_list.includes(l[i])){
-            return false;
+router.use(function(err, req, res, next){
+    logger.error(err);
+    res.status(err.status).json({'message' : err.message});
+});
+
+function check_session_id(req, res, next){
+    id = req.params.id;
+
+    if(id === undefined){
+        logger.error('no session_id');
+        
+    }else{
+        logger.debug('restore my session');
+        logger.debug(req.params.id);
+        if (CACHE.restore(req.params.id)){
+            //JUST FOR FUN FIXME.
+            req["state"] = CACHE.restore(req.params.id);
+        }else{
+            logger.error("can't restore a session");
+            //Jump to error handle.
+            var err = new Error('Wrong session_id');
+            err.status = 400;
+            next(err);
+            return;
         }
     }
-    return true;
-}
-
-if (!Array.prototype.includes) {
-  Array.prototype.includes = function(searchElement /*, fromIndex*/ ) {
-    'use strict';
-    var O = Object(this);
-    var len = parseInt(O.length) || 0;
-    if (len === 0) {
-      return false;
-    }
-    var n = parseInt(arguments[1]) || 0;
-    var k;
-    if (n >= 0) {
-      k = n;
-    } else {
-      k = len + n;
-      if (k < 0) {k = 0;}
-    }
-    var currentElement;
-    while (k < len) {
-      currentElement = O[k];
-      if (searchElement === currentElement ||
-         (searchElement !== searchElement && currentElement !== currentElement)) { // NaN !== NaN
-        return true;
-      }
-      k++;
-    }
-    return false;
-  };
-}
+    //Jump to next handle.
+    //next('route') used to jump out this route, all the following handler
+    //will be ignored.
+    next();
+};
 
 module.exports = router;

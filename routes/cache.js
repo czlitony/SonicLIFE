@@ -24,8 +24,10 @@ Cache.prototype.hasUser = function(username){
             ptr = item;
             return;
         }
-    }.bind(this));
+    },this);
 
+    //This is dangerous, because if forEach callback doesn't wait, or run slower
+    //, then found will be a wrong result.
     if(found){
         return ptr;
     }

@@ -14,7 +14,7 @@ DataBase = function(){
         console.log("Connected correctly to server");
         this.db = database;
         this.db.createCollection('user');
-        this.db.createCollection('orderlist');
+        this.db.createCollection('menu');
     }.bind(this));
 }
 
@@ -22,7 +22,7 @@ DataBase.prototype.insert = function(collection, obj) {
     if(this.db === undefined){
         this.reconnect();
     }
-    this.db.collection(collection).insert(obj);
+    return this.db.collection(collection).insert(obj);
 };
 
 DataBase.prototype.reconnect = function() {
@@ -37,6 +37,9 @@ DataBase.prototype.close = function(){
 }
 
 DataBase.prototype.find = function(collection, target){
+    if(this.db === undefined){
+        this.reconnect();
+    }
     return this.db.collection(collection).find(target);
 }
 
