@@ -8,8 +8,9 @@ var logger = require('./log').logger;
 var check_input_handler = require('./util').check_input_handler;
 var check_user_session_id_handler = require('./util').check_user_session_id_handler;
 
+router.all('/:id/*', check_user_session_id_handler);
+
 router.get('/:id/menu/:vender_name', 
-    check_user_session_id_handler, 
     function(req, res, next) {
     var cursor = db.find('menu', {'vender' : req.params.vender_name});
 
@@ -25,8 +26,7 @@ router.get('/:id/menu/:vender_name',
     });
 });
 
-router.post('/:id/menu/:vender_name/:dish_name/rate', 
-    check_user_session_id_handler, 
+router.put('/:id/menu/:vender_name/:dish_name/rate', 
     check_input_handler(['rate']), 
     function(req, res, next) {
     var selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name};
@@ -61,7 +61,7 @@ router.post('/:id/menu/:vender_name/:dish_name/rate',
                         return;
                     }
                     logger.debug(update_result);
-                    res.json(update_result);
+                    res.status(200).send();
                 });
         }else{
             var error = new Error('rate not existed.')

@@ -13,16 +13,7 @@ const crypto = require('crypto');
 // var session = require('express-session');
 
 //This will be matched first.
-router.use(function(req, res, next){    
-    //input check
-    logger.debug('pre check');
-    if( req.body == null && !req.is('application/json')){
-        var err = new Error('expect a json format');
-        err.status = 401;
-        next(err);
-        // need a return here, or the program will continue.
-        return;
-    }
+router.use(function(req, res, next){
 
     logger.debug(req.method);
     if(req.method == 'POST'){
@@ -154,7 +145,7 @@ router.post('/register',
                     return;
                 }
                 logger.debug(result);
-                res.status(200).json();
+                res.status(200).send();
             });
             
         }else{

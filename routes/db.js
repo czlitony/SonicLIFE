@@ -64,6 +64,13 @@ DataBase.prototype.update = function(collection, selector, document, options){
     return this.db.collection(collection).update(selector, document, options);
 }
 
+DataBase.prototype.remove = function(collection, selector, options){
+     if(this.db === undefined){
+        this.reconnect();
+    }
+    return this.db.collection(collection).remove(selector, options);
+}
+
 var dataBase = new DataBase();
 
 module.exports = dataBase;

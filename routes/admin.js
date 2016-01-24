@@ -3,12 +3,15 @@ var router = express.Router();
 // var uuid = require('node-uuid'); 
 var CACHE = require('./cache').cache;
 var db = require('./db');
-var logger = require('./log').logger;  
+var logger = require('./log').logger; 
+var ObjectID = require('mongodb').ObjectID
 
 var check_input_handler = require('./util').check_input_handler;
 var check_admin_session_id_handler = require('./util').check_admin_session_id_handler;
 
-router.get('/:id/vender', check_admin_session_id_handler, function(req, res, next) {
+router.all('/:id/*', check_admin_session_id_handler);
+
+router.get('/:id/vender', function(req, res, next) {
 
     var promise_result = db.findDistinct('menu','vender');
     promise_result.then(function(result,err){
@@ -26,8 +29,7 @@ router.get('/:id/vender', check_admin_session_id_handler, function(req, res, nex
 });
 
 //NOTE: give anonymous functions a name is good for debug.
-router.post('/:id/menu/add', 
-    check_admin_session_id_handler, 
+router.post('/:id/menu/add',  
     check_input_handler(['vender','dish']), 
     function(req, res, next){
 
@@ -64,8 +66,26 @@ router.post('/:id/menu/add',
     });
 });
 
-router.get('/:id/menu/:vender_name', 
-    check_admin_session_id_handler, 
+router.delete('/:id/menu/:dish_id',  
+    function(req,res,next){
+    logger.debug('dish_id is ' + req.params.dish_id);
+    db.remove('menu', {'_id':ObjectID.createFromHexString(req.params.dish_id)})
+    .then(function(result, error){
+        logger.debug(result);
+        logger.debug(error);
+        if(error){
+            logger.error(error);
+            logger.debug(result);
+            error.status = 401;
+            next(error);
+            return;
+        }
+        res.status(200).send();
+    });
+
+});
+
+router.get('/:id/menu/:vender_name',  
     function(req, res, next) {
     res.redirect('/order/'+ req.params.id + '/menu/' + req.params.vender_name);
 });

@@ -57,21 +57,27 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 
 ## Order API
 
-### GET /order/<session_id>/menu/<vender>
-
-#### INPUT
+### GET /order/<session_id>/menu/<vender_name>
 
 #### OUTPUT
 
 ~~~
 [
-    {_id : id, vender: xxx, dish : yyy, rate : 5},
+    {_id : id, vender: xxx, dish : yyy, rate : {result : 4.5, times: 23}},
     ...,
     ...
 ]
 ~~~
 
+### PUT /order/<session_id>/menu/<vender_name>/<dish_name>/rate
 
+#### INPUT
+~~~
+{rate : 4}
+~~~
+
+### OUTPUT
+* status 200
 
 ## Admin API
 
@@ -81,7 +87,7 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 
 ~~~
 [
-    {_id : id, vender: xxx, dish : yyy},
+    {vender: xxx, dish : yyy},
     ...,
     ...
 ]
@@ -89,27 +95,50 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 
 #### OUTPUT
 ~~~
-[{"vender":"grew","dish":"yuxiangrous","_id":"56a45f965b13aee44a2c0c22"}]
+[{  
+    "_id":"56a48821fa521c194dd931e2",
+    "vender":"new",
+    "dish":"yuxiangrous",
+    "rate":{"result":3.125,"times":8}
+}]
 ~~~
 
 * status 200.
 
 #### ERROR
 
-### DELETE /admin/<session_id>/menu
+### DELETE /admin/<session_id>/menu/<dish_id>
 
-#### INPUT
+### OUTPUT
 
-~~~
-[
-    id1,id2,id3.....
-]
-~~~
+* status 200.
+
+### GET /admin/<session_id>/menu/<vender_name>
+redirect to `/order/<session_id>/menu/<vender_name>`
 
 ### GET /admin/<session_id>/vender
 
 #### OUTPUT
 
 ~~~
-[ vender1, vender2,.....]
+[vender1,vender2...]
+~~~
+
+### POST /admin/<session_id>/menu/add
+
+~~~
+{ vender : xxx, dish : yyy}
+~~~
+
+#### OUTPUT
+
+~~~
+[{  
+    "_id":"56a48821fa521c194dd931e2",
+    "vender":"new",
+    "dish":"yuxiangrous",
+    "rate":{"result":3.125,"times":8}
+},
+....
+]
 ~~~

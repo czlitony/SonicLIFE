@@ -32,6 +32,15 @@ if (!Array.prototype.includes) {
 }
 
 function check_request_content(req, target_list){
+
+    if( req.body !== undefined && !req.is('application/json')){
+        var err = new Error('expect a json format');
+        err.status = 401;
+        next(err);
+        // need a return here, or the program will continue.
+        return false;
+    }
+
     logger.debug(Object.keys(req.body));
     l = Object.keys(req.body)
     for(var i=0; i< l.length; i++){
