@@ -43,6 +43,27 @@ DataBase.prototype.find = function(collection, target){
     return this.db.collection(collection).find(target);
 }
 
+DataBase.prototype.findDistinct = function(collection, key, query){
+     if(this.db === undefined){
+        this.reconnect();
+    }
+    return this.db.collection(collection).distinct(key, query);
+}
+
+DataBase.prototype.findOneAndUpdate = function(collection, filter, update, option){
+     if(this.db === undefined){
+        this.reconnect();
+    }
+    return this.db.collection(collection).findOneAndUpdate(filter, update, option);
+}
+
+DataBase.prototype.update = function(collection, selector, document, options){
+     if(this.db === undefined){
+        this.reconnect();
+    }
+    return this.db.collection(collection).update(selector, document, options);
+}
+
 var dataBase = new DataBase();
 
 module.exports = dataBase;

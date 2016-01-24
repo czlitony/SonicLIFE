@@ -1,14 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var uuid = require('node-uuid');  
-var Cache = require('./cache');
+var CACHE = require('./cache').cache;
 var db = require('./db');
 var logger = require('./log').logger;  
 
-var check_request_content = require('./util').check_request_content;
+var check_input_handler = require('./util').check_input_handler;
+var check_user_session_id_handler = require('./util').check_user_session_id_handler;
 const crypto = require('crypto');
 
-var CACHE = new Cache();
+// var CACHE = new Cache();
 // var session = require('express-session');
 
 //This will be matched first.
@@ -42,23 +43,18 @@ router.use(function(req, res, next){
     next();
 });
 
-router.post('/', function(req, res, next) {
+router.post('/', 
+    check_input_handler(['username', 'password']), 
+    function(req, res, next) {
 
     body = req.body;
-
-    if(!check_request_content(req, ['username', 'password'])){
-        var err = new Error('Unexpected input');
-        logger.error('Unexpected input')
-        err.status = 401;
-        next(err);
-        return;
-    }
 
     result = db.find('user', { 'username' : body['username']});
     result.toArray(function(err, documents){
         
         if(err){
             logger.error(err.message);
+            err.status = 401;
             next(err);
             return;
         }
@@ -104,12 +100,17 @@ router.post('/', function(req, res, next) {
 //router.use(function(err, req, res, next){
 // DO MAGIC
 //})
-router.get('/:id', check_session_id, function(req, res, next) {
+router.get('/:id', 
+    check_user_session_id_handler, 
+    function(req, res, next) {
+    
     logger.debug(req.params.id);
     res.send(req['state']);
 });
 
-router.delete('/:id', check_session_id, function(req, res, next){
+router.delete('/:id', 
+    check_user_session_id_handler, 
+    function(req, res, next){
 
     id = req.params.id;;
     CACHE.delete(id);
@@ -117,16 +118,11 @@ router.delete('/:id', check_session_id, function(req, res, next){
     res.json({'status':true});
 });
 
-router.post('/register', function(req, res, next){
+router.post('/register', 
+    check_input_handler(['username', 'password']), 
+    function(req, res, next){
     
     body = req.body;
-    if(!check_request_content(req, ['username', 'password'])){
-        var err = new Error('Unexpected input');
-        logger.error('Unexpected input');
-        err.status = 401;
-        next(err);
-        return;
-    }
 
     result = db.find('user', { 'username' : body['username']});
     result.toArray(function(err, documents){
@@ -149,9 +145,15 @@ router.post('/register', function(req, res, next){
             record['role'] = 'user';
 
             var promise_result = db.insert('user', record);
-            promise_result.then(function(err, result){
-                console.log(err);
-                console.log(result);
+            promise_result.then(function(result, err){
+                if(err){
+                    logger.error(err);
+                    logger.debug(result);
+                    err.status = 401;
+                    next(err);
+                    return;
+                }
+                logger.debug(result);
                 res.status(200).json();
             });
             
@@ -166,32 +168,5 @@ router.use(function(err, req, res, next){
     logger.error(err);
     res.status(err.status).json({'message' : err.message});
 });
-
-function check_session_id(req, res, next){
-    id = req.params.id;
-
-    if(id === undefined){
-        logger.error('no session_id');
-        
-    }else{
-        logger.debug('restore my session');
-        logger.debug(req.params.id);
-        if (CACHE.restore(req.params.id)){
-            //JUST FOR FUN FIXME.
-            req["state"] = CACHE.restore(req.params.id);
-        }else{
-            logger.error("can't restore a session");
-            //Jump to error handle.
-            var err = new Error('Wrong session_id');
-            err.status = 400;
-            next(err);
-            return;
-        }
-    }
-    //Jump to next handle.
-    //next('route') used to jump out this route, all the following handler
-    //will be ignored.
-    next();
-};
 
 module.exports = router;

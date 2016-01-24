@@ -75,7 +75,7 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 
 ## Admin API
 
-### POST /admin/<session_id>/menu/<vender>
+### POST /admin/<session_id>/menu/add
 
 #### INPUT
 
@@ -88,6 +88,9 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 ~~~
 
 #### OUTPUT
+~~~
+[{"vender":"grew","dish":"yuxiangrous","_id":"56a45f965b13aee44a2c0c22"}]
+~~~
 
 * status 200.
 

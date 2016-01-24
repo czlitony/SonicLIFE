@@ -49,4 +49,6 @@ Cache.prototype.hasKey = function(key) {
     return this.cache.hasOwnProperty(key);
 }
 
-module.exports = Cache;
+//Singleton
+var cache = new Cache();
+module.exports.cache = cache;
