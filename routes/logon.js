@@ -96,7 +96,7 @@ router.get('/:id',
     function(req, res, next) {
     
     logger.debug(req.params.id);
-    res.send(req['state']);
+    res.json(req['state']);
 });
 
 router.delete('/:id', 

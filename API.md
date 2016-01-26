@@ -58,7 +58,7 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 ## Order API
 
 ### GET /order/<session_id>/menu/<vender_name>
-
+NO SESSION
 #### OUTPUT
 
 ~~~
