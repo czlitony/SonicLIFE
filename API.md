@@ -1,6 +1,6 @@
 ## Logon API
 
-### POST /logon
+### POST /__api__/logon
 
 #### INPUT
 
@@ -29,7 +29,7 @@ if user has already logon, it will return the same session_id.
 curl -X POST -H "content-type: application/json" http://localhost:3000/logon -d '{"username":"ab", "password":"cd"}'
 ~~~
 
-### DELETE /logon/<sessiond_id>
+### DELETE /__api__/logon/<sessiond_id>
 
 ~~~
 curl -X DELETE http://localhost:3000/logon/<session-id>
@@ -41,7 +41,7 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 
 #### ERROR
 
-### POST /logon/register
+### POST /__api__/logon/register
 #### INPUT
 ~~~
 {
@@ -55,9 +55,9 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 
 #### ERROR
 
-## Order API
+## Menu API
 
-### GET /order/<session_id>/menu/<vender_name>
+### GET /__api__/menu/<session_id>/<vender_name>
 NO SESSION
 #### OUTPUT
 
@@ -69,7 +69,7 @@ NO SESSION
 ]
 ~~~
 
-### PUT /order/<session_id>/menu/<vender_name>/<dish_name>/rate
+### PUT /__api__/menu/<session_id>/<vender_name>/<dish_name>/rate
 
 #### INPUT
 ~~~
@@ -78,6 +78,7 @@ NO SESSION
 
 ### OUTPUT
 * status 200
+
 
 ## Admin API
 

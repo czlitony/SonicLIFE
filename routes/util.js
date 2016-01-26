@@ -31,13 +31,16 @@ if (!Array.prototype.includes) {
   };
 }
 
-function check_request_content(req, target_list){
+function check_request_content(req, target_list, strict){
+
+    if(strict && target_list.length !== Object.keys(req.body).length){
+        req['error_reason'] = "input parameters length not match";
+        return false;
+    }
 
     if( req.body !== undefined && !req.is('application/json')){
-        var err = new Error('expect a json format');
-        err.status = 401;
-        next(err);
         // need a return here, or the program will continue.
+        req['error_reason'] = "input parameters must be json";
         return false;
     }
 
@@ -53,13 +56,13 @@ function check_request_content(req, target_list){
     return true;
 }
 
-function check_input_handler(target){
+function check_input_handler(target, strict){
     return function (req, res, next){
         body = req.body;
 
-        if(!check_request_content(req, target)){
-            var err = new Error('Unexpected input');
-            logger.error('Unexpected input')
+        if(!check_request_content(req, target, strict)){
+            logger.error('Error :' + req['error_reason']);
+            var err = new Error(req['error_reason']);
             err.status = 401;
             next(err);
             return;

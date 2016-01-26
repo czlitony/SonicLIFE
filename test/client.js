@@ -1,4 +1,4 @@
-var https = require('https');
+var http = require('http');
 var EventEmitter = require('events');
 var test = require('unit.js');
 
@@ -29,7 +29,7 @@ APITester.prototype.invoke = function(path, method, data, done){
     }
     
 
-    var req = https.request(options, function(response)
+    var req = http.request(options, function(response)
     {
         var response_data = '';
 
@@ -110,7 +110,7 @@ APITester.prototype._test_template = function (api, api_list){
             var url = api_list[TEST_URI];
 
             if(api_list[TEST_URI] instanceof Array){
-                url = api_list[TEST_URI][0].location + api_list[TEST_URI][1];
+                url = api_list[TEST_URI][0] + api_list[TEST_URI][1].session_id + api_list[TEST_URI][2];
             }
 
             api.invoke(url, api_list[TEST_METHOD], api_list[TEST_BODY_DATA], done);
@@ -124,7 +124,8 @@ APITester.prototype._test_template = function (api, api_list){
 
         it("Check content type", function(){
             test.should(api.result.ctype).be.a.String;
-            test.should(api.result.ctype).be.equal('application/json');
+            // test.should(api.result.ctype).be.equal('application/json');
+            test.should(api.result.ctype).be.equal('application/json; charset=utf-8');
             test.should(api.result.data).be.json;
         });
 

@@ -5,12 +5,12 @@ var CACHE = require('./cache').cache;
 var db = require('./db');
 var logger = require('./log').logger;  
 
-var check_input_handler = require('./util').check_input_handler;
-var check_user_session_id_handler = require('./util').check_user_session_id_handler;
+var check_input_handler = require('./util').check_input_handler,
+    check_user_session_id_handler = require('./util').check_user_session_id_handler;
 
-router.all('/:id/*', check_user_session_id_handler);
+router.param('id', check_user_session_id_handler);
 
-router.get('/:id/menu/:vender_name', 
+router.get('/:id/:vender_name', 
     function(req, res, next) {
     var cursor = db.find('menu', {'vender' : req.params.vender_name});
 
@@ -21,14 +21,30 @@ router.get('/:id/menu/:vender_name',
             next(error);
             return;
         }
-        logger.debug(docments);
+        logger.debug(req.originalUrl + ' ' + docments);
         res.json(docments);
     });
 });
 
-router.put('/:id/menu/:vender_name/:dish_name/rate', 
-    check_input_handler(['rate']), 
-    function(req, res, next) {
+router.get('/:id/:vender_name/:dish_name', function(req, res, next) {
+
+    var selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name},
+        cursor = db.find('menu', selector);
+
+    cursor.toArray(function(error, docments){
+        if(error){
+            logger.error(error.message);
+            error.status = 401;
+            next(error);
+            return;
+        }
+        logger.debug(req.originalUrl + ' ' + docments);
+        res.json(docments);
+    });
+});
+
+router.put('/:id/:vender_name/:dish_name/rate', check_input_handler(['rate'], true), function(req, res, next) {
+    
     var selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name};
     var cursor = db.find('menu', selector);
 
@@ -48,11 +64,10 @@ router.put('/:id/menu/:vender_name/:dish_name/rate',
         var times = result[0]['rate']['times'];
         var old_rate = result[0]['rate']['result'];
         var new_rate;
-        if(req.body['rate'] !== undefined){
+        if(req.body['rate'] !== undefined && typeof req.body['rate'] === 'number'){
             new_rate = (times*old_rate + req.body['rate'])/(times+1);
             logger.debug('new rate is ' + new_rate);
-            db.update('menu', selector, 
-                    {'$set': {'rate':{'result':new_rate, 'times': (times+1)}}}, {})
+            db.update('menu', selector, {'$set': {'rate':{'result':new_rate, 'times': (times+1)}}}, {})
                 .then(function(update_result, error){
                     if(error){
                         logger.error(error.message);
@@ -64,7 +79,7 @@ router.put('/:id/menu/:vender_name/:dish_name/rate',
                     res.status(200).send();
                 });
         }else{
-            var error = new Error('rate not existed.')
+            var error = new Error('rate not existed, or a wrong type.')
             logger.error(error.message);
             error.status = 401;
             next(error);

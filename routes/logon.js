@@ -13,30 +13,28 @@ const crypto = require('crypto');
 // var session = require('express-session');
 
 //This will be matched first.
-router.use(function(req, res, next){
+// router.use(function(req, res, next){
 
-    logger.debug(req.method);
-    if(req.method == 'POST'){
-        logger.debug("Check request body");
-        if(req.body.hasOwnProperty('username') && req.body.hasOwnProperty('password')){
-            logger.debug('input match');
-        }else{
-            var err = new Error('Unexpected input');
-            err.status = 403;
-            next(err);
-            return;
-        }
-    }else if(req.method == 'GET'){
-        logger.debug("get a GET request");
-    }else if(req.method == 'DELETE'){
-        logger.debug("get a DELETE request");
-    }
-    next();
-});
+//     logger.debug(req.method);
+//     if(req.method == 'POST'){
+//         logger.debug("Check request body");
+//         if(req.body.hasOwnProperty('username') && req.body.hasOwnProperty('password')){
+//             logger.debug('input match');
+//         }else{
+//             var err = new Error('Unexpected input');
+//             err.status = 403;
+//             next(err);
+//             return;
+//         }
+//     }else if(req.method == 'GET'){
+//         logger.debug("get a GET request");
+//     }else if(req.method == 'DELETE'){
+//         logger.debug("get a DELETE request");
+//     }
+//     next();
+// });
 
-router.post('/', 
-    check_input_handler(['username', 'password']), 
-    function(req, res, next) {
+router.post('/', check_input_handler(['username', 'password'], true), function(req, res, next) {
 
     body = req.body;
 
@@ -91,17 +89,13 @@ router.post('/',
 //router.use(function(err, req, res, next){
 // DO MAGIC
 //})
-router.get('/:id', 
-    check_user_session_id_handler, 
-    function(req, res, next) {
+router.get('/:id', check_user_session_id_handler, function(req, res, next) {
     
     logger.debug(req.params.id);
     res.json(req['state']);
 });
 
-router.delete('/:id', 
-    check_user_session_id_handler, 
-    function(req, res, next){
+router.delete('/:id', check_user_session_id_handler, function(req, res, next){
 
     id = req.params.id;;
     CACHE.delete(id);
@@ -109,9 +103,7 @@ router.delete('/:id',
     res.json({'status':true});
 });
 
-router.post('/register', 
-    check_input_handler(['username', 'password']), 
-    function(req, res, next){
+router.post('/register', check_input_handler(['username', 'password'], true), function(req, res, next){
     
     body = req.body;
 
@@ -145,7 +137,7 @@ router.post('/register',
                     return;
                 }
                 logger.debug(result);
-                res.status(200).send();
+                res.sendStatus(200);
             });
             
         }else{
