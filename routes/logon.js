@@ -137,7 +137,7 @@ router.post('/register', check_input_handler(['username', 'password'], true), fu
                     return;
                 }
                 logger.debug(result);
-                res.sendStatus(200);
+                res.status(200).json({'status':true});
             });
             
         }else{
