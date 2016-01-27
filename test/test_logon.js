@@ -18,8 +18,8 @@ var targets = new Set();
 var username = "user2",
     password = "password";
 
-targets.add(["logon", "/__api__/logon/register", "POST", {'username':username, "password":password}, undefined]);
+targets.add(["register", "/__api__/logon/register", "POST", {'username':username, "password":password}, undefined]);
 targets.add(["logon", "/__api__/logon", "POST", {'username':username, "password":password}, check_logon_resp]);
-targets.add(["logon", ["/__api__/logon/", api.logonID, ""], "DELETE", undefined, undefined]);
+targets.add(["logout", ["/__api__/logon/", api.logonID, ""], "DELETE", undefined, undefined]);
 
 api.test_all(targets);
