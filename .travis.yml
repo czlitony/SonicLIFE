@@ -14,3 +14,4 @@ services:
 before_script:
   - sleep 15
   - mongo sonicwall --eval 'db.user.remove();'
+  - npm start
