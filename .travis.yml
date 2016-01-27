@@ -7,11 +7,11 @@ install:
 
 services:
   - mongodb
-  - npm start
 
 before_script:
   - sleep 15
   - mongo sonicwall --eval 'db.user.remove();'
+  - npm start&
   - sleep 5
 
 script:
