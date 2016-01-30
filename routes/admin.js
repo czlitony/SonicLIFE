@@ -6,10 +6,10 @@ var db = require('./db');
 var logger = require('./log').logger; 
 var ObjectID = require('mongodb').ObjectID
 
-var check_input_handler = require('./util').check_input_handler;
-var check_admin_session_id_handler = require('./util').check_admin_session_id_handler;
+var checkInputHandler = require('./util').checkInputHandler;
+var checkAdminSessionIdHandler = require('./util').checkAdminSessionIdHandler;
 
-router.param('id', check_admin_session_id_handler);
+router.param('id', checkAdminSessionIdHandler);
 
 router.get('/:id/vender', function(req, res, next) {
 
@@ -29,7 +29,7 @@ router.get('/:id/vender', function(req, res, next) {
 });
 
 //NOTE: give anonymous functions a name is good for debug.
-router.post('/:id/menu/add', check_input_handler(['vender','dish'], true), function(req, res, next){
+router.post('/:id/menu/add', checkInputHandler(['vender','dish'], true), function(req, res, next){
 
     body = req.body;
     var data = {};

@@ -31,7 +31,7 @@ if (!Array.prototype.includes) {
   };
 }
 
-function check_request_content(req, target_list, strict){
+function checkRequestContent(req, target_list, strict){
 
     if(strict && target_list.length !== Object.keys(req.body).length){
         req['error_reason'] = "input parameters length not match";
@@ -56,11 +56,11 @@ function check_request_content(req, target_list, strict){
     return true;
 }
 
-function check_input_handler(target, strict){
+function checkInputHandler(target, strict){
     return function (req, res, next){
         body = req.body;
 
-        if(!check_request_content(req, target, strict)){
+        if(!checkRequestContent(req, target, strict)){
             logger.error('Error :' + req['error_reason']);
             var err = new Error(req['error_reason']);
             err.status = 401;
@@ -71,7 +71,7 @@ function check_input_handler(target, strict){
     }
 }
 
-function check_user_session_id_handler(req, res, next){
+function checkUserSessionIdHandler(req, res, next){
     id = req.params.id;
 
     if(id === undefined){
@@ -103,7 +103,7 @@ function check_user_session_id_handler(req, res, next){
     next();
 };
 
-function check_admin_session_id_handler(req, res, next){
+function checkAdminSessionIdHandler(req, res, next){
     logger.debug('restore my session');
     logger.debug(req.params.id);
     if (CACHE.restore(req.params.id)){
@@ -125,6 +125,6 @@ function check_admin_session_id_handler(req, res, next){
     next();
 };
 
-module.exports.check_input_handler = check_input_handler;
-module.exports.check_user_session_id_handler = check_user_session_id_handler;
-module.exports.check_admin_session_id_handler = check_admin_session_id_handler;
+module.exports.checkInputHandler = checkInputHandler;
+module.exports.checkUserSessionIdHandler = checkUserSessionIdHandler;
+module.exports.checkAdminSessionIdHandler = checkAdminSessionIdHandler;

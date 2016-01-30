@@ -5,36 +5,12 @@ var CACHE = require('./cache').cache;
 var db = require('./db');
 var logger = require('./log').logger;  
 
-var check_input_handler = require('./util').check_input_handler;
-var check_user_session_id_handler = require('./util').check_user_session_id_handler;
+var checkInputHandler = require('./util').checkInputHandler;
+var checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
 const crypto = require('crypto');
 
-// var CACHE = new Cache();
-// var session = require('express-session');
 
-//This will be matched first.
-// router.use(function(req, res, next){
-
-//     logger.debug(req.method);
-//     if(req.method == 'POST'){
-//         logger.debug("Check request body");
-//         if(req.body.hasOwnProperty('username') && req.body.hasOwnProperty('password')){
-//             logger.debug('input match');
-//         }else{
-//             var err = new Error('Unexpected input');
-//             err.status = 403;
-//             next(err);
-//             return;
-//         }
-//     }else if(req.method == 'GET'){
-//         logger.debug("get a GET request");
-//     }else if(req.method == 'DELETE'){
-//         logger.debug("get a DELETE request");
-//     }
-//     next();
-// });
-
-router.post('/', check_input_handler(['username', 'password'], true), function(req, res, next) {
+router.post('/', checkInputHandler(['username', 'password'], true), function(req, res, next) {
 
     body = req.body;
 
@@ -83,19 +59,13 @@ router.post('/', check_input_handler(['username', 'password'], true), function(r
     });
 });
 
-//Each route can have a err handler.
-//FIXME: need to find a way to make error auto handled.
-//Maybe we can add this:
-//router.use(function(err, req, res, next){
-// DO MAGIC
-//})
-router.get('/:id', check_user_session_id_handler, function(req, res, next) {
+router.get('/:id', checkUserSessionIdHandler, function(req, res, next) {
     
     logger.debug(req.params.id);
     res.json(req['state']);
 });
 
-router.delete('/:id', check_user_session_id_handler, function(req, res, next){
+router.delete('/:id', checkUserSessionIdHandler, function(req, res, next){
 
     id = req.params.id;;
     CACHE.delete(id);
@@ -103,7 +73,7 @@ router.delete('/:id', check_user_session_id_handler, function(req, res, next){
     res.json({'status':true});
 });
 
-router.post('/register', check_input_handler(['username', 'password'], true), function(req, res, next){
+router.post('/register', checkInputHandler(['username', 'password'], true), function(req, res, next){
     
     body = req.body;
 

@@ -5,10 +5,10 @@ var CACHE = require('./cache').cache;
 var db = require('./db');
 var logger = require('./log').logger;  
 
-var check_input_handler = require('./util').check_input_handler,
-    check_user_session_id_handler = require('./util').check_user_session_id_handler;
+var checkInputHandler = require('./util').checkInputHandler,
+    checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
 
-router.param('id', check_user_session_id_handler);
+router.param('id', checkUserSessionIdHandler);
 
 router.get('/:id/:vender_name', 
     function(req, res, next) {
@@ -43,7 +43,7 @@ router.get('/:id/:vender_name/:dish_name', function(req, res, next) {
     });
 });
 
-router.put('/:id/:vender_name/:dish_name/rate', check_input_handler(['rate'], true), function(req, res, next) {
+router.put('/:id/:vender_name/:dish_name/rate', checkInputHandler(['rate'], true), function(req, res, next) {
     
     var selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name};
     var cursor = db.find('menu', selector);
