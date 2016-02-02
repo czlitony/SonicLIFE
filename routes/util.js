@@ -1,10 +1,11 @@
-var logger = require('./log').logger;
-var CACHE = require('./cache').cache;
+'use strict';
+var logger = require('./log').logger,
+    CACHE = require('./cache').cache;
 
 //if includes function not existed, then use this.
 if (!Array.prototype.includes) {
   Array.prototype.includes = function(searchElement /*, fromIndex*/ ) {
-    'use strict';
+
     var O = Object(this);
     var len = parseInt(O.length) || 0;
     if (len === 0) {
@@ -45,7 +46,7 @@ function checkRequestContent(req, target_list, strict){
     }
 
     logger.debug(Object.keys(req.body));
-    l = Object.keys(req.body)
+    let l = Object.keys(req.body)
     for(var i=0; i< l.length; i++){
         // console.log(itr);
         logger.debug('checking '+l[i]);
@@ -58,7 +59,7 @@ function checkRequestContent(req, target_list, strict){
 
 function checkInputHandler(target, strict){
     return function (req, res, next){
-        body = req.body;
+        // let body = req.body;
 
         if(!checkRequestContent(req, target, strict)){
             logger.error('Error :' + req['error_reason']);
@@ -72,7 +73,7 @@ function checkInputHandler(target, strict){
 }
 
 function checkUserSessionIdHandler(req, res, next){
-    id = req.params.id;
+    let id = req.params.id;
 
     if(id === undefined){
         logger.error('no session_id');
@@ -111,7 +112,7 @@ function checkAdminSessionIdHandler(req, res, next){
     }else{
         logger.error("can't restore a session");
         //Jump to error handle.
-        var err = new Error('Wrong session_id');
+        let err = new Error('Wrong session_id');
         err.status = 400;
         next(err);
         return;

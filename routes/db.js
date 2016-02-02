@@ -1,10 +1,11 @@
+'use strict';
 var MongoClient = require('mongodb').MongoClient
 
 // Connection URL
 var url = 'mongodb://localhost:27017/sonicwall';
 var option = {'server': {'poolSize':5} };
 
-DataBase = function(){
+function DataBase(){
     /*    
     If we call insert or other function too early, it will
     lead to a db not function issue, because this is a non-block

@@ -1,52 +1,60 @@
-function Cache(){
-    this.cache = {};
-};
+'use strict';
 
-Cache.prototype.save = function(key, obj) {
-    this.cache[key] = obj;
-}
+var logger = require('./log').logger;
 
-Cache.prototype.restore = function(key) {
-    try{
-        return this.cache[key];
-    }catch(e){
+class Cache{
+    constructor(){
+        this.cache = {};
+    }
+
+    save(key, obj) {
+        this.cache[key] = obj;
+    }
+    
+    restore(key) {
+        try{
+            return this.cache[key];
+        }catch(e){
+            return null;
+        }
+    }
+
+    hasUser(username){
+        let key = Object.keys(this.cache),
+            found = false,
+            ptr = null;
+        key.forEach(function(item){
+            if(this.cache[item]['username'] == username){
+                found = true;
+                ptr = item;
+                return;
+            }
+        },this);
+
+        //This is dangerous, because if forEach callback doesn't wait, or run slower
+        //, then found will be a wrong result.
+        if(found){
+            return ptr;
+        }
+
         return null;
     }
-}
 
-Cache.prototype.hasUser = function(username){
-    key = Object.keys(this.cache);
-    var found = false;
-    var ptr = null;
-    key.forEach(function(item){
-        if(this.cache[item]['username'] == username){
-            found = true;
-            ptr = item;
-            return;
-        }
-    },this);
-
-    //This is dangerous, because if forEach callback doesn't wait, or run slower
-    //, then found will be a wrong result.
-    if(found){
-        return ptr;
+    delete(key) {
+        // body...
+        delete this.cache[key];
     }
 
-    return null;
-}
+    dump() {
+        // body...
+        console.log(this.cache);
+        logger.debug(this.cache);
+    };
 
-Cache.prototype.delete = function(key) {
-    // body...
-    delete this.cache[key];
-};
+    hasKey(key) {
+        return this.cache.hasOwnProperty(key);
+    }
 
-Cache.prototype.dump = function() {
-    // body...
-    console.log(this.cache);
-};
-
-Cache.prototype.hasKey = function(key) {
-    return this.cache.hasOwnProperty(key);
 }
 
 //Singleton

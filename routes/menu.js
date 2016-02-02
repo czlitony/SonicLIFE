@@ -1,3 +1,4 @@
+'use strict';
 var express = require('express');
 var router = express.Router();
 // var uuid = require('node-uuid'); 
@@ -15,7 +16,7 @@ router.param('id', checkUserSessionIdHandler);
 
 router.get('/:id/:vender_name', 
     function(req, res, next) {
-    var cursor = db.find('menu', {'vender' : req.params.vender_name});
+    let cursor = db.find('menu', {'vender' : req.params.vender_name});
 
     cursor.toArray(function(error, docments){
         if(error){
@@ -31,7 +32,7 @@ router.get('/:id/:vender_name',
 
 router.get('/:id/:vender_name/:dish_name', function(req, res, next) {
 
-    var selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name},
+    let selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name},
         cursor = db.find('menu', selector);
 
     cursor.toArray(function(error, docments){
@@ -48,8 +49,8 @@ router.get('/:id/:vender_name/:dish_name', function(req, res, next) {
 
 router.put('/:id/:vender_name/:dish_name/rate', checkInputHandler(['rate'], true), function(req, res, next) {
     
-    var selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name};
-    var cursor = db.find('menu', selector);
+    let selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name};
+    let cursor = db.find('menu', selector);
 
     //FIXME, inconsistent with offical docs.
     cursor.toArray().then(function(result, error){
@@ -64,9 +65,9 @@ router.put('/:id/:vender_name/:dish_name/rate', checkInputHandler(['rate'], true
         logger.debug(result);
         logger.debug(req.body);
 
-        var times = result[0]['rate']['times'];
-        var old_rate = result[0]['rate']['result'];
-        var new_rate;
+        let times = result[0]['rate']['times'];
+        let old_rate = result[0]['rate']['result'];
+        let new_rate;
         if(req.body['rate'] !== undefined && typeof req.body['rate'] === 'number'){
             new_rate = (times*old_rate + req.body['rate'])/(times+1);
             logger.debug('new rate is ' + new_rate);
@@ -82,7 +83,7 @@ router.put('/:id/:vender_name/:dish_name/rate', checkInputHandler(['rate'], true
                     res.status(200).send();
                 });
         }else{
-            var error = new Error('rate not existed, or a wrong type.')
+            let error = new Error('rate not existed, or a wrong type.')
             logger.error(error.message);
             error.status = 401;
             next(error);

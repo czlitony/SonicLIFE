@@ -1,20 +1,19 @@
-var express = require('express');
-var router = express.Router();
-var uuid = require('node-uuid');  
-var CACHE = require('./cache').cache;
-var db = require('./db');
-var logger = require('./log').logger;  
-
-var checkInputHandler = require('./util').checkInputHandler;
-var checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
+'use strict';
+var express = require('express'),
+    router = express.Router(),
+    uuid = require('node-uuid'),  
+    CACHE = require('./cache').cache,
+    db = require('./db'),
+    logger = require('./log').logger,
+    checkInputHandler = require('./util').checkInputHandler,
+    checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
 const crypto = require('crypto');
-
 
 router.post('/', checkInputHandler(['username', 'password'], true), function(req, res, next) {
 
-    body = req.body;
+    let body = req.body;
 
-    result = db.find('user', { 'username' : body['username']});
+    let result = db.find('user', { 'username' : body['username']});
     result.toArray(function(err, documents){
         
         if(err){
@@ -26,14 +25,14 @@ router.post('/', checkInputHandler(['username', 'password'], true), function(req
 
         if(documents.length == 1){
             logger.info('User found: ' + documents[0]);
-            salt = documents[0]['salt'];
-            record = {};
-            var hash = crypto.createHash('sha256');
+            let salt = documents[0]['salt'];
+            let record = {};
+            let hash = crypto.createHash('sha256');
             hash.update(body['password'] + salt); 
 
             if(hash.digest('hex') == documents[0]['password']){
-                result = {};
-                var cache_result = CACHE.hasUser(body['username']);
+                let result = {};
+                let cache_result = CACHE.hasUser(body['username']);
                 if(cache_result){
                     result['session_id'] = cache_result;
                 }else{
@@ -62,12 +61,25 @@ router.post('/', checkInputHandler(['username', 'password'], true), function(req
 router.get('/:id', checkUserSessionIdHandler, function(req, res, next) {
     
     logger.debug(req.params.id);
-    res.json(req['state']);
+    let body = req.body;
+    let result = {};
+    let cache_result = CACHE.restore(req.params.id);
+    if(cache_result){
+        result['session_id'] = cache_result;
+    }else{
+        let error = new Error('Can not restore ' + req.params.id);
+        logger.error(error.message);
+        error.status = 401;
+        next(error);
+        return;
+    }
+    logger.info('user '+ body['username'] +' created');
+    res.json(result);
 });
 
 router.delete('/:id', checkUserSessionIdHandler, function(req, res, next){
 
-    id = req.params.id;;
+    let id = req.params.id;;
     CACHE.delete(id);
     CACHE.dump();
     res.json({'status':true});
@@ -75,9 +87,9 @@ router.delete('/:id', checkUserSessionIdHandler, function(req, res, next){
 
 router.post('/register', checkInputHandler(['username', 'password'], true), function(req, res, next){
     
-    body = req.body;
+    let body = req.body;
 
-    result = db.find('user', { 'username' : body['username']});
+    let result = db.find('user', { 'username' : body['username']});
     result.toArray(function(err, documents){
         
         if(err){
@@ -87,9 +99,10 @@ router.post('/register', checkInputHandler(['username', 'password'], true), func
         }
 
         if(documents.length == 0){
-            salt = uuid.v1();
-            record = {};
-            var hash = crypto.createHash('sha256');
+            let salt = uuid.v1(),
+                record = {},
+                hash = crypto.createHash('sha256');
+            
             hash.update(body['password'] + salt);            
 
             record['username'] = body['username'];
