@@ -72,7 +72,7 @@ APITester.prototype._set_response = function(status_code, content_type, data){
 };
 
 APITester.prototype._set_logonID = function(data){
-    if("session_id" in data && this.logonID === undefined){
+    if("session_id" in data && this.logonID !== undefined && this.logonID.session_id === undefined){
         this.logonID.session_id = data["session_id"];
     }
 
@@ -112,7 +112,7 @@ APITester.prototype._test_template = function (api, api_list){
             if(api_list[TEST_URI] instanceof Array){
                 url = api_list[TEST_URI][0] + api_list[TEST_URI][1].session_id + api_list[TEST_URI][2];
             }
-
+            console.log("URL: "+url);
             api.invoke(url, api_list[TEST_METHOD], api_list[TEST_BODY_DATA], done);
             api.url = url;
         });
