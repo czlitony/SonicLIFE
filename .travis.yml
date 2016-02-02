@@ -12,6 +12,7 @@ services:
 before_script:
   - sleep 15
   - mongo sonicwall --eval 'db.user.remove();'
+  - mongo sonciwall --eval 'db.user.insert({"username":"admin", "password":"password"});'
   - npm start&
   - sleep 5
 

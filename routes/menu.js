@@ -10,6 +10,9 @@ var checkInputHandler = require('./util').checkInputHandler,
 
 router.param('id', checkUserSessionIdHandler);
 
+
+//FIXME Get all vender
+
 router.get('/:id/:vender_name', 
     function(req, res, next) {
     var cursor = db.find('menu', {'vender' : req.params.vender_name});

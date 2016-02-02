@@ -44,6 +44,7 @@ DEBUG=express:* npm start
 ~~~
 {
 	vendor : string,
+	img_uri : string,
 	dish : string,
 	rate : { times:123, result:4.6 }
 }
@@ -67,6 +68,15 @@ DEBUG=express:* npm start
 	user : DBRef,
 	datetime : string,
 	dish : DBRef
+}
+~~~
+
+###scehu
+
+~~~
+{
+	menu_ref : [string],
+	day : int
 }
 ~~~
 

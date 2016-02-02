@@ -143,3 +143,21 @@ redirect to `/order/<session_id>/menu/<vender_name>`
 ....
 ]
 ~~~
+
+
+##Order
+
+###Add POST /__api__/<session-id>/order
+
+###Remove DELETE     
+
+###modify PUT
+
+
+
+GET /menu?arg1=1&arg2=2...
+GET /menu/<obejct-id>
+
+
+
+POST notification
