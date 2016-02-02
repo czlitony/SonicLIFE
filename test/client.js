@@ -72,7 +72,7 @@ APITester.prototype._set_response = function(status_code, content_type, data){
 };
 
 APITester.prototype._set_logonID = function(data){
-    if("session_id" in data && this.logonID !== undefined){
+    if("session_id" in data && this.logonID === undefined){
         this.logonID.session_id = data["session_id"];
     }
 

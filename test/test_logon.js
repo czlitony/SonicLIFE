@@ -28,7 +28,7 @@ var username = "user",
 
 targets.add(["register POST", "/__api__/logon/register", "POST", {'username':username, "password":password}, check_register_resp]);
 targets.add(["logon POST", "/__api__/logon", "POST", {'username':username, "password":password}, check_logon_resp]);
-targets.add(["logon GET", ["/__api__/logon/", api.logonID, ""], "GET", {'username':username, "password":password}, check_logon_get_resp]);
+targets.add(["logon GET", ["/__api__/logon/", api.logonID, ""], "GET", undefined, check_logon_get_resp]);
 targets.add(["logout DELETE", ["/__api__/logon/", api.logonID, ""], "DELETE", undefined, undefined]);
 
 api.test_all(targets);
