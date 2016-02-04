@@ -57,8 +57,10 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 
 ## Menu API
 
-### GET /__api__/menu/<session_id>/<vender_name>
-NO SESSION
+### GET /__api__/menu?page=1
+
+### GET /__api__/menu/<vender_name>?page=1
+
 #### OUTPUT
 
 ~~~
@@ -69,7 +71,7 @@ NO SESSION
 ]
 ~~~
 
-### PUT /__api__/menu/<session_id>/<vender_name>/<dish_name>/rate
+### PUT /__api__/menu/<vender_name>/<dish_name>/rate
 
 #### INPUT
 ~~~
@@ -115,7 +117,7 @@ NO SESSION
 * status 200.
 
 ### GET /admin/<session_id>/menu/<vender_name>
-redirect to `/order/<session_id>/menu/<vender_name>`
+redirect to `/menu/<session_id>/menu/<vender_name>`
 
 ### GET /admin/<session_id>/vender
 
