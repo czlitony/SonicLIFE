@@ -12,5 +12,7 @@ var checkInputHandler = require('./util').checkInputHandler,
 router.param('id', checkUserSessionIdHandler);
 
 router.get('/', function(req, res, next) {
-
+    res.send();
 });
+
+module.exports = router;

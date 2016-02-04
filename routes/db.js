@@ -18,6 +18,7 @@ function DataBase(){
         this.db.createCollection('menu');
         this.db.createCollection('oder');
         this.db.createCollection('comments');
+        this.db.createCollection('schedule');
     }.bind(this));
 }
 
