@@ -20,7 +20,7 @@ function check_menu_resp(data){
 
 var targets = new Set(),
     username = "admin",
-    password = "198664";
+    password = "password";
 
 targets.add(["logon admin", "/__api__/logon", "POST", {'username':username, "password":password}, undefined]);
 targets.add(["add menu", ["/__api__/admin/", api.logonID, "/menu/add"], "POST", {'vender':"vender1", "dish":"dish1"}, undefined]);
