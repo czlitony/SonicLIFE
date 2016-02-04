@@ -14,10 +14,14 @@ router.param('id', checkUserSessionIdHandler);
 
 //FIXME Get all vender
 
-router.get('/:id/:vender_name', 
-    function(req, res, next) {
-    let cursor = db.find('menu', {'vender' : req.params.vender_name});
+router.get('/', function(req, res, next) {
+    let cursor = db.find('menu', {});
 
+    let page = req.query.page;
+    if(page !== undefined && page > 0){
+        cursor = cursor.skip((page-1)*10).limit(10);
+    }
+    
     cursor.toArray(function(error, docments){
         if(error){
             logger.error(error.message);
@@ -30,8 +34,30 @@ router.get('/:id/:vender_name',
     });
 });
 
-router.get('/:id/:vender_name/:dish_name', function(req, res, next) {
 
+router.get('/:vender_name', function(req, res, next) {
+    let cursor = db.find('menu', {'vender' : req.params.vender_name});
+    let page = req.query.page;
+    if(page !== undefined && page > 0){
+        cursor = cursor.skip((page-1)*10).limit(10);
+    }
+    cursor.toArray(function(error, docments){
+        if(error){
+            logger.error(error.message);
+            error.status = 401;
+            next(error);
+            return;
+        }
+        logger.debug(req.originalUrl + ' ' + docments);
+        res.json(docments);
+    });
+});
+
+router.get('/:vender_name/:dish_name', function(req, res, next) {
+    let page = req.query.page;
+    if(page !== undefined && page > 0){
+        cursor = cursor.skip((page-1)*10).limit(10);
+    }
     let selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name},
         cursor = db.find('menu', selector);
 

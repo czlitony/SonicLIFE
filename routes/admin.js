@@ -14,7 +14,7 @@ router.param('id', checkAdminSessionIdHandler);
 
 router.get('/:id/vender', function(req, res, next) {
 
-    var promise_result = db.findDistinct('menu','vender');
+    let promise_result = db.findDistinct('menu','vender');
     promise_result.then(function(result,err){
          if(err){
             logger.error(err);
@@ -23,7 +23,7 @@ router.get('/:id/vender', function(req, res, next) {
             return;
         }
         logger.debug(result);
-        var result_data = {};
+        let result_data = {};
         result_data['values'] = result;
         res.status(200).json(result_data);
     });
@@ -32,8 +32,8 @@ router.get('/:id/vender', function(req, res, next) {
 //NOTE: give anonymous functions a name is good for debug.
 router.post('/:id/menu/add', checkInputHandler(['vender','dish'], true), function(req, res, next){
 
-    body = req.body;
-    var data = {};
+    let body = req.body;
+    let data = {};
     data['vender'] = body['vender'];
     data['dish'] = body['dish'];
 
@@ -89,12 +89,11 @@ router.route('/:id/menu/:dish_id')
             }
             res.sendStatus(200);
         });
-
 });
 
 router.get('/:id/:vender_name',  
     function(req, res, next) {
-    res.redirect('/menu/'+ req.params.id + '/' + req.params.vender_name);
+    res.redirect('/menu/' + req.params.vender_name);
 });
 
 router.use(function(err, req, res, next){
