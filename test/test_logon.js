@@ -16,19 +16,17 @@ function check_logon_resp(data){
 
 function check_logon_get_resp(data){
     test.should(data).be.a.Object;
-    test.should(data).have.ownProperty('session_id');
-    test.should(data['session_id']).have.ownProperty('state');
-    test.should(data['session_id']).have.ownProperty('username');
-    test.should(data['session_id']).have.ownProperty('role');
+    test.should(data).have.ownProperty('authenticated');
+    test.should(data).have.ownProperty('username');
 }
 
 var targets = new Set();
 var username = "user",
     password = "password";
 
-targets.add(["register POST", "/__api__/logon/register", "POST", {'username':username, "password":password}, check_register_resp]);
-targets.add(["logon POST", "/__api__/logon", "POST", {'username':username, "password":password}, check_logon_resp]);
-targets.add(["logon GET", ["/__api__/logon/", api.logonID, ""], "GET", undefined, check_logon_get_resp]);
-targets.add(["logout DELETE", ["/__api__/logon/", api.logonID, ""], "DELETE", undefined, undefined]);
+targets.add(["register POST", "/__api__/logon/register", "POST", api.logonID, {'username':username, "password":password}, check_register_resp]);
+targets.add(["logon POST", "/__api__/logon", "POST", api.logonID, {'username':username, "password":password}, check_logon_resp]);
+targets.add(["logon GET", "/__api__/logon", "GET", api.logonID, undefined, check_logon_get_resp]);
+targets.add(["logout DELETE", "/__api__/logon", "DELETE", api.logonID, undefined, undefined]);
 
 api.test_all(targets);

@@ -18,19 +18,24 @@ function check_menu_resp(data){
     });
 };
 
+function check_data (data) {
+    // body...
+    console.log(data);
+}
+
 var targets = new Set(),
     username = "admin",
     password = "password";
 
-targets.add(["logon admin", "/__api__/logon", "POST", {'username':username, "password":password}, undefined]);
-targets.add(["add menu", ["/__api__/admin/", api.logonID, "/menu/add"], "POST", {'vender':"vender1", "dish":"dish1"}, undefined]);
-targets.add(["add menu", ["/__api__/admin/", api.logonID, "/menu/add"], "POST", {'vender':"vender1", "dish":"dish2"}, undefined]);
-targets.add(["add menu", ["/__api__/admin/", api.logonID, "/menu/add"], "POST", {'vender':"vender2", "dish":"dish1"}, undefined]);
-targets.add(["add menu", ["/__api__/admin/", api.logonID, "/menu/add"], "POST", {'vender':"vender2", "dish":"dish2"}, undefined]);
+targets.add(["logon admin", "/__api__/logon", "POST", api.logonID, {'username':username, "password":password}, undefined]);
+targets.add(["add menu", "/__api__/admin/menu/add", "POST", api.logonID, {'vender':"vender1", "dish":"dish1"}, check_data]);
+targets.add(["add menu", "/__api__/admin/menu/add", "POST", api.logonID, {'vender':"vender1", "dish":"dish2"}, undefined]);
+targets.add(["add menu", "/__api__/admin/menu/add", "POST", api.logonID, {'vender':"vender2", "dish":"dish1"}, undefined]);
+targets.add(["add menu", "/__api__/admin/menu/add", "POST", api.logonID, {'vender':"vender2", "dish":"dish2"}, undefined]);
 
 
-targets.add(["all menu", "/__api__/menu", "GET", undefined, check_menu_resp]);
-targets.add(["by vender", "/__api__/menu", "GET", undefined, check_menu_resp]);
-targets.add(["by vender and dish_name", "/__api__/menu", "GET", undefined, check_menu_resp]);
+targets.add(["all menu", "/__api__/menu", "GET", api.logonID, undefined, check_menu_resp]);
+targets.add(["by vender", "/__api__/menu", "GET", api.logonID, undefined, check_menu_resp]);
+targets.add(["by vender and dish_name", "/__api__/menu", "GET", api.logonID, undefined, check_menu_resp]);
 
 api.test_all(targets);

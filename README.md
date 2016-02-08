@@ -71,7 +71,7 @@ DEBUG=express:* npm start
 }
 ~~~
 
-###scehu
+###schedule
 
 ~~~
 {

@@ -72,18 +72,22 @@ function checkInputHandler(target, strict){
     }
 }
 
-function checkUserSessionIdHandler(req, res, next){
-    let id = req.params.id;
+function checkUserSessionIdHandler(isAdmin){
+    return function(req, res, next){
+        logger.debug('Cookies is: ' + req.cookies['connect.sid']);
+        let session = req.session;
 
-    if(id === undefined){
-        logger.error('no session_id');
-        
-    }else{
-        logger.debug('restore my session');
-        logger.debug(req.params.id);
-        if (CACHE.restore(req.params.id)){
-            //JUST FOR FUN FIXME.
-            req["state"] = CACHE.restore(req.params.id);
+        if(session.sessionState){
+            if(session.sessionState['authenticated'] && isAdmin === false){
+                logger.debug("successfuly restore a user session");
+                next();
+            }else if(session.sessionState['authenticated'] && isAdmin === true && session.sessionState['role'] == "admin"){
+                logger.debug("successfuly restore a admin session");
+                next();
+            }else{
+                res.redirect("/logon");
+                return;
+            }
         }else{
             logger.error("can't restore a session");
             //Jump to error handle.
@@ -92,40 +96,8 @@ function checkUserSessionIdHandler(req, res, next){
             next(err);
             return;
         }
-
-        if(req["state"]["state"] !== true){
-            res.redirect("/logon");
-            return;
-        }
-    }
-    //Jump to next handle.
-    //next('route') used to jump out this route, all the following handler
-    //will be ignored.
-    next();
-};
-
-function checkAdminSessionIdHandler(req, res, next){
-    logger.debug('restore my session');
-    logger.debug(req.params.id);
-    if (CACHE.restore(req.params.id)){
-        var result = CACHE.restore(req.params.id);
-    }else{
-        logger.error("can't restore a session");
-        //Jump to error handle.
-        let err = new Error('Wrong session_id');
-        err.status = 400;
-        next(err);
-        return;
-    }
-
-    if(result['role'] !== 'admin' || result['state'] !== true){
-        res.redirect("/logon");
-        return;
-    }
-
-    next();
-};
+    };
+}
 
 module.exports.checkInputHandler = checkInputHandler;
 module.exports.checkUserSessionIdHandler = checkUserSessionIdHandler;
-module.exports.checkAdminSessionIdHandler = checkAdminSessionIdHandler;

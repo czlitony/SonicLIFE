@@ -9,7 +9,8 @@ var logon = require('./routes/logon');
 var menu = require('./routes/menu');
 var admin = require('./routes/admin');
 var order = require('./routes/order');
-var log = require('./routes/log');  
+var log = require('./routes/log');
+var session = require('express-session');
 
 var app = express();
 log.use(app); 
@@ -25,8 +26,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//Here we need another Storage to cache the sessions, MemoryStore is not suitable for production.
+app.use(session({
+  secret: '!@#$%^&**',
+  resave: false,
+  saveUninitialized: true,
+  //If set secure = true, you have to use HTTPS, otherwise you can't get a set-cookie response.
+  cookie: { secure: false }
+}))
 
-// app.use('/', routes);
 app.use('/__api__/logon', logon);
 app.use('/__api__/menu', menu);
 app.use('/__api__/admin', admin);

@@ -2,15 +2,12 @@
 var express = require('express');
 var router = express.Router();
 // var uuid = require('node-uuid'); 
-var CACHE = require('./cache').cache;
+// var CACHE = require('./cache').cache;
 var db = require('./db');
 var logger = require('./log').logger;  
 
 var checkInputHandler = require('./util').checkInputHandler,
     checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
-
-router.param('id', checkUserSessionIdHandler);
-
 
 //FIXME Get all vender
 
@@ -21,7 +18,7 @@ router.get('/', function(req, res, next) {
     if(page !== undefined && page > 0){
         cursor = cursor.skip((page-1)*10).limit(10);
     }
-    
+
     cursor.toArray(function(error, docments){
         if(error){
             logger.error(error.message);
@@ -73,7 +70,7 @@ router.get('/:vender_name/:dish_name', function(req, res, next) {
     });
 });
 
-router.put('/:id/:vender_name/:dish_name/rate', checkInputHandler(['rate'], true), function(req, res, next) {
+router.put('/:vender_name/:dish_name/rate', checkUserSessionIdHandler(false), checkInputHandler(['rate'], true), function(req, res, next) {
     
     let selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name};
     let cursor = db.find('menu', selector);

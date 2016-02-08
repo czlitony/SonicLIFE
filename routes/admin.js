@@ -2,17 +2,17 @@
 var express = require('express');
 var router = express.Router();
 // var uuid = require('node-uuid'); 
-var CACHE = require('./cache').cache;
+//var CACHE = require('./cache').cache;
 var db = require('./db');
 var logger = require('./log').logger; 
 var ObjectID = require('mongodb').ObjectID
 
 var checkInputHandler = require('./util').checkInputHandler;
-var checkAdminSessionIdHandler = require('./util').checkAdminSessionIdHandler;
+var checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
 
-router.param('id', checkAdminSessionIdHandler);
+// router.param('id', checkAdminSessionIdHandler);
 
-router.get('/:id/vender', function(req, res, next) {
+router.get('/vender', checkUserSessionIdHandler(true), function(req, res, next) {
 
     let promise_result = db.findDistinct('menu','vender');
     promise_result.then(function(result,err){
@@ -30,7 +30,7 @@ router.get('/:id/vender', function(req, res, next) {
 });
 
 //NOTE: give anonymous functions a name is good for debug.
-router.post('/:id/menu/add', checkInputHandler(['vender','dish'], true), function(req, res, next){
+router.post('/menu/add', checkUserSessionIdHandler(true), checkInputHandler(['vender','dish'], true), function(req, res, next){
 
     let body = req.body;
     let data = {};
@@ -73,8 +73,7 @@ router.post('/:id/menu/add', checkInputHandler(['vender','dish'], true), functio
     });
 });
 
-router.route('/:id/menu/:dish_id')
-.delete(function(req,res,next){
+router.delete('/menu/:dish_id', checkUserSessionIdHandler(true), function(req,res,next){
     logger.debug('dish_id is ' + req.params.dish_id);
     db.remove('menu', {'_id':ObjectID.createFromHexString(req.params.dish_id)})
         .then(function(result, error){
@@ -91,10 +90,9 @@ router.route('/:id/menu/:dish_id')
         });
 });
 
-router.get('/:id/:vender_name',  
-    function(req, res, next) {
-    res.redirect('/menu/' + req.params.vender_name);
-});
+// router.get('/:vender_name', checkUserSessionIdHandler(true), function(req, res, next) {
+//     res.redirect('/menu/' + req.params.vender_name);
+// });
 
 router.use(function(err, req, res, next){
     console.error(err);
