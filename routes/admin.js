@@ -5,8 +5,9 @@ var router = express.Router();
 //var CACHE = require('./cache').cache;
 var db = require('./db');
 var logger = require('./log').logger; 
-var ObjectID = require('mongodb').ObjectID
-
+var ObjectID = require('mongodb').ObjectID;
+var APIError = require('./error').APIError,
+    ErrorType = require('./error').ErrorType;
 var checkInputHandler = require('./util').checkInputHandler;
 var checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
 
@@ -17,9 +18,9 @@ router.get('/vender', checkUserSessionIdHandler(true), function(req, res, next) 
     let promise_result = db.findDistinct('menu','vender');
     promise_result.then(function(result,err){
          if(err){
-            logger.error(err);
-            err.status = 401;
-            next(err);
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND_DISTINCT(menu)', err.message);
+            logger.error(err.message);
+            next(new_err);
             return;
         }
         logger.debug(result);
@@ -39,16 +40,15 @@ router.post('/menu/add', checkUserSessionIdHandler(true), checkInputHandler(['ve
 
     db.find('menu', data).toArray(function(error, docments){
         if(error){
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(menu)', error.message);
             logger.error(error.message);
-            error.status = 401;
-            next(error);
+            next(new_err);
             return;
         }
 
         if(docments.length >= 1){
-            var error = new Error('items existed.');
+            let error = new APIError(ErrorType.DISH_EXISTED, body['vender'], body['dish']);
             logger.error(error.message);
-            error.status = 401;
             next(error);
             return;
         }
@@ -62,10 +62,9 @@ router.post('/menu/add', checkUserSessionIdHandler(true), checkInputHandler(['ve
     //Actual: function(result, err)
     promise_result.then(function(result, err){
         if(err){
-            logger.error(err);
-            logger.debug(result);
-            err.status = 401;
-            next(err);
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(menu)', err.message);
+            logger.error(err.message);
+            next(new_err);
             return;
         }
         logger.debug(result);
@@ -80,9 +79,8 @@ router.delete('/menu/:dish_id', checkUserSessionIdHandler(true), function(req,re
             logger.debug(result);
             logger.debug(error);
             if(error){
-                logger.error(error);
-                logger.debug(result);
-                error.status = 401;
+                let error = new APIError(ErrorType.DB_OPERATE_FAIL, 'REMOVE(menu)', err.message);
+                logger.error(error.message);
                 next(error);
                 return;
             }
@@ -95,8 +93,8 @@ router.delete('/menu/:dish_id', checkUserSessionIdHandler(true), function(req,re
 // });
 
 router.use(function(err, req, res, next){
-    console.error(err);
-    res.status(err.status).json({'message' : err.message});
+    logger.error(err.toJSON());
+    res.status(err.status).json(err.toJSON());
 });
 
 module.exports = router;

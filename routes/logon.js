@@ -6,7 +6,9 @@ var express = require('express'),
     db = require('./db'),
     logger = require('./log').logger,
     checkInputHandler = require('./util').checkInputHandler,
-    checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
+    checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler,
+    APIError = require('./error').APIError,
+    ErrorType = require('./error').ErrorType;
 const crypto = require('crypto');
 
 router.post('/', checkInputHandler(['username', 'password'], true), function(req, res, next) {
@@ -17,9 +19,9 @@ router.post('/', checkInputHandler(['username', 'password'], true), function(req
     result.toArray(function(err, documents){
         
         if(err){
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND', err.message);
             logger.error(err.message);
-            err.status = 401;
-            next(err);
+            next(new_err);
             return;
         }
 
@@ -42,11 +44,13 @@ router.post('/', checkInputHandler(['username', 'password'], true), function(req
                     res.json(result);
                 });
             }else{
-                res.status(400).json({'message' : 'wrong password'});
+                let new_err = new APIError(ErrorType.LOGIN_FAIL, 'FIND', body['username']);
+                res.status(new_err.status).json(new_err.toJSON());
             }
 
         }else{
-            res.status(400).json({'message':'Can not find user'});
+            let new_err = new APIError(ErrorType.LOGIN_FAIL, 'FIND', body['username']);
+            res.status(new_err.status).json(new_err.toJSON());
         }
     });
 });
@@ -63,9 +67,8 @@ router.get('/', checkUserSessionIdHandler(false), function(req, res, next) {
         result['authenticated'] = session.sessionState.authenticated;
         result['username'] = session.sessionState.username;
     }else{
-        let error = new Error('Can not restore ' + req.sessionID);
-        logger.error(error.message);
-        error.status = 401;
+        let error = new APIError(ErrorType.CHECK_SID_FAIL, req.sessionID);
+        logger.error(error.toJSON());
         next(error);
         return;
     }
@@ -92,8 +95,9 @@ router.post('/register', checkInputHandler(['username', 'password'], true), func
     result.toArray(function(err, documents){
         
         if(err){
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(user)', err.message);
             logger.error(err.message);
-            next(err);
+            next(new_err);
             return;
         }
 
@@ -112,10 +116,10 @@ router.post('/register', checkInputHandler(['username', 'password'], true), func
             var promise_result = db.insert('user', record);
             promise_result.then(function(result, err){
                 if(err){
+                    let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(user)', err.message);
                     logger.error(err);
                     logger.debug(result);
-                    err.status = 401;
-                    next(err);
+                    next(new_err);
                     return;
                 }
                 logger.debug(result);
@@ -123,15 +127,16 @@ router.post('/register', checkInputHandler(['username', 'password'], true), func
             });
             
         }else{
-            res.status(400).json({'message':'user existed.'});
+            let new_err = new APIError(ErrorType.USER_EXISTED, body['username']);
+            res.status(new_err.status).json(new_err.toJSON());
         }
     })
 
 });
 
 router.use(function(err, req, res, next){
-    logger.error(err);
-    res.status(err.status).json({'message' : err.message});
+    logger.error(err.toJSON());
+    res.status(err.status).json(err.toJSON());
 });
 
 module.exports = router;

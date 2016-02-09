@@ -5,7 +5,8 @@ var router = express.Router();
 // var CACHE = require('./cache').cache;
 var db = require('./db');
 var logger = require('./log').logger;  
-
+var APIError = require('./error').APIError,
+    ErrorType = require('./error').ErrorType;
 var checkInputHandler = require('./util').checkInputHandler,
     checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
 
@@ -21,9 +22,9 @@ router.get('/', function(req, res, next) {
 
     cursor.toArray(function(error, docments){
         if(error){
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(menu)', error.message);
             logger.error(error.message);
-            error.status = 401;
-            next(error);
+            next(new_err);
             return;
         }
         logger.debug(req.originalUrl + ' ' + docments);
@@ -40,9 +41,9 @@ router.get('/:vender_name', function(req, res, next) {
     }
     cursor.toArray(function(error, docments){
         if(error){
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(menu)', error.message);
             logger.error(error.message);
-            error.status = 401;
-            next(error);
+            next(new_err);
             return;
         }
         logger.debug(req.originalUrl + ' ' + docments);
@@ -52,17 +53,19 @@ router.get('/:vender_name', function(req, res, next) {
 
 router.get('/:vender_name/:dish_name', function(req, res, next) {
     let page = req.query.page;
+
+    let selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name},
+        cursor = db.find('menu', selector);
+    
     if(page !== undefined && page > 0){
         cursor = cursor.skip((page-1)*10).limit(10);
     }
-    let selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name},
-        cursor = db.find('menu', selector);
 
     cursor.toArray(function(error, docments){
         if(error){
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(menu)', error.message);
             logger.error(error.message);
-            error.status = 401;
-            next(error);
+            next(new_err);
             return;
         }
         logger.debug(req.originalUrl + ' ' + docments);
@@ -79,9 +82,9 @@ router.put('/:vender_name/:dish_name/rate', checkUserSessionIdHandler(false), ch
     cursor.toArray().then(function(result, error){
 
         if(error){
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(menu)', error.message);
             logger.error(error.message);
-            error.status = 401;
-            next(error);
+            next(new_err);
             return;
         }
 
@@ -91,24 +94,23 @@ router.put('/:vender_name/:dish_name/rate', checkUserSessionIdHandler(false), ch
         let times = result[0]['rate']['times'];
         let old_rate = result[0]['rate']['result'];
         let new_rate;
-        if(req.body['rate'] !== undefined && typeof req.body['rate'] === 'number'){
+        if(typeof req.body['rate'] === 'number'){
             new_rate = (times*old_rate + req.body['rate'])/(times+1);
             logger.debug('new rate is ' + new_rate);
             db.update('menu', selector, {'$set': {'rate':{'result':new_rate, 'times': (times+1)}}}, {})
                 .then(function(update_result, error){
                     if(error){
+                        let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'UPDATE(menu)', error.message);
                         logger.error(error.message);
-                        error.status = 401;
-                        next(error);
+                        next(new_err);
                         return;
                     }
                     logger.debug(update_result);
                     res.status(200).send();
                 });
         }else{
-            let error = new Error('rate not existed, or a wrong type.')
-            logger.error(error.message);
-            error.status = 401;
+            let error = new APIError(ErrorType.RATE_TYPE_ILLEGAL);
+            logger.error(error.toJSON());
             next(error);
             return;
         }
@@ -117,8 +119,9 @@ router.put('/:vender_name/:dish_name/rate', checkUserSessionIdHandler(false), ch
 });
 
 router.use(function(err, req, res, next){
-    console.error(err);
-    res.status(err.status).json({'message' : err.message});
+    logger.error(err.toJSON());
+    res.status(err.status).json(err.toJSON());
+
 });
 
 module.exports = router;

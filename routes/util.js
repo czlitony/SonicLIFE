@@ -1,6 +1,9 @@
 'use strict';
 var logger = require('./log').logger,
-    CACHE = require('./cache').cache;
+    APIError = require('./error').APIError,
+    ErrorType = require('./error').ErrorType;
+
+    // CACHE = require('./cache').cache;
 
 //if includes function not existed, then use this.
 if (!Array.prototype.includes) {
@@ -63,8 +66,7 @@ function checkInputHandler(target, strict){
 
         if(!checkRequestContent(req, target, strict)){
             logger.error('Error :' + req['error_reason']);
-            var err = new Error(req['error_reason']);
-            err.status = 401;
+            var err = new APIError(ErrorType.REQUEST_CONTENT_NOT_MATCH, target);
             next(err);
             return;
         }
@@ -91,8 +93,7 @@ function checkUserSessionIdHandler(isAdmin){
         }else{
             logger.error("can't restore a session");
             //Jump to error handle.
-            var err = new Error('Wrong session_id');
-            err.status = 400;
+            var err = new APIError(ErrorType.CHECK_SID_FAIL, req.cookies['connect.sid']);
             next(err);
             return;
         }
