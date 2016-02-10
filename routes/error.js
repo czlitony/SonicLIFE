@@ -1,7 +1,8 @@
 'use strict';
 var logger = require('./log').logger;
 
-var ErrorType = { GENERAL_ERROR : 1,
+var ErrorType = { 
+    GENERAL_ERROR : 1,
     LOGIN_FAIL : 2,
     REGISTER_FAIL_USER_EXIST : 3,
     CHECK_SID_FAIL : 4,
@@ -9,7 +10,8 @@ var ErrorType = { GENERAL_ERROR : 1,
     RATE_TYPE_ILLEGAL : 6,
     DB_OPERATE_FAIL : 7,
     USER_EXISTED : 8,
-    DISH_EXISTED : 9
+    DISH_EXISTED : 9,
+    ROUTE_NOT_FOUND : 10
 }
 
 var ErrorMap = {};
@@ -23,6 +25,7 @@ ErrorMap[ErrorType.RATE_TYPE_ILLEGAL] = {'code' : 500, 'error_code':6, 'msg' : '
 ErrorMap[ErrorType.DB_OPERATE_FAIL] = {'code' : 500, 'error_code':7, 'msg' : 'ACTION: {1}, MSG: {2}', 'param_count' : 2};
 ErrorMap[ErrorType.USER_EXISTED] = {'code' : 500, 'error_code':8, 'msg' : 'user \'{1}\' existed.', 'param_count' : 1};
 ErrorMap[ErrorType.DISH_EXISTED] = {'code' : 500, 'error_code':9, 'msg' : 'vender \'{1}\' dish \'{2}\' existed.', 'param_count' : 2};
+ErrorMap[ErrorType.ROUTE_NOT_FOUND] = {'code' : 404, 'error_code':10, 'msg' : 'route \'{1}\' invaild', 'param_count' : 1};
 
 Object.defineProperty(ErrorMap, 'key', {
   enumerable: true,
@@ -72,12 +75,6 @@ class APIError extends Error{
         return result;
     }
 }
-
-// var error = new APIError(ErrorType.REGISTER_FAIL_USER_EXIST,'shgao');
-// error.toJSON();
-// var error2 = new APIError(ErrorType.GENERAL_ERROR);
-// error2.toJSON();
-// throw error2;
 
 exports.APIError = APIError;
 exports.ErrorType = ErrorType;

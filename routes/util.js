@@ -3,8 +3,6 @@ var logger = require('./log').logger,
     APIError = require('./error').APIError,
     ErrorType = require('./error').ErrorType;
 
-    // CACHE = require('./cache').cache;
-
 //if includes function not existed, then use this.
 if (!Array.prototype.includes) {
   Array.prototype.includes = function(searchElement /*, fromIndex*/ ) {
@@ -93,6 +91,7 @@ function checkUserSessionIdHandler(isAdmin){
         }else{
             logger.error("can't restore a session");
             //Jump to error handle.
+            console.log(req.cookies['connect.sid']);
             var err = new APIError(ErrorType.CHECK_SID_FAIL, req.cookies['connect.sid']);
             next(err);
             return;

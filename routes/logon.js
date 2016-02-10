@@ -1,8 +1,6 @@
 'use strict';
 var express = require('express'),
     router = express.Router(),
-    uuid = require('node-uuid'),  
-    // CACHE = require('./cache').cache,
     db = require('./db'),
     logger = require('./log').logger,
     checkInputHandler = require('./util').checkInputHandler,
@@ -44,12 +42,12 @@ router.post('/', checkInputHandler(['username', 'password'], true), function(req
                     res.json(result);
                 });
             }else{
-                let new_err = new APIError(ErrorType.LOGIN_FAIL, 'FIND', body['username']);
+                let new_err = new APIError(ErrorType.LOGIN_FAIL, body['username']);
                 res.status(new_err.status).json(new_err.toJSON());
             }
 
         }else{
-            let new_err = new APIError(ErrorType.LOGIN_FAIL, 'FIND', body['username']);
+            let new_err = new APIError(ErrorType.LOGIN_FAIL, body['username']);
             res.status(new_err.status).json(new_err.toJSON());
         }
     });
@@ -132,11 +130,6 @@ router.post('/register', checkInputHandler(['username', 'password'], true), func
         }
     })
 
-});
-
-router.use(function(err, req, res, next){
-    logger.error(err.toJSON());
-    res.status(err.status).json(err.toJSON());
 });
 
 module.exports = router;

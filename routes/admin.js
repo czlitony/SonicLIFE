@@ -1,8 +1,6 @@
 'use strict';
 var express = require('express');
 var router = express.Router();
-// var uuid = require('node-uuid'); 
-//var CACHE = require('./cache').cache;
 var db = require('./db');
 var logger = require('./log').logger; 
 var ObjectID = require('mongodb').ObjectID;
@@ -10,8 +8,6 @@ var APIError = require('./error').APIError,
     ErrorType = require('./error').ErrorType;
 var checkInputHandler = require('./util').checkInputHandler;
 var checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
-
-// router.param('id', checkAdminSessionIdHandler);
 
 router.get('/vender', checkUserSessionIdHandler(true), function(req, res, next) {
 
@@ -86,15 +82,6 @@ router.delete('/menu/:dish_id', checkUserSessionIdHandler(true), function(req,re
             }
             res.sendStatus(200);
         });
-});
-
-// router.get('/:vender_name', checkUserSessionIdHandler(true), function(req, res, next) {
-//     res.redirect('/menu/' + req.params.vender_name);
-// });
-
-router.use(function(err, req, res, next){
-    logger.error(err.toJSON());
-    res.status(err.status).json(err.toJSON());
 });
 
 module.exports = router;

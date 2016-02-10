@@ -1,8 +1,6 @@
 'use strict';
 var express = require('express');
 var router = express.Router();
-// var uuid = require('node-uuid'); 
-// var CACHE = require('./cache').cache;
 var db = require('./db');
 var logger = require('./log').logger;  
 var APIError = require('./error').APIError,
@@ -115,12 +113,6 @@ router.put('/:vender_name/:dish_name/rate', checkUserSessionIdHandler(false), ch
             return;
         }
     });
-
-});
-
-router.use(function(err, req, res, next){
-    logger.error(err.toJSON());
-    res.status(err.status).json(err.toJSON());
 
 });
 
