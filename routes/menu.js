@@ -8,8 +8,6 @@ var APIError = require('./error').APIError,
 var checkInputHandler = require('./util').checkInputHandler,
     checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
 
-//FIXME Get all vender
-
 router.get('/', function(req, res, next) {
     let cursor = db.find('menu', {});
 

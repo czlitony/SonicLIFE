@@ -60,7 +60,6 @@ function checkRequestContent(req, target_list, strict){
 
 function checkInputHandler(target, strict){
     return function (req, res, next){
-        // let body = req.body;
 
         if(!checkRequestContent(req, target, strict)){
             logger.error('Error :' + req['error_reason']);

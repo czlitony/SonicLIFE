@@ -1,6 +1,7 @@
 'use strict';
 var express = require('express'),
     router = express.Router(),
+    uuid = require('node-uuid'),  
     db = require('./db'),
     logger = require('./log').logger,
     checkInputHandler = require('./util').checkInputHandler,
@@ -55,11 +56,7 @@ router.post('/', checkInputHandler(['username', 'password'], true), function(req
 
 router.get('/', checkUserSessionIdHandler(false), function(req, res, next) {
     
-    // logger.debug(req.params.id);
-    // let body = req.body;
-
     let result = {};
-    // let cache_result = CACHE.restore(req.params.id);
     let session = req.session;
     if(session.sessionState.authenticated){
         result['authenticated'] = session.sessionState.authenticated;
@@ -76,9 +73,6 @@ router.get('/', checkUserSessionIdHandler(false), function(req, res, next) {
 
 router.delete('/', checkUserSessionIdHandler(false), function(req, res, next){
 
-    // let id = req.params.id;;
-    // CACHE.delete(id);
-    // CACHE.dump();
     req.session.destroy(function(err){
         res.json({'status':true});
     });
