@@ -92,7 +92,9 @@ function ldapAuthenticate(req, res, next){
 }
 
 var authenticate = localAuthenticate;
-if(process.env.USE_LDAP){
+console.log('ENV USE_LDAP '+process.env.USE_LDAP);
+if(process.env.USE_LDAP == 1){
+    console.log('USE LDAP');
     authenticate = ldapAuthenticate;
 }
 
