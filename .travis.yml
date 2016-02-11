@@ -8,7 +8,8 @@ install:
 
 services:
   - mongodb
-
+env:
+  - USE_LDAP=0
 before_script:
   - sleep 15
   - mongo sonicwall --eval 'db.user.remove();'
