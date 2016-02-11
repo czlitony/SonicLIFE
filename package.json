@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test/test_*",
-    "start": "node -e 'process.env.USE_LDAP = 0' ./bin/www"
+    "start": "node ./bin/www"
   },
   "repository": {
     "type": "git",
