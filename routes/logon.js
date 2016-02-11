@@ -10,8 +10,15 @@ var express = require('express'),
     ErrorType = require('./error').ErrorType;
 const crypto = require('crypto');
 
-router.post('/', checkInputHandler(['username', 'password'], true), function(req, res, next) {
+var ldap = require('ldap-verifyuser');
+var ldapConfig = {
+    server: 'ldap://10.102.1.51',
+    adrdn: 'sv\\',
+    adquery: 'DC=sv,DC=us,DC=sonicwall,DC=com',
+    debug: false
+}
 
+function localAuthenticate(req, res, next){
     let body = req.body;
 
     let result = db.find('user', { 'username' : body['username']});
@@ -52,6 +59,46 @@ router.post('/', checkInputHandler(['username', 'password'], true), function(req
             res.status(new_err.status).json(new_err.toJSON());
         }
     });
+}
+
+function ldapAuthenticate(req, res, next){
+    let body = req.body;
+    let username = body.username,
+        password = body.password;
+
+    logger.debug("start to verifyUser.");
+    ldap.verifyUser(ldapConfig, username, password, function(err, data){
+        if(err) {
+            logger.debug("verifyUser fail.");
+            let new_err = new APIError(ErrorType.LOGIN_FAIL, body['username']);
+            res.status(new_err.status).json(new_err.toJSON());
+        } else {
+            console.log('valid?', data.valid);
+            console.log('locked?', data.locked);
+            console.log('raw data available?', data.raw ? true : false);
+            req.session.regenerate(function(err){
+                req.session.sessionState = {};
+                req.session.sessionState["authenticated"] = true;
+                //HOW TO check if it's an admin??
+                req.session.sessionState["role"] = 'user';
+                req.session.sessionState["username"] = body['username'];
+                // req.session.save();
+                let result = {'session_id': req.sessionID};
+                logger.info('user '+ body['username'] +' logon.');
+                res.json(result);
+            });
+        }
+    });
+}
+
+var authenticate = localAuthenticate;
+if(process.env.USE_LDAP){
+    authenticate = ldapAuthenticate;
+}
+
+router.post('/', checkInputHandler(['username', 'password'], true), function(req, res, next) {
+
+    authenticate(req, res, next);
 });
 
 router.get('/', checkUserSessionIdHandler(false), function(req, res, next) {
