@@ -35,7 +35,7 @@ targets.add(["add menu", "/__api__/admin/menu/add", "POST", api.logonID, {'vende
 
 
 targets.add(["all menu", "/__api__/menu", "GET", api.logonID, undefined, check_menu_resp]);
-targets.add(["by vender", "/__api__/menu", "GET", api.logonID, undefined, check_menu_resp]);
-targets.add(["by vender and dish_name", "/__api__/menu", "GET", api.logonID, undefined, check_menu_resp]);
+targets.add(["by vender", "/__api__/menu/vender1", "GET", api.logonID, undefined, check_menu_resp]);
+targets.add(["by vender and dish_name", "/__api__/menu/vender1/dish1", "GET", api.logonID, undefined, check_menu_resp]);
 
 api.test_all(targets);

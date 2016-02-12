@@ -8,7 +8,6 @@ var express = require('express'),
     checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler,
     APIError = require('./error').APIError,
     ErrorType = require('./error').ErrorType;
-const crypto = require('crypto');
 
 var ldap = require('ldap-verifyuser');
 var ldapConfig = {
@@ -17,6 +16,8 @@ var ldapConfig = {
     adquery: 'DC=sv,DC=us,DC=sonicwall,DC=com',
     debug: false
 }
+
+const crypto = require('crypto');
 
 function localAuthenticate(req, res, next){
     let body = req.body;
@@ -51,12 +52,14 @@ function localAuthenticate(req, res, next){
                 });
             }else{
                 let new_err = new APIError(ErrorType.LOGIN_FAIL, body['username']);
-                res.status(new_err.status).json(new_err.toJSON());
+                next(new_err);
+                return;
             }
 
         }else{
             let new_err = new APIError(ErrorType.LOGIN_FAIL, body['username']);
-            res.status(new_err.status).json(new_err.toJSON());
+            next(new_err);
+            return;
         }
     });
 }
@@ -71,10 +74,20 @@ function ldapAuthenticate(req, res, next){
         if(err) {
             logger.debug("verifyUser fail.");
             let new_err = new APIError(ErrorType.LOGIN_FAIL, body['username']);
-            res.status(new_err.status).json(new_err.toJSON());
+            next(new_err);
+            return;
         } else {
-            console.log('valid?', data.valid);
-            console.log('locked?', data.locked);
+
+            if(data.valid == false){
+                let new_err = new APIError(ErrorType.LDAP_USER_INVALID, body['username']);
+                next(new_err);
+                return;
+            }else if(data.locked){
+                let new_err = new APIError(ErrorType.LDAP_USER_LOCKED, body['username']);
+                next(new_err);
+                return; 
+            }
+
             console.log('raw data available?', data.raw ? true : false);
             req.session.regenerate(function(err){
                 req.session.sessionState = {};
@@ -98,10 +111,7 @@ if(process.env.USE_LDAP == 1){
     authenticate = ldapAuthenticate;
 }
 
-router.post('/', checkInputHandler(['username', 'password'], true), function(req, res, next) {
-
-    authenticate(req, res, next);
-});
+router.post('/', checkInputHandler(['username', 'password'], true), authenticate);
 
 router.get('/', checkUserSessionIdHandler(false), function(req, res, next) {
     
@@ -154,7 +164,7 @@ router.post('/register', checkInputHandler(['username', 'password'], true), func
             record['salt'] = salt;
             record['role'] = 'user';
 
-            var promise_result = db.insert('user', record);
+            let promise_result = db.insert('user', record);
             promise_result.then(function(result, err){
                 if(err){
                     let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(user)', err.message);
