@@ -32,7 +32,7 @@ app.use(session({
 
 app.use('/__api__/logon', logon);
 app.use('/__api__/menu', menu);
-app.use('/__api__/admin', admin);
+// app.use('/__api__/admin', admin);
 app.use('/__api__/order', order);
 
 // catch 404 and forward to error handler

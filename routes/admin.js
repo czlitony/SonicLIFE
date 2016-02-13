@@ -9,25 +9,25 @@ var APIError = require('./error').APIError,
 var checkInputHandler = require('./util').checkInputHandler;
 var checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
 
-router.get('/vender', checkUserSessionIdHandler(true), function(req, res, next) {
+// router.get('/vender', checkUserSessionIdHandler(true), function(req, res, next) {
 
-    let promise_result = db.findDistinct('menu','vender');
-    promise_result.then(function(result,err){
-         if(err){
-            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND_DISTINCT(menu)', err.message);
-            logger.error(err.message);
-            next(new_err);
-            return;
-        }
-        logger.debug(result);
-        let result_data = {};
-        result_data['values'] = result;
-        res.status(200).json(result_data);
-    });
-});
+//     let promise_result = db.findDistinct('menu','vender');
+//     promise_result.then(function(result,err){
+//          if(err){
+//             let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND_DISTINCT(menu)', err.message);
+//             logger.error(err.message);
+//             next(new_err);
+//             return;
+//         }
+//         logger.debug(result);
+//         let result_data = {};
+//         result_data['values'] = result;
+//         res.status(200).json(result_data);
+//     });
+// });
 
 //NOTE: give anonymous functions a name is good for debug.
-router.post('/menu/add', checkUserSessionIdHandler(true), checkInputHandler(['vender','dish'], true), function(req, res, next){
+/*router.post('/menu/add', checkUserSessionIdHandler(true), checkInputHandler(['vender','dish'], true), function(req, res, next){
 
     let body = req.body;
     let data = {};
@@ -82,6 +82,6 @@ router.delete('/menu/:dish_id', checkUserSessionIdHandler(true), function(req,re
             }
             res.sendStatus(200);
         });
-});
+});*/
 
 module.exports = router;

@@ -14,7 +14,8 @@ var ErrorType = {
     ROUTE_NOT_FOUND : 10,
     LDAP_USER_INVALID : 11,
     LDAP_USER_LOCKED : 12,
-    LOGOFF_FAIL : 13
+    LOGOFF_FAIL : 13,
+    CAN_NOT_CREATE_OBJECTID : 14
 }
 
 var ErrorMap = {};
@@ -32,6 +33,7 @@ ErrorMap[ErrorType.ROUTE_NOT_FOUND] = {'code' : 404, 'error_code':10, 'msg' : 'r
 ErrorMap[ErrorType.LDAP_USER_INVALID] = {'code' : 404, 'error_code':11, 'msg' : 'LDAP user \'{1}\' invaild', 'param_count' : 1};
 ErrorMap[ErrorType.LDAP_USER_LOCKED] = {'code' : 404, 'error_code':12, 'msg' : 'LDAP user \'{1}\' locked', 'param_count' : 1};
 ErrorMap[ErrorType.LOGOFF_FAIL] = {'code' : 500, 'error_code':13, 'msg' : 'Logoff user \'{1}\' failed', 'param_count' : 1};
+ErrorMap[ErrorType.CAN_NOT_CREATE_OBJECTID] = {'code' : 500, 'error_code':14, 'msg' : 'Translate id to ObjectID fail, \'{1}\' is not a vaild value', 'param_count' : 1};
 
 Object.defineProperty(ErrorMap, 'key', {
   enumerable: true,
@@ -69,7 +71,7 @@ class APIError extends Error{
 
     toJSON(){
         let finalMsg = ErrorMap[this.type]['msg'];
-        for(let i=1; i<this.paramList.length; i++){
+        for(let i = 1; i < this.paramList.length; i++){
             let pattern = '{' + i.toString() + '}';
             finalMsg = finalMsg.replace(pattern, this.paramList[i]);
         }
