@@ -43,8 +43,12 @@ app.use(function(req, res, next) {
 
 // error handlers
 app.use(function(err, req, res, next) {
-    log.logger.error(err.toJSON());
-    res.status(err.status).json(err.toJSON());
+    if(err.toJSON){
+        log.logger.error(err.toJSON());
+        res.status(err.status).json(err.toJSON());
+    }else{
+        res.status(500).send(err.message);
+    }
 });
 
 

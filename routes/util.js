@@ -2,7 +2,7 @@
 var logger = require('./log').logger,
     APIError = require('./error').APIError,
     ErrorType = require('./error').ErrorType;
-
+var db = require('./db');
 //if includes function not existed, then use this.
 if (!Array.prototype.includes) {
   Array.prototype.includes = function(searchElement /*, fromIndex*/ ) {
@@ -115,7 +115,6 @@ function checkUserSessionIdHandler(isAdmin){
 function genericQuery(collection){
     return function(req, res, next){
         let cursor = db.find(collection, {});
-
         let page = req.query.page;
         if(page !== undefined && page > 0){
             cursor = cursor.skip((page-1)*10).limit(10);
@@ -131,7 +130,7 @@ function genericQuery(collection){
             logger.debug(req.originalUrl + ' ' + docments);
             res.json(docments);
         });
-    }
+    };
 }
 
 module.exports.checkInputHandler = checkInputHandler;
