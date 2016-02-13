@@ -42,6 +42,12 @@ APITester.prototype.invoke = function(path, method, cookie, data, done){
     var req = http.request(options, function(response)
     {
         var response_data = '';
+        //console.log(response.headers);
+
+        var parse_json = true;
+        if(response.headers['content-type'] == 'text/plain; charset=utf-8'){
+            parse_json = false;
+        }
 
         response.setEncoding('utf8');
 
@@ -51,16 +57,17 @@ APITester.prototype.invoke = function(path, method, cookie, data, done){
 
         response.on('end', function () {
 
+
             if(done && typeof done === "function"){
                 console.log(response_data);
                 this._resp_callback(response.statusCode, 
                     response.headers, 
-                    JSON.parse(response_data), 
+                    parse_json ? JSON.parse(response_data) : response_data, 
                     done);
             }else{
                 this._resp_callback(response.statusCode, 
                     response.headers, 
-                    JSON.parse(response_data));
+                    parse_json ? JSON.parse(response_data) : response_data);
             }
             
         }.bind(this));
@@ -105,7 +112,8 @@ var TEST_URI = 1;
 var TEST_METHOD = 2;
 var TEST_COOKIE = 3;
 var TEST_BODY_DATA = 4;
-var TEST_CALLBACK = 5;
+var TEST_CTYPE = 5;
+var TEST_CALLBACK = 6;
 
 
 APITester.prototype._test_template = function (api, api_list){
@@ -137,7 +145,7 @@ APITester.prototype._test_template = function (api, api_list){
         it("Check content type", function(){
             test.should(api.result.ctype).be.a.String;
             // test.should(api.result.ctype).be.equal('application/json');
-            test.should(api.result.ctype).be.equal('application/json; charset=utf-8');
+            test.should(api.result.ctype).be.equal(api_list[TEST_CTYPE]);
             test.should(api.result.data).be.json;
         });
 

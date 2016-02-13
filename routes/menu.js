@@ -102,7 +102,7 @@ router.put('/:vender_name/:dish_name/rate', checkUserSessionIdHandler(false), ch
                         return;
                     }
                     logger.debug(update_result);
-                    res.status(200).send();
+                    res.sendStatus(200);
                 });
         }else{
             let error = new APIError(ErrorType.RATE_TYPE_ILLEGAL);

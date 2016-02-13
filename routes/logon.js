@@ -46,9 +46,9 @@ function localAuthenticate(req, res, next){
                     req.session.sessionState["role"] = documents[0]['role'];
                     req.session.sessionState["username"] = documents[0]['username'];
                     // req.session.save();
-                    let result = {'session_id': req.sessionID};
+                    // let result = {'session_id': req.sessionID};
                     logger.info('user '+ body['username'] +' logon.');
-                    res.json(result);
+                    res.json(req.session.sessionState);
                 });
             }else{
                 let new_err = new APIError(ErrorType.LOGIN_FAIL, body['username']);
@@ -96,9 +96,9 @@ function ldapAuthenticate(req, res, next){
                 req.session.sessionState["role"] = 'user';
                 req.session.sessionState["username"] = body['username'];
                 // req.session.save();
-                let result = {'session_id': req.sessionID};
+                // let result = {'session_id': req.sessionID};
                 logger.info('user '+ body['username'] +' logon.');
-                res.json(result);
+                res.json(req.session.sessionState);
             });
         }
     });
@@ -133,7 +133,13 @@ router.get('/', checkUserSessionIdHandler(false), function(req, res, next) {
 router.delete('/', checkUserSessionIdHandler(false), function(req, res, next){
 
     req.session.destroy(function(err){
-        res.json({'status':true});
+        if(err){
+            let error = new APIError(ErrorType.LOGOFF_FAIL, req.sessionID);
+            logger.error(error.toJSON());
+            next(error);
+            return;
+        }
+        res.sendStatus(200);
     });
     
 });
@@ -174,7 +180,7 @@ router.post('/register', checkInputHandler(['username', 'password'], true), func
                     return;
                 }
                 logger.debug(result);
-                res.status(200).json({'status':true});
+                res.sendStatus(200);
             });
             
         }else{

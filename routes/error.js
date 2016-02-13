@@ -13,7 +13,8 @@ var ErrorType = {
     DISH_EXISTED : 9,
     ROUTE_NOT_FOUND : 10,
     LDAP_USER_INVALID : 11,
-    LDAP_USER_LOCKED : 12
+    LDAP_USER_LOCKED : 12,
+    LOGOFF_FAIL : 13
 }
 
 var ErrorMap = {};
@@ -30,6 +31,7 @@ ErrorMap[ErrorType.DISH_EXISTED] = {'code' : 500, 'error_code':9, 'msg' : 'vende
 ErrorMap[ErrorType.ROUTE_NOT_FOUND] = {'code' : 404, 'error_code':10, 'msg' : 'route \'{1}\' invaild', 'param_count' : 1};
 ErrorMap[ErrorType.LDAP_USER_INVALID] = {'code' : 404, 'error_code':11, 'msg' : 'LDAP user \'{1}\' invaild', 'param_count' : 1};
 ErrorMap[ErrorType.LDAP_USER_LOCKED] = {'code' : 404, 'error_code':12, 'msg' : 'LDAP user \'{1}\' locked', 'param_count' : 1};
+ErrorMap[ErrorType.LOGOFF_FAIL] = {'code' : 500, 'error_code':13, 'msg' : 'Logoff user \'{1}\' failed', 'param_count' : 1};
 
 Object.defineProperty(ErrorMap, 'key', {
   enumerable: true,
