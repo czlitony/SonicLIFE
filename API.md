@@ -1,8 +1,8 @@
-## Logon API
+# Logon API
 
-### POST /__api__/logon
+## POST /__api__/logon
 
-#### INPUT
+### INPUT
 
 ~~~
 {
@@ -11,38 +11,32 @@
 }
 ~~~
 
-#### OUTPUT
+### OUTPUT
 
 * status 200
+* set-cookie: connect.sid=1233456789
+
 ~~~
 {
-    'session_id' : "52671630-c120-11e5-87e4-87a53587f70d"
+    "authenticated":true,
+    "role":"admin",
+    "username":"admin"
 }
 ~~~
-if user has already logon, it will return the same session_id.
 
-#### ERROR
 
-#### test
+## DELETE /__api__/logon
 
-~~~
-curl -X POST -H "content-type: application/json" http://localhost:3000/logon -d '{"username":"ab", "password":"cd"}'
-~~~
+###INPUT
+SHOULD set cookie in header
 
-### DELETE /__api__/logon/<sessiond_id>
-
-~~~
-curl -X DELETE http://localhost:3000/logon/<session-id>
-~~~
-
-#### OUTPUT
+### OUTPUT
 
 * status 200
 
-#### ERROR
+## POST /__api__/logon/register
 
-### POST /__api__/logon/register
-#### INPUT
+### INPUT
 ~~~
 {
     'username' : 'xxxxx',
@@ -50,18 +44,18 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 }
 ~~~
 
-#### OUTPUT
+### OUTPUT
+
 * status 200
 
-#### ERROR
 
-## Menu API
+# Menu API
 
-### GET /__api__/menu?page=1
+## GET /__api__/menu?page=1
+## GET /__api__/menu/q/\<vender_name\>?page=1
+## GET /__api__/menu/q/\<vender_name\>/<dish_name>?page=1
 
-### GET /__api__/menu/<vender_name>?page=1
-
-#### OUTPUT
+### OUTPUT
 
 ~~~
 [
@@ -71,9 +65,10 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 ]
 ~~~
 
-### PUT /__api__/menu/<vender_name>/<dish_name>/rate
+## PUT /__api__/menu/q/\<vender_name\>/\<dish_name\>/rate
 
-#### INPUT
+### INPUT
+
 ~~~
 {rate : 4}
 ~~~
@@ -82,84 +77,65 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 * status 200
 
 
-## Admin API
 
-### POST /admin/<session_id>/menu/add
+## POST /__api__/menu
 
-#### INPUT
+### INPUT
 
+~~~   
+{
+    vender: xxx, 
+    dish : yyy
+}
 ~~~
-[
-    {vender: xxx, dish : yyy},
-    ...,
-    ...
-]
-~~~
-
-#### OUTPUT
-~~~
-[{  
-    "_id":"56a48821fa521c194dd931e2",
-    "vender":"new",
-    "dish":"yuxiangrous",
-    "rate":{"result":3.125,"times":8}
-}]
-~~~
-
-* status 200.
-
-#### ERROR
-
-### DELETE /admin/<session_id>/menu/<dish_id>
 
 ### OUTPUT
 
 * status 200.
 
-### GET /admin/<session_id>/menu/<vender_name>
-redirect to `/menu/<session_id>/menu/<vender_name>`
-
-### GET /admin/<session_id>/vender
-
-#### OUTPUT
-
 ~~~
-[vender1,vender2...]
-~~~
-
-### POST /admin/<session_id>/menu/add
-
-~~~
-{ vender : xxx, dish : yyy}
-~~~
-
-#### OUTPUT
-
-~~~
-[{  
+{  
     "_id":"56a48821fa521c194dd931e2",
     "vender":"new",
     "dish":"yuxiangrous",
     "rate":{"result":3.125,"times":8}
-},
-....
+}
+~~~
+
+## DELETE /__api__/menu
+
+### INPUT
+
+~~~
+{
+    dish_list : [id1,id2,id3]
+}
+~~~
+
+### OUTPUT
+
+* status 200.
+
+### GET /__api__/menu/vender
+
+#### OUTPUT
+
+~~~
+[
+    vender1,
+    vender2,
+    ...
 ]
 ~~~
 
+#Order API
 
-##Order
+## POST /__api__/order
 
-###Add POST /__api__/<session-id>/order
+## Remove DELETE     
 
-###Remove DELETE     
-
-###modify PUT
-
+## modify PUT
 
 
-GET /menu?arg1=1&arg2=2...
-GET /menu/<obejct-id>
-
-
-
+# TODO
 POST notification
