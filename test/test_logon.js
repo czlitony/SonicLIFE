@@ -18,7 +18,7 @@ function check_logon_get_resp(data){
 }
 
 var targets = new Set();
-var username = "admin",
+var username = "user",
     password = "password";
 
 targets.add(["register POST", "/__api__/logon/register", "POST", api.logonID, {'username':username, "password":password}, 'text/plain; charset=utf-8', undefined]);
