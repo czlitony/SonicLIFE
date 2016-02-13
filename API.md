@@ -53,7 +53,7 @@ SHOULD set cookie in header
 
 ## GET /__api__/menu?page=1
 ## GET /__api__/menu/q/\<vender_name\>?page=1
-## GET /__api__/menu/q/\<vender_name\>/<dish_name>?page=1
+## GET /__api__/menu/q/\<vender_name\>/\<dish_name\>?page=1
 
 ### OUTPUT
 
