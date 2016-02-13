@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logon = require('./routes/logon');
 var menu = require('./routes/menu');
-var admin = require('./routes/admin');
+var schedule = require('./routes/schedule');
 var order = require('./routes/order');
 var log = require('./routes/log');
 var session = require('express-session');
@@ -32,7 +32,7 @@ app.use(session({
 
 app.use('/__api__/logon', logon);
 app.use('/__api__/menu', menu);
-// app.use('/__api__/admin', admin);
+app.use('/__api__/schedule', schedule);
 app.use('/__api__/order', order);
 
 // catch 404 and forward to error handler

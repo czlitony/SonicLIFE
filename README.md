@@ -76,7 +76,7 @@ DEBUG=express:* npm start
 ~~~
 {
 	menu_ref : [string],
-	day : int
+	day : int[1-7]
 }
 ~~~
 

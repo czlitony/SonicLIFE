@@ -67,6 +67,8 @@ SHOULD set cookie in header
 
 ## PUT /__api__/menu/q/\<vender_name\>/\<dish_name\>/rate
 
+* NEED LOGIN
+
 ### INPUT
 
 ~~~
@@ -77,8 +79,9 @@ SHOULD set cookie in header
 * status 200
 
 
-
 ## POST /__api__/menu
+
+* NEED LOGIN and ADMIN
 
 ### INPUT
 
@@ -103,6 +106,8 @@ SHOULD set cookie in header
 ~~~
 
 ## DELETE /__api__/menu
+
+* NEED LOGIN and ADMIN
 
 ### INPUT
 

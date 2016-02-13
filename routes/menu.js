@@ -7,27 +7,12 @@ var ObjectID = require('mongodb').ObjectID;
 var APIError = require('./error').APIError,
     ErrorType = require('./error').ErrorType;
 var checkInputHandler = require('./util').checkInputHandler,
-    checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
+    checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler,
+    genericQuery = require('./util').genericQuery;
 
-router.get('/', function(req, res, next) {
-    let cursor = db.find('menu', {});
 
-    let page = req.query.page;
-    if(page !== undefined && page > 0){
-        cursor = cursor.skip((page-1)*10).limit(10);
-    }
 
-    cursor.toArray(function(error, docments){
-        if(error){
-            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(menu)', error.message);
-            logger.error(error.message);
-            next(new_err);
-            return;
-        }
-        logger.debug(req.originalUrl + ' ' + docments);
-        res.json(docments);
-    });
-});
+router.get('/', genericQuery('menu'));
 
 //NOTE: give anonymous functions a name is good for debug.
 router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['vender','dish'], true), function(req, res, next){
@@ -51,24 +36,26 @@ router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['vender','d
             next(error);
             return;
         }
+        
+        data['rate'] = { 'times': 0, 'result': 0 };
+        var promise_result = db.insert('menu', data);
+
+        //FIXME: the input sequence is different with the offical document.
+        //Offical docs: function(err, result)
+        //Actual: function(result, err)
+        promise_result.then(function(result, err){
+            if(err){
+                let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(menu)', err.message);
+                logger.error(err.message);
+                next(new_err);
+                return;
+            }
+            logger.debug(result);
+            res.status(200).json(result['ops']);
+        });
     });
 
-    data['rate'] = { 'times': 0, 'result': 0 };
-    var promise_result = db.insert('menu', data);
 
-    //FIXME: the input sequence is different with the offical document.
-    //Offical docs: function(err, result)
-    //Actual: function(result, err)
-    promise_result.then(function(result, err){
-        if(err){
-            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(menu)', err.message);
-            logger.error(err.message);
-            next(new_err);
-            return;
-        }
-        logger.debug(result);
-        res.status(200).json(result['ops']);
-    });
 });
 
 router.delete('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_list'], true), function(req,res,next){
@@ -103,7 +90,7 @@ router.delete('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_lis
         });
 });
 
-router.get('/vender', checkUserSessionIdHandler(true), function(req, res, next) {
+router.get('/vender', function(req, res, next) {
 
     let promise_result = db.findDistinct('menu','vender');
     promise_result.then(function(result,err){
@@ -196,7 +183,7 @@ router.put('/q/:vender_name/:dish_name/rate', checkUserSessionIdHandler(false), 
                     res.sendStatus(200);
                 });
         }else{
-            let error = new APIError(ErrorType.RATE_TYPE_ILLEGAL);
+            let error = new APIError(ErrorType.TYPE_ILLEGAL, 'rate', 'Number');
             logger.error(error.toJSON());
             next(error);
             return;

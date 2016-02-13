@@ -35,27 +35,41 @@ if (!Array.prototype.includes) {
 
 function checkRequestContent(req, target_list, strict){
 
-    if(strict && target_list.length !== Object.keys(req.body).length){
-        req['error_reason'] = "input parameters length not match";
-        return false;
+    if(req.body instanceof Array){
+        for(let i=0; i<req.body.length; i++){
+            if(!checkObject(req.body[i])){
+                return false;
+            }
+        }
+        return true;
+    }else{
+        return checkObject(req.body);
     }
 
-    if( req.body !== undefined && !req.is('application/json')){
-        // need a return here, or the program will continue.
-        req['error_reason'] = "input parameters must be json";
-        return false;
-    }
-
-    logger.debug(Object.keys(req.body));
-    let l = Object.keys(req.body)
-    for(var i=0; i< l.length; i++){
-        // console.log(itr);
-        logger.debug('checking '+l[i]);
-        if(!target_list.includes(l[i])){
+    function checkObject(obj){
+        if(strict && target_list.length !== Object.keys(obj).length){
+            req['error_reason'] = "input parameters length not match";
             return false;
         }
+
+        if( obj !== undefined && !req.is('application/json')){
+            // need a return here, or the program will continue.
+            req['error_reason'] = "input parameters must be json";
+            return false;
+        }
+
+        logger.debug(Object.keys(obj));
+        let l = Object.keys(obj)
+        for(var i=0; i< l.length; i++){
+            // console.log(itr);
+            logger.debug('checking '+l[i]);
+            if(!target_list.includes(l[i])){
+                logger.debug('return false');
+                return false;
+            }
+        }
+        return true;
     }
-    return true;
 }
 
 function checkInputHandler(target, strict){
@@ -98,5 +112,28 @@ function checkUserSessionIdHandler(isAdmin){
     };
 }
 
+function genericQuery(collection){
+    return function(req, res, next){
+        let cursor = db.find(collection, {});
+
+        let page = req.query.page;
+        if(page !== undefined && page > 0){
+            cursor = cursor.skip((page-1)*10).limit(10);
+        }
+
+        cursor.toArray(function(error, docments){
+            if(error){
+                let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND('+collection+')', error.message);
+                logger.error(error.message);
+                next(new_err);
+                return;
+            }
+            logger.debug(req.originalUrl + ' ' + docments);
+            res.json(docments);
+        });
+    }
+}
+
 module.exports.checkInputHandler = checkInputHandler;
 module.exports.checkUserSessionIdHandler = checkUserSessionIdHandler;
+module.exports.genericQuery = genericQuery;
