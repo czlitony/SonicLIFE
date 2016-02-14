@@ -167,6 +167,19 @@ SHOULD set cookie in header
 ]
 ~~~
 
+## DELETE /\_\_api\_\_/schedule
+
+* NEED ADMIN AND LOGON
+
+### INPUT
+
+~~~
+{
+    schedule_list : [id1,id2,id3]
+}
+~~~
+
+
 #Order API
 
 ## POST /__api__/order

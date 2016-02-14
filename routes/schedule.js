@@ -106,7 +106,7 @@ router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','
             callback(error);
             return;
         }
-        if(typeof data['day'] != 'number'){
+        if(typeof data['day'] != 'number' || data['day'] > 7 || data['day'] < 1){
             let error = new APIError(ErrorType.TYPE_ILLEGAL, 'day', 'Number');
             logger.error(error.toJSON());
             callback(error);
@@ -131,6 +131,38 @@ router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','
         });    
     }
 
+});
+
+router.delete('/', checkUserSessionIdHandler(true), checkInputHandler(['schedule_id']), function(req, res, next){
+    let delete_list = req.body['schedule_id'];
+
+    let translated_list = [];
+    let a_tracker = '';
+    try{
+        for(let i=0; i<delete_list.length; i++){
+            a_tracker = delete_list[i];
+            translated_list.push(ObjectID.createFromHexString(a_tracker));
+        }
+    }catch(e){
+        let error = new APIError(ErrorType.CAN_NOT_CREATE_OBJECTID, a_tracker);
+        logger.error(error.message);
+        next(error);
+        return;
+    }
+
+    // logger.debug('dish_id is ' + req.params.dish_id);
+    db.remove('schedule', {'_id': {'$in' : translated_list}})
+        .then(function(result, error){
+            logger.debug(result);
+            logger.debug(error);
+            if(error){
+                let error = new APIError(ErrorType.DB_OPERATE_FAIL, 'REMOVE(schedule)', err.message);
+                logger.error(error.message);
+                next(error);
+                return;
+            }
+            res.sendStatus(200);
+        });
 });
 
 
