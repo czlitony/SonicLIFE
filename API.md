@@ -123,12 +123,46 @@ SHOULD set cookie in header
 
 ### GET /__api__/menu/vender
 
-#### OUTPUT
+### OUTPUT
 
 ~~~
 [
     vender1,
     vender2,
+    ...
+]
+~~~
+
+#schedule API
+
+## POST /__api__/schedule
+
+###INPUT
+
+* NEED ADMIN AND LOGON
+* day [1-7] represent from monday to sunday.
+~~~
+[
+    {
+        dish_id : "abcdefa",
+        day : 1
+    },
+    ...
+    ...
+]
+~~~
+
+###OUTPUT
+
+* status 200
+
+~~~
+[
+    {
+        dish_id : "abcdefa",
+        day : 1
+    },
+    ...
     ...
 ]
 ~~~
