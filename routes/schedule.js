@@ -13,7 +13,7 @@ var async = require('async');
 
 router.get('/', genericQuery('schedule'));
 
-router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','day']), function(req, res, next){
+router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','day'], true), function(req, res, next){
     let body = req.body;
 
     if(body instanceof Array){
@@ -133,7 +133,7 @@ router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','
 
 });
 
-router.delete('/', checkUserSessionIdHandler(true), checkInputHandler(['schedule_id']), function(req, res, next){
+router.delete('/', checkUserSessionIdHandler(true), checkInputHandler(['schedule_id'], true), function(req, res, next){
     let delete_list = req.body['schedule_id'];
 
     let translated_list = [];
@@ -165,5 +165,60 @@ router.delete('/', checkUserSessionIdHandler(true), checkInputHandler(['schedule
         });
 });
 
+router.put('/', checkUserSessionIdHandler(true), checkInputHandler(['_id', 'dish_id','day'], false), function(req, res, next){
+    if(!req.body['_id']){
+        let error = new APIError(ErrorType.NEED_A_ID);
+        logger.error(error.message);
+        next(error);
+        return;
+    }
+
+    if(typeof data['dish_id'] != 'string'){
+        let error = new APIError(ErrorType.TYPE_ILLEGAL, 'dish_id', 'String');
+        logger.error(error.toJSON());
+        callback(error);
+        return;
+    }
+    if(typeof data['day'] != 'number' || data['day'] > 7 || data['day'] < 1){
+        let error = new APIError(ErrorType.TYPE_ILLEGAL, 'day', 'Number');
+        logger.error(error.toJSON());
+        callback(error);
+        return;
+    }
+
+    // let selector = {'_id' : ObjectID.createFromHexString(req.body['_id'])};
+    try{
+        var selector = {'_id' : ObjectID.createFromHexString(req.body['_id'])}
+    }catch(e){
+        let error = new APIError(ErrorType.CAN_NOT_CREATE_OBJECTID, req.body['_id']);
+        logger.error(error.message);
+        next(error);
+        return;
+    }
+
+    let target = {};
+    if(req.body['dish_id']){
+        target['dish_id'] = req.body['dish_id'];
+    }
+
+    if(req.body['day']){
+        target['day'] = req.body['day'];
+    }
+    
+    db.update('schedule', selector, {'$set': target}, {})
+        .then(function(update_result, error){
+            if(error){
+                let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'UPDATE(schedule)', error.message);
+                logger.error(error.message);
+                next(new_err);
+                return;
+            }
+            logger.debug(update_result);
+            res.sendStatus(200);
+        });
+
+
+    res.sendStatus(200);
+});
 
 module.exports = router;

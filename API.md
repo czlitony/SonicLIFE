@@ -1,6 +1,6 @@
 # Logon API
 
-## POST /__api__/logon
+## POST /\_\_api\_\_/logon
 
 ### INPUT
 
@@ -25,7 +25,7 @@
 ~~~
 
 
-## DELETE /__api__/logon
+## DELETE /\_\_api\_\_/logon
 
 ###INPUT
 SHOULD set cookie in header
@@ -34,7 +34,7 @@ SHOULD set cookie in header
 
 * status 200
 
-## POST /__api__/logon/register
+## POST /\_\_api\_\_/logon/register
 
 ### INPUT
 ~~~
@@ -51,9 +51,9 @@ SHOULD set cookie in header
 
 # Menu API
 
-## GET /__api__/menu?page=1
-## GET /__api__/menu/q/\<vender_name\>?page=1
-## GET /__api__/menu/q/\<vender_name\>/\<dish_name\>?page=1
+## GET /\_\_api\_\_/menu?page=1
+## GET /\_\_api\_\_/menu/q/\<vender_name\>?page=1
+## GET /\_\_api\_\_/menu/q/\<vender_name\>/\<dish_name\>?page=1
 
 ### OUTPUT
 
@@ -65,7 +65,7 @@ SHOULD set cookie in header
 ]
 ~~~
 
-## PUT /__api__/menu/q/\<vender_name\>/\<dish_name\>/rate
+## PUT /\_\_api\_\_/menu/q/\<vender_name\>/\<dish_name\>/rate
 
 * NEED LOGIN
 
@@ -79,7 +79,7 @@ SHOULD set cookie in header
 * status 200
 
 
-## POST /__api__/menu
+## POST /\_\_api\_\_/menu
 
 * NEED LOGIN and ADMIN
 
@@ -105,7 +105,7 @@ SHOULD set cookie in header
 }
 ~~~
 
-## DELETE /__api__/menu
+## DELETE /\_\_api\_\_/menu
 
 * NEED LOGIN and ADMIN
 
@@ -121,7 +121,7 @@ SHOULD set cookie in header
 
 * status 200.
 
-### GET /__api__/menu/vender
+### GET /\_\_api\_\_/menu/vender
 
 ### OUTPUT
 
@@ -135,7 +135,7 @@ SHOULD set cookie in header
 
 #schedule API
 
-## POST /__api__/schedule
+## POST /\_\_api\_\_/schedule
 
 ###INPUT
 
@@ -179,10 +179,31 @@ SHOULD set cookie in header
 }
 ~~~
 
+### OUTPUT
+
+* status 200
+
+## PUT /\_\_api\_\_/schedule
+
+* NEED ADMIN AND LOGON
+
+### INPUT
+
+~~~
+{
+    _id : string,
+    dish_id : string,
+    day : int[1-7]
+}
+~~~
+
+### OUTPUT
+
+* status 200
 
 #Order API
 
-## POST /__api__/order
+## POST /\_\_api\_\_/order
 
 ## Remove DELETE     
 
