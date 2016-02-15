@@ -56,7 +56,7 @@ DEBUG=express:* npm start
 {
 	datetime : int,
 	comment : string,
-	user : DBRef(user),
+	user : username,
 	dish : DBRef(menu)
 }
 ~~~
@@ -65,7 +65,7 @@ DEBUG=express:* npm start
 
 ~~~
 {
-	user : DBRef,
+	user : username,
 	datetime : string,
 	dish : DBRef
 }
