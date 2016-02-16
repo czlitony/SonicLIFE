@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: '!@#$%^&**',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   //If set secure = true, you have to use HTTPS, otherwise you can't get a set-cookie response.
   cookie: { secure: false }
 }))
