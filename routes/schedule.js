@@ -10,8 +10,35 @@ var checkInputHandler = require('./util').checkInputHandler,
     checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler,
     genericQuery = require('./util').genericQuery;
 var async = require('async');
+var Schedule = require('./model').Schedule;
 
-router.get('/', genericQuery('schedule'));
+router.get('/', function(req, res, next){
+    let s = new Schedule();
+    
+    let page = req.query.page;
+    let day = req.query.day;
+
+    logger.debug('day ' + day);
+    let selector = {};
+    
+    if(day && day >= 1 && day <= 7){
+        selector = {'day' : parseInt(day)};
+    }
+    
+    var promise;
+    if(page !== undefined && page > 0){
+        cursor = cursor.skip((page-1)*10).limit(10);
+        promise = s.find(selector, ((page-1)*10), 10);
+    }else{
+        promise = s.find(selector);
+    }
+
+    promise.then(function(val){
+        res.status(200).json(val);
+    }).catch(function(err){
+        next(err);
+    })
+});
 
 router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','day'], true), function(req, res, next){
     let body = req.body;
