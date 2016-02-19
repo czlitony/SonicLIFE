@@ -18,7 +18,7 @@ function DataBase(){
         this.db.createCollection('menu');
         this.db.createCollection('oder');
         // should be capped
-        this.db.createCollection('comments'， {'capped' : true, 'size' : 1024*1024});
+        this.db.createCollection('comments', {'capped' : true, 'size' : 1024*1024});
         this.db.createCollection('schedule');
     }.bind(this));
 }
