@@ -201,6 +201,50 @@ SHOULD set cookie in header
 
 * status 200
 
+# Comment API
+
+## GET /\_\_api\_\_/comment/\<dish_id\>?page=1
+
+### OUTPUT
+
+~~~
+[
+    {
+        "_id":"56c7317077eee0e37fcfd4aa",
+        "dish_id":"56bedfa50b7045cc5e9e8033",
+        "comment":"god good",
+        "datetime":"2016-02-19T15:14:56.010Z",
+        "username":"admin"
+    },
+    .....
+]
+~~~
+
+## POST /\_\_api\_\_/comment
+
+## INPUT
+
+~~~
+{
+    "comment":"god good",
+    "dish_id":"56bedfa50b7045cc5e9e8033"
+}
+~~~
+
+## OUTPUT
+
+~~~
+[
+    {
+        "dish_id":"56bedfa50b7045cc5e9e8033",
+        "comment":"god good",
+        "datetime":"2016-02-19T15:15:54.109Z",
+        "username":"admin",
+        "_id":"56c731aa953278168064f0e0"
+    }
+]
+~~~
+
 #Order API
 
 ## POST /\_\_api\_\_/order
