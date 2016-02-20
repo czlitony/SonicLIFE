@@ -65,9 +65,10 @@ DEBUG=express:* npm start
 
 ~~~
 {
-	user : username,
+	username : username,
 	datetime : string,
-	dish : DBRef
+	dish_id : DBRef,
+	expired : bool(default is false, mongodb run cron to set it to true everynight)
 }
 ~~~
 
@@ -76,7 +77,8 @@ DEBUG=express:* npm start
 ~~~
 {
 	menu_ref : [string],
-	day : int[1-7]
+	day : int[1-7],
+	type : [breakfast|lunch|supper|other]
 }
 ~~~
 

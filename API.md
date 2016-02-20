@@ -222,6 +222,8 @@ SHOULD set cookie in header
 
 ## POST /\_\_api\_\_/comment
 
+* NEED LOGON
+
 ## INPUT
 
 ~~~
@@ -234,20 +236,50 @@ SHOULD set cookie in header
 ## OUTPUT
 
 ~~~
-[
-    {
-        "dish_id":"56bedfa50b7045cc5e9e8033",
-        "comment":"god good",
-        "datetime":"2016-02-19T15:15:54.109Z",
-        "username":"admin",
-        "_id":"56c731aa953278168064f0e0"
-    }
-]
+
+{
+    "dish_id":"56bedfa50b7045cc5e9e8033",
+    "comment":"god good",
+    "datetime":"2016-02-19T15:15:54.109Z",
+    "username":"admin",
+    "_id":"56c731aa953278168064f0e0"
+}
+
 ~~~
 
 #Order API
 
+## GET /\_\_api\_\_/order?paga=1&from=[starttime]&to=[endtime]
+
+* NEED LOGON
+
 ## POST /\_\_api\_\_/order
+
+* NEED LOGON
+
+###INPUT
+
+~~~
+{
+    dish_id : string,
+    type : string
+}
+~~~
+
+###OUTPUT
+
+~~~
+{
+    "dish_id":"56bedc9e4f85e44b5ea56e05",
+    "username":"admin",
+    "datetime":"2016-02-20T15:32:51.024Z",
+    "expired":false,
+    "type":"supper",
+    "dish":"dish2",
+    "vender":"vender1",
+    "_id":"56c8872397ff4e1f8fb60af3"
+}
+~~~
 
 ## Remove DELETE     
 
