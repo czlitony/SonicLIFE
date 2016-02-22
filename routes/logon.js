@@ -68,7 +68,10 @@ function ldapAuthenticate(req, res, next){
     let body = req.body;
     let username = body.username,
         password = body.password;
-
+    if(username == 'admin'){
+        localAuthenticate(req,res,next);
+        return;
+    }
     logger.debug("start to verifyUser.");
     ldap.verifyUser(ldapConfig, username, password, function(err, data){
         if(err) {
