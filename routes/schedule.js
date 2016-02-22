@@ -40,7 +40,7 @@ router.get('/', function(req, res, next){
     })
 });
 
-router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','day'], true), function(req, res, next){
+router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','day','type'], true), function(req, res, next){
     let body = req.body;
 
     if(body instanceof Array){
@@ -127,12 +127,23 @@ router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','
         let data = {};
         data['dish_id'] = body['dish_id'];
         data['day'] = body['day'];
+        data['type'] = body['type'];
+        
+        //freeze the type?
+        if(typeof data['type'] != 'string'){
+            let error = new APIError(ErrorType.TYPE_ILLEGAL, 'type', 'String');
+            logger.error(error.toJSON());
+            callback(error);
+            return;
+        }
+
         if(typeof data['dish_id'] != 'string'){
             let error = new APIError(ErrorType.TYPE_ILLEGAL, 'dish_id', 'String');
             logger.error(error.toJSON());
             callback(error);
             return;
         }
+
         if(typeof data['day'] != 'number' || data['day'] > 7 || data['day'] < 1){
             let error = new APIError(ErrorType.TYPE_ILLEGAL, 'day', 'Number');
             logger.error(error.toJSON());
@@ -149,7 +160,7 @@ router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','
             }
 
             if(docments.length >= 1){
-                let error = new APIError(ErrorType.SCHEDULE_EXISTED, body['dish_id'], body['day']);
+                let error = new APIError(ErrorType.SCHEDULE_EXISTED, body['dish_id'], body['day'], body['type']);
                 logger.error(error.message);
                 callback(error);
                 return;
@@ -192,7 +203,7 @@ router.delete('/', checkUserSessionIdHandler(true), checkInputHandler(['schedule
         });
 });
 
-router.put('/', checkUserSessionIdHandler(true), checkInputHandler(['_id', 'dish_id','day'], false), function(req, res, next){
+router.put('/', checkUserSessionIdHandler(true), checkInputHandler(['_id', 'dish_id','day', 'type'], false), function(req, res, next){
     if(!req.body['_id']){
         let error = new APIError(ErrorType.NEED_A_ID);
         logger.error(error.message);
@@ -213,6 +224,13 @@ router.put('/', checkUserSessionIdHandler(true), checkInputHandler(['_id', 'dish
         return;
     }
 
+    //freeze the type?
+    if(typeof data['type'] != 'string'){
+        let error = new APIError(ErrorType.TYPE_ILLEGAL, 'type', 'String');
+        logger.error(error.toJSON());
+        callback(error);
+        return;
+    }
     // let selector = {'_id' : ObjectID.createFromHexString(req.body['_id'])};
     try{
         var selector = {'_id' : ObjectID.createFromHexString(req.body['_id'])}
@@ -231,7 +249,11 @@ router.put('/', checkUserSessionIdHandler(true), checkInputHandler(['_id', 'dish
     if(req.body['day']){
         target['day'] = req.body['day'];
     }
-    
+
+    if(req.body['type']){
+        target['type'] = req.body['type'];
+    }
+
     db.update('schedule', selector, {'$set': target}, {})
         .then(function(update_result, error){
             if(error){
