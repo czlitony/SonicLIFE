@@ -87,7 +87,28 @@ router.delete('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_lis
                 next(error);
                 return;
             }
-            res.sendStatus(200);
+
+            db.remove('schedule', {'dish_id' : {'$in' : delete_list}})
+            .then(function(result, error){
+                if(error){
+                    let error = new APIError(ErrorType.DB_OPERATE_FAIL, 'REMOVE(menu)', err.message);
+                    logger.error(error.message);
+                    next(error);
+                    return;
+                }
+                res.sendStatus(200);
+            })
+
+            db.remove('comments', {'dish_id' : {'$in' : delete_list}})
+            .then(function(result, error){
+                if(error){
+                    let error = new APIError(ErrorType.DB_OPERATE_FAIL, 'REMOVE(menu)', err.message);
+                    logger.error(error.message);
+                    next(error);
+                    return;
+                }
+                res.sendStatus(200);
+            })
         });
 });
 

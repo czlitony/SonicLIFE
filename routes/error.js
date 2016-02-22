@@ -18,7 +18,8 @@ var ErrorType = {
     CAN_NOT_CREATE_OBJECTID : 14,
     SCHEDULE_EXISTED : 15,
     INVAILD_MENU_ID : 16,
-    NEED_A_ID : 17
+    NEED_A_ID : 17,
+    HAVE_ORDERED : 18
 }
 
 var ErrorMap = {};
@@ -37,9 +38,10 @@ ErrorMap[ErrorType.LDAP_USER_INVALID] = {'code' : 404, 'error_code':11, 'msg' : 
 ErrorMap[ErrorType.LDAP_USER_LOCKED] = {'code' : 404, 'error_code':12, 'msg' : 'LDAP user \'{1}\' locked'};
 ErrorMap[ErrorType.LOGOFF_FAIL] = {'code' : 500, 'error_code':13, 'msg' : 'Logoff user \'{1}\' failed'};
 ErrorMap[ErrorType.CAN_NOT_CREATE_OBJECTID] = {'code' : 500, 'error_code':14, 'msg' : 'Translate id to ObjectID fail, \'{1}\' is not a vaild value'};
-ErrorMap[ErrorType.SCHEDULE_EXISTED] = {'code' : 500, 'error_code':15, 'msg' : 'id \'{1}\' day \'{2}\' existed.'};
+ErrorMap[ErrorType.SCHEDULE_EXISTED] = {'code' : 500, 'error_code':15, 'msg' : 'id \'{1}\' day \'{2}\' type \'{3}\' existed.'};
 ErrorMap[ErrorType.INVAILD_MENU_ID] = {'code' : 500, 'error_code':16, 'msg' : 'id \'{1}\' is not existed in menu collection.'};
 ErrorMap[ErrorType.NEED_A_ID] = {'code' : 500, 'error_code':17, 'msg' : 'Need a _id'};
+ErrorMap[ErrorType.HAVE_ORDERED] = {'code' : 500, 'error_code':18, 'msg' : 'you have already ordered.'};
 
 var keys = Object.keys(ErrorMap);
 keys.forEach(function(item){

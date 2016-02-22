@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var logon = require('./routes/logon');
 var menu = require('./routes/menu');
 var schedule = require('./routes/schedule');
+var commets = require('./routes/commets');
 var order = require('./routes/order');
 var log = require('./routes/log');
 var session = require('express-session');
@@ -25,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: '!@#$%^&**',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   //If set secure = true, you have to use HTTPS, otherwise you can't get a set-cookie response.
   cookie: { secure: false }
 }))
@@ -34,6 +35,7 @@ app.use('/__api__/logon', logon);
 app.use('/__api__/menu', menu);
 app.use('/__api__/schedule', schedule);
 app.use('/__api__/order', order);
+app.use('/__api__/comment', commets);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
