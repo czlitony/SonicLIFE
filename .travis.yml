@@ -9,10 +9,13 @@ install:
 services:
   - mongodb
 
+env:
+  - USE_LDAP=0
+
 before_script:
   - sleep 15
   - mongo sonicwall --eval 'db.user.remove();'
-  - mongo sonciwall --eval 'db.user.insert({"username":"admin", "password":"password", "role":"admin"});'
+  - mongo sonicwall --eval 'db.user.insert({"username":"admin", "password":"dea62c2ff6793ea4d2a096746ee928812836dfc05271db54bc30a17cf5a1c1cd", "salt":"621a8bf0-cb4f-11e5-9b5e-05fc4218bdda", "role":"admin"});'
   - npm start&
   - sleep 5
 

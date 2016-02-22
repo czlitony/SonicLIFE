@@ -21,17 +21,20 @@
   },
   "homepage": "https://github.com/SonicWALL-SSLVPN/SonicLIFE#readme",
   "dependencies": {
+    "async": "^1.5.2",
     "body-parser": "~1.13.2",
     "cookie-parser": "~1.3.5",
     "debug": "~2.2.0",
     "express": "~4.13.1",
+    "express-session": "^1.13.0",
     "jade": "~1.11.0",
+    "ldap-verifyuser": "^1.0.2",
+    "ldapjs": "^1.0.0",
     "log4js": "^0.6.29",
     "mocha": "^2.3.4",
     "mongodb": "^2.1.4",
     "morgan": "~1.6.1",
     "node-uuid": "^1.4.7",
-    "serve-favicon": "~2.3.0",
     "unit.js": "^2.0.0"
   },
   "devDependencies": {}

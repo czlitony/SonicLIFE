@@ -2,24 +2,33 @@
 var express = require('express'),
     router = express.Router(),
     uuid = require('node-uuid'),  
-    CACHE = require('./cache').cache,
     db = require('./db'),
     logger = require('./log').logger,
     checkInputHandler = require('./util').checkInputHandler,
-    checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
+    checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler,
+    APIError = require('./error').APIError,
+    ErrorType = require('./error').ErrorType;
+
+var ldap = require('ldap-verifyuser');
+var ldapConfig = {
+    server: 'ldap://10.102.1.51',
+    adrdn: 'sv\\',
+    adquery: 'DC=sv,DC=us,DC=sonicwall,DC=com',
+    debug: false
+}
+
 const crypto = require('crypto');
 
-router.post('/', checkInputHandler(['username', 'password'], true), function(req, res, next) {
-
+function localAuthenticate(req, res, next){
     let body = req.body;
 
     let result = db.find('user', { 'username' : body['username']});
     result.toArray(function(err, documents){
         
         if(err){
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND', err.message);
             logger.error(err.message);
-            err.status = 401;
-            next(err);
+            next(new_err);
             return;
         }
 
@@ -31,58 +40,108 @@ router.post('/', checkInputHandler(['username', 'password'], true), function(req
             hash.update(body['password'] + salt); 
 
             if(hash.digest('hex') == documents[0]['password']){
-                let result = {};
-                let cache_result = CACHE.hasUser(body['username']);
-                if(cache_result){
-                    result['session_id'] = cache_result;
-                }else{
-                    result = {
-                        'session_id' : uuid.v1()
-                    };
-
-                    CACHE.save(result['session_id'], {'state': true, 
-                                                      'username': documents[0]['username'],
-                                                      'role' : documents[0]['role']
-                                                  });
-                    CACHE.dump();
-                }
-                logger.info('user '+ body['username'] +' created');
-                res.json(result);
+                req.session.regenerate(function(err){
+                    req.session.sessionState = {};
+                    req.session.sessionState["authenticated"] = true;
+                    req.session.sessionState["role"] = documents[0]['role'];
+                    req.session.sessionState["username"] = documents[0]['username'];
+                    // req.session.save();
+                    // let result = {'session_id': req.sessionID};
+                    logger.info('user '+ body['username'] +' logon.');
+                    res.json(req.session.sessionState);
+                });
             }else{
-                res.status(400).json({'message' : 'wrong password'});
+                let new_err = new APIError(ErrorType.LOGIN_FAIL, body['username']);
+                next(new_err);
+                return;
             }
 
         }else{
-            res.status(400).json({'message':'Can not find user'});
+            let new_err = new APIError(ErrorType.LOGIN_FAIL, body['username']);
+            next(new_err);
+            return;
         }
     });
-});
+}
 
-router.get('/:id', checkUserSessionIdHandler, function(req, res, next) {
-    
-    logger.debug(req.params.id);
+function ldapAuthenticate(req, res, next){
     let body = req.body;
+    let username = body.username,
+        password = body.password;
+
+    logger.debug("start to verifyUser.");
+    ldap.verifyUser(ldapConfig, username, password, function(err, data){
+        if(err) {
+            logger.debug("verifyUser fail.");
+            let new_err = new APIError(ErrorType.LOGIN_FAIL, body['username']);
+            next(new_err);
+            return;
+        } else {
+
+            if(data.valid == false){
+                let new_err = new APIError(ErrorType.LDAP_USER_INVALID, body['username']);
+                next(new_err);
+                return;
+            }else if(data.locked){
+                let new_err = new APIError(ErrorType.LDAP_USER_LOCKED, body['username']);
+                next(new_err);
+                return; 
+            }
+
+            console.log('raw data available?', data.raw ? true : false);
+            req.session.regenerate(function(err){
+                req.session.sessionState = {};
+                req.session.sessionState["authenticated"] = true;
+                //HOW TO check if it's an admin??
+                req.session.sessionState["role"] = 'user';
+                req.session.sessionState["username"] = body['username'];
+                // req.session.save();
+                // let result = {'session_id': req.sessionID};
+                logger.info('user '+ body['username'] +' logon.');
+                res.json(req.session.sessionState);
+            });
+        }
+    });
+}
+
+var authenticate = localAuthenticate;
+console.log('ENV USE_LDAP '+process.env.USE_LDAP);
+if(process.env.USE_LDAP == 1){
+    console.log('USE LDAP');
+    authenticate = ldapAuthenticate;
+}
+
+router.post('/', checkInputHandler(['username', 'password'], true), authenticate);
+
+router.get('/', checkUserSessionIdHandler(false), function(req, res, next) {
+    
     let result = {};
-    let cache_result = CACHE.restore(req.params.id);
-    if(cache_result){
-        result['session_id'] = cache_result;
+    let session = req.session;
+    if(session.sessionState.authenticated){
+        result['authenticated'] = session.sessionState.authenticated;
+        result['username'] = session.sessionState.username;
     }else{
-        let error = new Error('Can not restore ' + req.params.id);
-        logger.error(error.message);
-        error.status = 401;
+        let error = new APIError(ErrorType.CHECK_SID_FAIL, req.sessionID);
+        logger.error(error.toJSON());
         next(error);
         return;
     }
-    logger.info('user '+ body['username'] +' created');
+
     res.json(result);
 });
 
-router.delete('/:id', checkUserSessionIdHandler, function(req, res, next){
+router.delete('/', checkUserSessionIdHandler(false), function(req, res, next){
 
-    let id = req.params.id;;
-    CACHE.delete(id);
-    CACHE.dump();
-    res.json({'status':true});
+    req.session.destroy(function(err){
+        if(err){
+            let error = new APIError(ErrorType.LOGOFF_FAIL, req.sessionID);
+            logger.error(error.toJSON());
+            next(error);
+            return;
+        }
+        res.sendStatus(200);
+    });
+    
 });
 
 router.post('/register', checkInputHandler(['username', 'password'], true), function(req, res, next){
@@ -93,8 +152,9 @@ router.post('/register', checkInputHandler(['username', 'password'], true), func
     result.toArray(function(err, documents){
         
         if(err){
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(user)', err.message);
             logger.error(err.message);
-            next(err);
+            next(new_err);
             return;
         }
 
@@ -110,29 +170,25 @@ router.post('/register', checkInputHandler(['username', 'password'], true), func
             record['salt'] = salt;
             record['role'] = 'user';
 
-            var promise_result = db.insert('user', record);
+            let promise_result = db.insert('user', record);
             promise_result.then(function(result, err){
                 if(err){
+                    let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(user)', err.message);
                     logger.error(err);
                     logger.debug(result);
-                    err.status = 401;
-                    next(err);
+                    next(new_err);
                     return;
                 }
                 logger.debug(result);
-                res.status(200).json({'status':true});
+                res.sendStatus(200);
             });
             
         }else{
-            res.status(400).json({'message':'user existed.'});
+            let new_err = new APIError(ErrorType.USER_EXISTED, body['username']);
+            res.status(new_err.status).json(new_err.toJSON());
         }
     })
 
-});
-
-router.use(function(err, req, res, next){
-    logger.error(err);
-    res.status(err.status).json({'message' : err.message});
 });
 
 module.exports = router;

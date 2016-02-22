@@ -1,0 +1,2 @@
+*.log_*
+/node_modules

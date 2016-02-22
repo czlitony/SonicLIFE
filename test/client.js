@@ -11,7 +11,7 @@ function APITester(host, port){
 };
 
 //mocha need a "done" function to indicate if async callback has successufully complete.
-APITester.prototype.invoke = function(path, method, data, done){
+APITester.prototype.invoke = function(path, method, cookie, data, done){
 
     var options = {
         host: this.hostname,
@@ -28,10 +28,26 @@ APITester.prototype.invoke = function(path, method, data, done){
                     'Content-Length': data.length };
     }
     
+    if(cookie){
+        if(cookie.session_id !== undefined){
+            // console.log('session_id is:'+cookie.session_id);
+            if(options.headers === undefined){
+                options.headers = {};
+            }
+            options.headers['cookie'] = cookie.session_id;
+        }
+        console.log('request header: '+options.headers.cookie);
+    }
 
     var req = http.request(options, function(response)
     {
         var response_data = '';
+        //console.log(response.headers);
+
+        var parse_json = true;
+        if(response.headers['content-type'] == 'text/plain; charset=utf-8'){
+            parse_json = false;
+        }
 
         response.setEncoding('utf8');
 
@@ -41,15 +57,17 @@ APITester.prototype.invoke = function(path, method, data, done){
 
         response.on('end', function () {
 
+
             if(done && typeof done === "function"){
+                console.log(response_data);
                 this._resp_callback(response.statusCode, 
-                    response.headers['content-type'], 
-                    JSON.parse(response_data), 
+                    response.headers, 
+                    parse_json ? JSON.parse(response_data) : response_data, 
                     done);
             }else{
                 this._resp_callback(response.statusCode, 
-                    response.headers['content-type'], 
-                    JSON.parse(response_data));
+                    response.headers, 
+                    parse_json ? JSON.parse(response_data) : response_data);
             }
             
         }.bind(this));
@@ -64,27 +82,27 @@ APITester.prototype.invoke = function(path, method, data, done){
     req.end();
 };
 
-APITester.prototype._set_response = function(status_code, content_type, data){
+APITester.prototype._set_response = function(status_code, header, data){
     this.result = {};
     this.result.status_code = status_code;
-    this.result.ctype = content_type;
+    this.result.ctype = header['content-type'];
     this.result.data = data;
 };
 
 APITester.prototype._set_logonID = function(data){
-    if("session_id" in data && this.logonID !== undefined && this.logonID.session_id === undefined){
-        this.logonID.session_id = data["session_id"];
+    if(this.logonID !== undefined){
+        this.logonID.session_id = data;
+        console.log(this.logonID.session_id);
     }
-
-    // if("teamid" in data && this.logonID !== undefined){
-    //     this.logonID.teamid = data["teamid"];
-    // }
 };
 
-APITester.prototype._resp_callback = function(status_code, content_type, data, done){
+APITester.prototype._resp_callback = function(status_code, header, data, done){
     
-    this._set_response(status_code, content_type, data);
-    this._set_logonID(data);
+    this._set_response(status_code, header, data);
+    console.log(header);
+    if(header['set-cookie'] !== undefined){
+        this._set_logonID(header['set-cookie'][0]);
+    }
     done();
     // setTimeout(done,1000);
 };
@@ -92,8 +110,10 @@ APITester.prototype._resp_callback = function(status_code, content_type, data, d
 var TEST_NAME = 0;
 var TEST_URI = 1;
 var TEST_METHOD = 2;
-var TEST_BODY_DATA = 3;
-var TEST_CALLBACK = 4;
+var TEST_COOKIE = 3;
+var TEST_BODY_DATA = 4;
+var TEST_CTYPE = 5;
+var TEST_CALLBACK = 6;
 
 
 APITester.prototype._test_template = function (api, api_list){
@@ -113,7 +133,7 @@ APITester.prototype._test_template = function (api, api_list){
                 url = api_list[TEST_URI][0] + api_list[TEST_URI][1].session_id + api_list[TEST_URI][2];
             }
             console.log("URL: "+url);
-            api.invoke(url, api_list[TEST_METHOD], api_list[TEST_BODY_DATA], done);
+            api.invoke(url, api_list[TEST_METHOD], api_list[TEST_COOKIE], api_list[TEST_BODY_DATA], done);
             api.url = url;
         });
 
@@ -125,7 +145,7 @@ APITester.prototype._test_template = function (api, api_list){
         it("Check content type", function(){
             test.should(api.result.ctype).be.a.String;
             // test.should(api.result.ctype).be.equal('application/json');
-            test.should(api.result.ctype).be.equal('application/json; charset=utf-8');
+            test.should(api.result.ctype).be.equal(api_list[TEST_CTYPE]);
             test.should(api.result.data).be.json;
         });
 

@@ -1,7 +1,8 @@
 'use strict';
 var logger = require('./log').logger,
-    CACHE = require('./cache').cache;
-
+    APIError = require('./error').APIError,
+    ErrorType = require('./error').ErrorType;
+var db = require('./db');
 //if includes function not existed, then use this.
 if (!Array.prototype.includes) {
   Array.prototype.includes = function(searchElement /*, fromIndex*/ ) {
@@ -34,37 +35,49 @@ if (!Array.prototype.includes) {
 
 function checkRequestContent(req, target_list, strict){
 
-    if(strict && target_list.length !== Object.keys(req.body).length){
-        req['error_reason'] = "input parameters length not match";
-        return false;
+    if(req.body instanceof Array){
+        for(let i=0; i<req.body.length; i++){
+            if(!checkObject(req.body[i])){
+                return false;
+            }
+        }
+        return true;
+    }else{
+        return checkObject(req.body);
     }
 
-    if( req.body !== undefined && !req.is('application/json')){
-        // need a return here, or the program will continue.
-        req['error_reason'] = "input parameters must be json";
-        return false;
-    }
-
-    logger.debug(Object.keys(req.body));
-    let l = Object.keys(req.body)
-    for(var i=0; i< l.length; i++){
-        // console.log(itr);
-        logger.debug('checking '+l[i]);
-        if(!target_list.includes(l[i])){
+    function checkObject(obj){
+        if(strict && target_list.length !== Object.keys(obj).length){
+            req['error_reason'] = "input parameters length not match";
             return false;
         }
+
+        if( obj !== undefined && !req.is('application/json')){
+            // need a return here, or the program will continue.
+            req['error_reason'] = "input parameters must be json";
+            return false;
+        }
+
+        logger.debug(Object.keys(obj));
+        let l = Object.keys(obj)
+        for(var i=0; i< l.length; i++){
+            // console.log(itr);
+            logger.debug('checking '+l[i]);
+            if(!target_list.includes(l[i])){
+                logger.debug('return false');
+                return false;
+            }
+        }
+        return true;
     }
-    return true;
 }
 
 function checkInputHandler(target, strict){
     return function (req, res, next){
-        // let body = req.body;
 
         if(!checkRequestContent(req, target, strict)){
             logger.error('Error :' + req['error_reason']);
-            var err = new Error(req['error_reason']);
-            err.status = 401;
+            var err = new APIError(ErrorType.REQUEST_CONTENT_NOT_MATCH, target);
             next(err);
             return;
         }
@@ -72,60 +85,54 @@ function checkInputHandler(target, strict){
     }
 }
 
-function checkUserSessionIdHandler(req, res, next){
-    let id = req.params.id;
+function checkUserSessionIdHandler(isAdmin){
+    return function(req, res, next){
+        logger.debug('Cookies is: ' + req.cookies['connect.sid']);
+        let session = req.session;
 
-    if(id === undefined){
-        logger.error('no session_id');
-        
-    }else{
-        logger.debug('restore my session');
-        logger.debug(req.params.id);
-        if (CACHE.restore(req.params.id)){
-            //JUST FOR FUN FIXME.
-            req["state"] = CACHE.restore(req.params.id);
+        if(session.sessionState){
+            if(session.sessionState['authenticated'] && isAdmin === false){
+                logger.debug("successfuly restore a user session");
+                next();
+            }else if(session.sessionState['authenticated'] && isAdmin === true && session.sessionState['role'] == "admin"){
+                logger.debug("successfuly restore a admin session");
+                next();
+            }else{
+                res.redirect("/logon");
+                return;
+            }
         }else{
             logger.error("can't restore a session");
             //Jump to error handle.
-            var err = new Error('Wrong session_id');
-            err.status = 400;
+            console.log(req.cookies['connect.sid']);
+            var err = new APIError(ErrorType.CHECK_SID_FAIL, req.cookies['connect.sid']);
             next(err);
             return;
         }
+    };
+}
 
-        if(req["state"]["state"] !== true){
-            res.redirect("/logon");
-            return;
+function genericQuery(collection){
+    return function(req, res, next){
+        let cursor = db.find(collection, {});
+        let page = req.query.page;
+        if(page !== undefined && page > 0){
+            cursor = cursor.skip((page-1)*10).limit(10);
         }
-    }
-    //Jump to next handle.
-    //next('route') used to jump out this route, all the following handler
-    //will be ignored.
-    next();
-};
 
-function checkAdminSessionIdHandler(req, res, next){
-    logger.debug('restore my session');
-    logger.debug(req.params.id);
-    if (CACHE.restore(req.params.id)){
-        var result = CACHE.restore(req.params.id);
-    }else{
-        logger.error("can't restore a session");
-        //Jump to error handle.
-        let err = new Error('Wrong session_id');
-        err.status = 400;
-        next(err);
-        return;
-    }
-
-    if(result['role'] !== 'admin' || result['state'] !== true){
-        res.redirect("/logon");
-        return;
-    }
-
-    next();
-};
+        cursor.toArray(function(error, docments){
+            if(error){
+                let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND('+collection+')', error.message);
+                logger.error(error.message);
+                next(new_err);
+                return;
+            }
+            logger.debug(req.originalUrl + ' ' + docments);
+            res.json(docments);
+        });
+    };
+}
 
 module.exports.checkInputHandler = checkInputHandler;
 module.exports.checkUserSessionIdHandler = checkUserSessionIdHandler;
-module.exports.checkAdminSessionIdHandler = checkAdminSessionIdHandler;
+module.exports.genericQuery = genericQuery;

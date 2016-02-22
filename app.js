@@ -1,63 +1,54 @@
 'use strict';
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logon = require('./routes/logon');
 var menu = require('./routes/menu');
-var admin = require('./routes/admin');
-var log = require('./routes/log');  
+var schedule = require('./routes/schedule');
+var order = require('./routes/order');
+var log = require('./routes/log');
+var session = require('express-session');
+var APIError = require('./routes/error').APIError;
+var ErrorType = require('./routes/error').ErrorType;
 
 var app = express();
 log.use(app); 
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//Here we need another Storage to cache the sessions, MemoryStore is not suitable for production.
+app.use(session({
+  secret: '!@#$%^&**',
+  resave: false,
+  saveUninitialized: true,
+  //If set secure = true, you have to use HTTPS, otherwise you can't get a set-cookie response.
+  cookie: { secure: false }
+}))
 
-// app.use('/', routes);
 app.use('/__api__/logon', logon);
 app.use('/__api__/menu', menu);
-app.use('/__api__/admin', admin);
+app.use('/__api__/schedule', schedule);
+app.use('/__api__/order', order);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
+  var err = new APIError(ErrorType.ROUTE_NOT_FOUND, req.originalUrl);
   next(err);
 });
 
 // error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.status(err.status).json({'error' : {
-    message: err.message,
-  }});
+    if(err.toJSON){
+        log.logger.error(err.toJSON());
+        res.status(err.status).json(err.toJSON());
+    }else{
+        res.status(500).send(err.message);
+    }
 });
 
 

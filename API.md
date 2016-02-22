@@ -1,8 +1,8 @@
-## Logon API
+# Logon API
 
-### POST /__api__/logon
+## POST /\_\_api\_\_/logon
 
-#### INPUT
+### INPUT
 
 ~~~
 {
@@ -11,38 +11,32 @@
 }
 ~~~
 
-#### OUTPUT
+### OUTPUT
 
 * status 200
+* set-cookie: connect.sid=1233456789
+
 ~~~
 {
-    'session_id' : "52671630-c120-11e5-87e4-87a53587f70d"
+    "authenticated":true,
+    "role":"admin",
+    "username":"admin"
 }
 ~~~
-if user has already logon, it will return the same session_id.
 
-#### ERROR
 
-#### test
+## DELETE /\_\_api\_\_/logon
 
-~~~
-curl -X POST -H "content-type: application/json" http://localhost:3000/logon -d '{"username":"ab", "password":"cd"}'
-~~~
+###INPUT
+SHOULD set cookie in header
 
-### DELETE /__api__/logon/<sessiond_id>
-
-~~~
-curl -X DELETE http://localhost:3000/logon/<session-id>
-~~~
-
-#### OUTPUT
+### OUTPUT
 
 * status 200
 
-#### ERROR
+## POST /\_\_api\_\_/logon/register
 
-### POST /__api__/logon/register
-#### INPUT
+### INPUT
 ~~~
 {
     'username' : 'xxxxx',
@@ -50,16 +44,18 @@ curl -X DELETE http://localhost:3000/logon/<session-id>
 }
 ~~~
 
-#### OUTPUT
+### OUTPUT
+
 * status 200
 
-#### ERROR
 
-## Menu API
+# Menu API
 
-### GET /__api__/menu/<session_id>/<vender_name>
-NO SESSION
-#### OUTPUT
+## GET /\_\_api\_\_/menu?page=1
+## GET /\_\_api\_\_/menu/q/\<vender_name\>?page=1
+## GET /\_\_api\_\_/menu/q/\<vender_name\>/\<dish_name\>?page=1
+
+### OUTPUT
 
 ~~~
 [
@@ -69,9 +65,12 @@ NO SESSION
 ]
 ~~~
 
-### PUT /__api__/menu/<session_id>/<vender_name>/<dish_name>/rate
+## PUT /\_\_api\_\_/menu/q/\<vender_name\>/\<dish_name\>/rate
 
-#### INPUT
+* NEED LOGIN
+
+### INPUT
+
 ~~~
 {rate : 4}
 ~~~
@@ -80,84 +79,136 @@ NO SESSION
 * status 200
 
 
-## Admin API
+## POST /\_\_api\_\_/menu
 
-### POST /admin/<session_id>/menu/add
+* NEED LOGIN and ADMIN
 
-#### INPUT
+### INPUT
 
+~~~   
+{
+    vender: xxx, 
+    dish : yyy
+}
 ~~~
-[
-    {vender: xxx, dish : yyy},
-    ...,
-    ...
-]
-~~~
-
-#### OUTPUT
-~~~
-[{  
-    "_id":"56a48821fa521c194dd931e2",
-    "vender":"new",
-    "dish":"yuxiangrous",
-    "rate":{"result":3.125,"times":8}
-}]
-~~~
-
-* status 200.
-
-#### ERROR
-
-### DELETE /admin/<session_id>/menu/<dish_id>
 
 ### OUTPUT
 
 * status 200.
 
-### GET /admin/<session_id>/menu/<vender_name>
-redirect to `/order/<session_id>/menu/<vender_name>`
-
-### GET /admin/<session_id>/vender
-
-#### OUTPUT
-
 ~~~
-[vender1,vender2...]
-~~~
-
-### POST /admin/<session_id>/menu/add
-
-~~~
-{ vender : xxx, dish : yyy}
-~~~
-
-#### OUTPUT
-
-~~~
-[{  
+{  
     "_id":"56a48821fa521c194dd931e2",
     "vender":"new",
     "dish":"yuxiangrous",
     "rate":{"result":3.125,"times":8}
-},
-....
+}
+~~~
+
+## DELETE /\_\_api\_\_/menu
+
+* NEED LOGIN and ADMIN
+
+### INPUT
+
+~~~
+{
+    dish_list : [id1,id2,id3]
+}
+~~~
+
+### OUTPUT
+
+* status 200.
+
+### GET /\_\_api\_\_/menu/vender
+
+### OUTPUT
+
+~~~
+[
+    vender1,
+    vender2,
+    ...
 ]
 ~~~
 
+#schedule API
 
-##Order
+## POST /\_\_api\_\_/schedule
 
-###Add POST /__api__/<session-id>/order
+###INPUT
 
-###Remove DELETE     
+* NEED ADMIN AND LOGON
+* day [1-7] represent from monday to sunday.
+~~~
+[
+    {
+        dish_id : "abcdefa",
+        day : 1
+    },
+    ...
+    ...
+]
+~~~
 
-###modify PUT
+###OUTPUT
+
+* status 200
+
+~~~
+[
+    {
+        dish_id : "abcdefa",
+        day : 1
+    },
+    ...
+    ...
+]
+~~~
+
+## DELETE /\_\_api\_\_/schedule
+
+* NEED ADMIN AND LOGON
+
+### INPUT
+
+~~~
+{
+    schedule_list : [id1,id2,id3]
+}
+~~~
+
+### OUTPUT
+
+* status 200
+
+## PUT /\_\_api\_\_/schedule
+
+* NEED ADMIN AND LOGON
+
+### INPUT
+
+~~~
+{
+    _id : string,
+    dish_id : string,
+    day : int[1-7]
+}
+~~~
+
+### OUTPUT
+
+* status 200
+
+#Order API
+
+## POST /\_\_api\_\_/order
+
+## Remove DELETE     
+
+## modify PUT
 
 
-
-GET /menu?arg1=1&arg2=2...
-GET /menu/<obejct-id>
-
-
-
+# TODO
 POST notification
