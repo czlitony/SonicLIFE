@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" ng-app="dinnerBookingApp">
+<head>
+  <meta charset="utf-8">
+  <title>订餐</title>
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/dinnerBooking.css">
+
+  <script src="js/jquery.js"></script>
+  <script src="js/angular.js"></script>
+  <script src="js/angular-route.js"></script>
+  <script src="js/angular-resource.js"></script>
+
+  <script src="js/dinnerBooking.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/services.js"></script>
+                  
+  <script type="text/javascript">
+    angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
+  </script>
+</head>
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">SonicWeb</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="loginControl">
+        <ul class="nav navbar-nav navbar-right">
+          <li ng-click="modal.show=true"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog" ng-class="{'in':modal.show,'show-modal':modal.show}">
+          <div class="modal-dialog">
+            
+            <div class="loginmodal-container">
+              <button type="button" class="close loginmodal-x" aria-label="Close" ng-click="modal.show=false">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h1>Login to Your Account</h1><br>
+              <form>
+                <input type="text" name="user" placeholder="Username" ng-model="user.name">
+                <input type="password" name="pass" placeholder="Password" ng-model="user.password">
+                <input type="submit" name="login" class="login loginmodal-submit" value="Login" ng-click="login(user)">
+              </form>
+              <!--
+                  <div class="login-help">
+                    <a href="#">Register</a> - <a href="#">Forgot Password</a>
+                  </div>
+                  -->
+            </div>
+            
+          </div>
+        </div>
+        <div class="modal-backdrop in" ng-show="modal.show"></div>
+
+      </div><!-- /.navbar-collapse -->
+
+    </div><!-- /.container-fluid -->
+  </nav>
+
+  <div class="view-container">
+    <div ng-view class="view-frame"></div>
+  </div>
+
+</body>
+</html>
