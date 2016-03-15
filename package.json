@@ -4,12 +4,16 @@
   "description": "a sonicwall office tool",
   "main": "index.js",
   "scripts": {
+    "postinstall": "bower install && ./bin/install.sh",
+
+    "prestart": "npm install",
+
     "test": "mocha test/test_*",
     "start": "node ./bin/www"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SonicWALL-SSLVPN/SonicLIFE.git"
+    "url": "git+https://github.com/SonicWeb/SonicLIFE.git"
   },
   "keywords": [
     "sonicwall"
@@ -17,9 +21,9 @@
   "author": "Matthew Lauren Bin Jeffrey",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SonicWALL-SSLVPN/SonicLIFE/issues"
+    "url": "https://github.com/SonicWeb/SonicLIFE/issues"
   },
-  "homepage": "https://github.com/SonicWALL-SSLVPN/SonicLIFE#readme",
+  "homepage": "https://github.com/SonicWeb/SonicLIFE#readme",
   "dependencies": {
     "async": "^1.5.2",
     "body-parser": "~1.13.2",
