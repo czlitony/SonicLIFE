@@ -10,7 +10,7 @@ var checkInputHandler = require('./util').checkInputHandler,
     checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler,
     genericQuery = require('./util').genericQuery;
 var async = require('async');
-var Schedule = require('./model').Schedule;
+var Schedule = require('./models/schedule_model').Schedule;
 
 router.get('/', function(req, res, next){
     let s = new Schedule();
@@ -89,18 +89,29 @@ router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','
     }
 
     function insert(body){
-        let promise_result = db.insert('schedule', body);
+        // let promise_result = db.insert('schedule', body);
 
-        promise_result.then(function(result, err){
-            if(err){
-                let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(schedule)', err.message);
-                logger.error(err.message);
-                next(new_err);
-                return;
-            }
-            logger.debug(result);
-            res.status(200).json(result['ops']);
-        });
+        // promise_result.then(function(result, err){
+        //     if(err){
+        //         let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(schedule)', err.message);
+        //         logger.error(err.message);
+        //         next(new_err);
+        //         return;
+        //     }
+        //     logger.debug(result);
+        //     res.status(200).json(result['ops']);
+        // });
+
+        let s = new Schedule();
+        let promise = s.insert(body);
+        promise.then(function(val){
+            res.status(200).json(val);
+        }).catch(function(err){
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(schedule)', err.message);
+            logger.error(err.message);
+            next(new_err);
+            return;
+        })
     }
 
     function isIdValid(item, callback){

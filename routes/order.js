@@ -9,7 +9,7 @@ var logger = require('./log').logger;
 var checkInputHandler = require('./util').checkInputHandler,
     checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
 
-var Order = require('./model').Order;
+var Order = require('./models/order_model').Order;
 // router.param('id', checkUserSessionIdHandler(false));
 
 router.get('/', checkUserSessionIdHandler(false), function(req, res, next) {

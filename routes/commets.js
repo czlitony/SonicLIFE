@@ -10,7 +10,7 @@ var checkInputHandler = require('./util').checkInputHandler,
     checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler,
     genericQuery = require('./util').genericQuery;
 
-var Comment = require('./model').Comment;
+var Comment = require('./models/comments_model').Comment;
 
 module.exports = router;
 

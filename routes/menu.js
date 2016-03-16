@@ -1,6 +1,7 @@
 'use strict';
 var express = require('express');
 var router = express.Router();
+var CACHE = require('./cache').cache;
 var db = require('./db');
 var logger = require('./log').logger;
 var ObjectID = require('mongodb').ObjectID;

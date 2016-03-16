@@ -1,0 +1,50 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class = "col-md-8 col-md-offset-2">
+      <!--Body content-->
+      <div class="panel-group" role="tablist" ng-repeat="schedule in schedules">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <button type="button" class="btn btn-success col-sm-3 button-text" style="margin-left:15px"> 
+                  {{schedule.date}} {{schedule.type}}
+                </button>
+                <button type="button" class="btn btn-warning col-sm-offset-1 col-sm-2 button-text"> 
+                  {{schedule.menu.name}} 
+                </button>
+                <div class="col-sm-4" style="float:right">
+                  <input type="text" class="form-control" placeholder="Search" ng-model="dishQuery">
+                </div>
+              </div>
+            </form>
+
+
+        <div class="panel" ng-repeat="dish in schedule.menu.dishes | filter:dishQuery" 
+             ng-class="{'panel-info':dish.id!==order.dishID,
+                       'panel-primary':dish.id===order.dishID}">
+          <div class="panel-heading" role="tab" ng-click="chooseDish($index)">
+            <h4 class="panel-title">
+              <a role="button">
+                {{dish.name}}
+              </a>
+            </h4>
+          </div>
+          <div class="panel-collapse collapse in" role="tabpanel" ng-show="(!order.dishID||dish.id===order.dishID)&&$index===chosen">
+            <div class="panel-body">
+              <button type="button" class="btn btn-default db-btn-div-middle" autocomplete="off" ng-click="chooseDish($index)">
+                取消
+              </button>
+              <button type="button" class="btn btn-success" autocomplete="off" ng-click="subscribe($index)" 
+                      ng-show="dish.id!==order.dishID">
+                下单
+              </button>
+              <button type="button" class="btn btn-danger" autocomplete="off" ng-click="unsubscribe($index)"
+                      ng-show="dish.id===order.dishID">
+                退订
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

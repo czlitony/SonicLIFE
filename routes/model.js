@@ -95,6 +95,27 @@ Schedule.prototype.find = function(target, skip, limit){
     return promise;
 }
 
+Schedule.prototype.insert = function(body){
+    let ret_promise = new Promise(function(resolve, reject){
+        let promise_result = db.insert('schedule', body);
+
+        promise_result.then(function(result, err){
+            if(err){
+                // let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(schedule)', err.message);
+                logger.error(err.message);
+                // next(new_err);
+                reject(err);
+                return;
+            }
+            logger.debug(result);
+            resolve(result['ops']);
+            // res.status(200).json(result['ops']);
+        });
+    })
+
+    return ret_promise;
+}
+
 function Comment(){
 
 }

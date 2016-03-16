@@ -3,6 +3,7 @@ var logger = require('./log').logger,
     APIError = require('./error').APIError,
     ErrorType = require('./error').ErrorType;
 var db = require('./db');
+
 //if includes function not existed, then use this.
 if (!Array.prototype.includes) {
   Array.prototype.includes = function(searchElement /*, fromIndex*/ ) {
