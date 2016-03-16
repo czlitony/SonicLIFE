@@ -58,4 +58,8 @@ router.post('/', checkUserSessionIdHandler(false), checkInputHandler(['dish_id',
     })
 })
 
+router.delete('/', checkUserSessionIdHandler(false), checkInputHandler(['order_id'], true), function(req, res, next){
+
+});
+
 module.exports = router;

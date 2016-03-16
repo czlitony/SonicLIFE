@@ -318,4 +318,8 @@ Order.prototype.insert = function(obj){
     return promise;
 }
 
+Order.prototype.delete = function(obj){
+    let promise = new Promise(function(resolve, reject){
 
+    });
+}
