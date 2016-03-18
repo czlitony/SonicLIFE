@@ -1,5 +1,5 @@
 # SonicLIFE
-[![Build Status](https://travis-ci.org/SonicWALL-SSLVPN/SonicLIFE.svg?branch=master)](https://travis-ci.org/SonicWALL-SSLVPN/SonicLIFE)
+[![Build Status](https://travis-ci.org/SonicWeb/SonicLIFE.svg?branch=master)](https://travis-ci.org/SonicWeb/SonicLIFE)
 ## Installation
 
 If you check out the project for the firest time, then you need to install all the dependencies.
