@@ -16,7 +16,7 @@ function DataBase(){
         this.db = database;
         this.db.createCollection('user');
         this.db.createCollection('menu');
-        this.db.createCollection('oder');
+        this.db.createCollection('order');
         // should be capped
         this.db.createCollection('comments', {'capped' : true, 'size' : 1024*1024});
         this.db.createCollection('schedule');

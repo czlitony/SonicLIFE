@@ -6,7 +6,7 @@ var logger = require('./log').logger;
 var ObjectID = require('mongodb').ObjectID;
 var APIError = require('./error').APIError,
     ErrorType = require('./error').ErrorType;
-var checkInputHandler = require('./util').checkInputHandler,
+var inputChecker = require('./util').inputChecker,
     checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler,
     genericQuery = require('./util').genericQuery;
 
@@ -35,7 +35,7 @@ router.get('/:dish_id', function(req, res, next){
     });
 });
 
-router.post('/', checkUserSessionIdHandler(false), checkInputHandler(['comment','dish_id'], true), function(req, res, next){
+router.post('/', checkUserSessionIdHandler(false), inputChecker({'comment':'string','dish_id':'string'}, true), function(req, res, next){
     let msg = req.body['comment'];
     let dish_id = req.body['dish_id'];
     let comment = new Comment();
@@ -51,5 +51,4 @@ router.post('/', checkUserSessionIdHandler(false), checkInputHandler(['comment',
     }).catch(function(err){
         next(err);
     })
-
 })

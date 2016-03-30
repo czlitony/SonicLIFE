@@ -7,7 +7,7 @@ var logger = require('./log').logger;
 var ObjectID = require('mongodb').ObjectID;
 var APIError = require('./error').APIError,
     ErrorType = require('./error').ErrorType;
-var checkInputHandler = require('./util').checkInputHandler,
+var inputChecker = require('./util').inputChecker,
     checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler,
     genericQuery = require('./util').genericQuery;
 
@@ -16,7 +16,8 @@ var checkInputHandler = require('./util').checkInputHandler,
 router.get('/', genericQuery('menu'));
 
 //NOTE: give anonymous functions a name is good for debug.
-router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['vender','dish'], true), function(req, res, next){
+router.post('/', checkUserSessionIdHandler(true), 
+    inputChecker({'vender':'string','dish':'string'}, true), function(req, res, next){
 
     let body = req.body;
     let data = {};
@@ -59,7 +60,7 @@ router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['vender','d
 
 });
 
-router.delete('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_list'], true), function(req,res,next){
+router.delete('/', checkUserSessionIdHandler(true), inputChecker({'dish_list':['string']}, true), function(req,res,next){
     let delete_list = req.body['dish_list'];
 
     let translated_list = [];
@@ -169,7 +170,8 @@ router.get('/q/:vender_name/:dish_name', function(req, res, next) {
     });
 });
 
-router.put('/q/:vender_name/:dish_name/rate', checkUserSessionIdHandler(false), checkInputHandler(['rate'], true), function(req, res, next) {
+router.put('/q/:vender_name/:dish_name/rate', checkUserSessionIdHandler(false), 
+    inputChecker({'rate':'number'}, true), function(req, res, next) {
     
     let selector = {'vender' : req.params.vender_name, 'dish': req.params.dish_name};
     let cursor = db.find('menu', selector);
@@ -190,26 +192,21 @@ router.put('/q/:vender_name/:dish_name/rate', checkUserSessionIdHandler(false), 
         let times = result[0]['rate']['times'];
         let old_rate = result[0]['rate']['result'];
         let new_rate;
-        if(typeof req.body['rate'] === 'number'){
-            new_rate = (times*old_rate + req.body['rate'])/(times+1);
-            logger.debug('new rate is ' + new_rate);
-            db.update('menu', selector, {'$set': {'rate':{'result':new_rate, 'times': (times+1)}}}, {})
-                .then(function(update_result, error){
-                    if(error){
-                        let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'UPDATE(menu)', error.message);
-                        logger.error(error.message);
-                        next(new_err);
-                        return;
-                    }
-                    logger.debug(update_result);
-                    res.sendStatus(200);
-                });
-        }else{
-            let error = new APIError(ErrorType.TYPE_ILLEGAL, 'rate', 'Number');
-            logger.error(error.toJSON());
-            next(error);
-            return;
-        }
+
+        new_rate = (times*old_rate + req.body['rate'])/(times+1);
+        logger.debug('new rate is ' + new_rate);
+        db.update('menu', selector, {'$set': {'rate':{'result':new_rate, 'times': (times+1)}}}, {})
+            .then(function(update_result, error){
+                if(error){
+                    let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'UPDATE(menu)', error.message);
+                    logger.error(error.message);
+                    next(new_err);
+                    return;
+                }
+                logger.debug(update_result);
+                res.sendStatus(200);
+            });
+
     });
 
 });

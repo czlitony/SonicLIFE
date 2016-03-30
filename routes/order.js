@@ -6,7 +6,7 @@ var APIError = require('./error').APIError,
 var db = require('./db');
 var logger = require('./log').logger;  
 
-var checkInputHandler = require('./util').checkInputHandler,
+var inputChecker = require('./util').inputChecker,
     checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler;
 
 var Order = require('./models/order_model').Order;
@@ -40,7 +40,7 @@ router.get('/', checkUserSessionIdHandler(false), function(req, res, next) {
     })
 });
 
-router.post('/', checkUserSessionIdHandler(false), checkInputHandler(['dish_id','type'], true), function(req, res, next){
+router.post('/', checkUserSessionIdHandler(false), inputChecker({'dish_id':'string','type':'string'}, true), function(req, res, next){
     let s = new Order();
 
     let target = {
@@ -58,7 +58,7 @@ router.post('/', checkUserSessionIdHandler(false), checkInputHandler(['dish_id',
     })
 })
 
-router.delete('/', checkUserSessionIdHandler(false), checkInputHandler(['order_id'], true), function(req, res, next){
+router.delete('/', checkUserSessionIdHandler(false), inputChecker({'order_list':['string']}, true), function(req, res, next){
 
 });
 

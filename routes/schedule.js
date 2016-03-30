@@ -6,9 +6,9 @@ var logger = require('./log').logger;
 var ObjectID = require('mongodb').ObjectID;
 var APIError = require('./error').APIError,
     ErrorType = require('./error').ErrorType;
-var checkInputHandler = require('./util').checkInputHandler,
-    checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler,
-    genericQuery = require('./util').genericQuery;
+var checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler,
+    genericQuery = require('./util').genericQuery,
+    inputChecker = require('./util').inputChecker;
 var async = require('async');
 var Schedule = require('./models/schedule_model').Schedule;
 
@@ -17,12 +17,18 @@ router.get('/', function(req, res, next){
     
     let page = req.query.page;
     let day = req.query.day;
+    let type = req.query.type;
 
     logger.debug('day ' + day);
+    logger.debug('type ' + type);
     let selector = {};
     
     if(day && day >= 1 && day <= 7){
         selector = {'day' : parseInt(day)};
+    }
+
+    if(type){
+        selector['type'] = type;
     }
     
     var promise;
@@ -40,7 +46,10 @@ router.get('/', function(req, res, next){
     })
 });
 
-router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','day','type'], true), function(req, res, next){
+router.post('/', checkUserSessionIdHandler(true), 
+    inputChecker({'dish_id':'string','day':'number','type':'string'}, true), 
+    function(req, res, next){
+    
     let body = req.body;
 
     if(body instanceof Array){
@@ -140,22 +149,7 @@ router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','
         data['day'] = body['day'];
         data['type'] = body['type'];
         
-        //freeze the type?
-        if(typeof data['type'] != 'string'){
-            let error = new APIError(ErrorType.TYPE_ILLEGAL, 'type', 'String');
-            logger.error(error.toJSON());
-            callback(error);
-            return;
-        }
-
-        if(typeof data['dish_id'] != 'string'){
-            let error = new APIError(ErrorType.TYPE_ILLEGAL, 'dish_id', 'String');
-            logger.error(error.toJSON());
-            callback(error);
-            return;
-        }
-
-        if(typeof data['day'] != 'number' || data['day'] > 7 || data['day'] < 1){
+        if(data['day'] > 7 || data['day'] < 1){
             let error = new APIError(ErrorType.TYPE_ILLEGAL, 'day', 'Number');
             logger.error(error.toJSON());
             callback(error);
@@ -182,7 +176,7 @@ router.post('/', checkUserSessionIdHandler(true), checkInputHandler(['dish_id','
 
 });
 
-router.delete('/', checkUserSessionIdHandler(true), checkInputHandler(['schedule_id'], true), function(req, res, next){
+router.delete('/', checkUserSessionIdHandler(true), inputChecker({'schedule_id':['string']}, true), function(req, res, next){
     let delete_list = req.body['schedule_id'];
 
     let translated_list = [];
@@ -214,7 +208,10 @@ router.delete('/', checkUserSessionIdHandler(true), checkInputHandler(['schedule
         });
 });
 
-router.put('/', checkUserSessionIdHandler(true), checkInputHandler(['_id', 'dish_id','day', 'type'], false), function(req, res, next){
+router.put('/', 
+            checkUserSessionIdHandler(true), 
+            inputChecker({'_id':'string', 'dish_id':'string','day':'number', 'type':'string'}, false), 
+            function(req, res, next){
     if(!req.body['_id']){
         let error = new APIError(ErrorType.NEED_A_ID);
         logger.error(error.message);
@@ -222,26 +219,13 @@ router.put('/', checkUserSessionIdHandler(true), checkInputHandler(['_id', 'dish
         return;
     }
 
-    if(typeof data['dish_id'] != 'string'){
-        let error = new APIError(ErrorType.TYPE_ILLEGAL, 'dish_id', 'String');
-        logger.error(error.toJSON());
-        callback(error);
-        return;
-    }
-    if(typeof data['day'] != 'number' || data['day'] > 7 || data['day'] < 1){
+    if(data['day'] > 7 || data['day'] < 1){
         let error = new APIError(ErrorType.TYPE_ILLEGAL, 'day', 'Number');
         logger.error(error.toJSON());
         callback(error);
         return;
     }
 
-    //freeze the type?
-    if(typeof data['type'] != 'string'){
-        let error = new APIError(ErrorType.TYPE_ILLEGAL, 'type', 'String');
-        logger.error(error.toJSON());
-        callback(error);
-        return;
-    }
     // let selector = {'_id' : ObjectID.createFromHexString(req.body['_id'])};
     try{
         var selector = {'_id' : ObjectID.createFromHexString(req.body['_id'])}

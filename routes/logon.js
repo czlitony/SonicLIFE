@@ -4,7 +4,7 @@ var express = require('express'),
     uuid = require('node-uuid'),  
     db = require('./db'),
     logger = require('./log').logger,
-    checkInputHandler = require('./util').checkInputHandler,
+    inputChecker = require('./util').inputChecker,
     checkUserSessionIdHandler = require('./util').checkUserSessionIdHandler,
     APIError = require('./error').APIError,
     ErrorType = require('./error').ErrorType;
@@ -114,7 +114,7 @@ if(process.env.USE_LDAP == 1){
     authenticate = ldapAuthenticate;
 }
 
-router.post('/', checkInputHandler(['username', 'password'], true), authenticate);
+router.post('/', inputChecker({'username':'string', 'password':'string'}, true), authenticate);
 
 router.get('/', checkUserSessionIdHandler(false), function(req, res, next) {
     
@@ -147,12 +147,11 @@ router.delete('/', checkUserSessionIdHandler(false), function(req, res, next){
     
 });
 
-router.post('/register', checkInputHandler(['username', 'password'], true), function(req, res, next){
+router.post('/register', inputChecker({'username':'string', 'password':'string'}, true), function(req, res, next){
     
     let body = req.body;
 
-    let result = db.find('user', { 'username' : body['username']});
-    result.toArray(function(err, documents){
+    db.find('user', { 'username' : body['username']}).toArray(function(err, documents){
         
         if(err){
             let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(user)', err.message);
