@@ -6,8 +6,6 @@
   "scripts": {
     "postinstall": "bower install && ./bin/install.sh",
 
-    "prestart": "npm install",
-
     "test": "mocha test/test_*",
     "start": "node ./bin/www"
   },
@@ -33,8 +31,8 @@
     "express": "~4.13.1",
     "express-session": "^1.13.0",
     "jade": "~1.11.0",
-    "ldap-verifyuser": "^1.0.2",
-    "ldapjs": "^1.0.0",
+    "ldap-verifyuser": "latest",
+    "ldapjs": "latest",
     "log4js": "^0.6.29",
     "mocha": "^2.3.4",
     "mongodb": "^2.1.4",

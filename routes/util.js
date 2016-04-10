@@ -181,7 +181,7 @@ function checkRequestContentHandler(body, target, strict){
 
         for(let i=0; i<keys.length; i++){
             if(!(keys[i] in target)){
-                logger.debug("not in");
+                logger.debug(keys[i] + " not in target.");
                 return false;
             }
 
@@ -189,8 +189,7 @@ function checkRequestContentHandler(body, target, strict){
             
             if(typeof elem_type == 'string'){
                 if(elem_type != typeof body[keys[i]]){
-                    logger.debug(keys[i]);
-                    logger.debug(typeof body[keys[i]]);
+                    logger.debug(keys[i] + " not match the type of " + typeof body[keys[i]]);
                     // req['error_reason'] = body[keys[i]] + " expected to be a " + elem_type;
                     return false;
                 }
