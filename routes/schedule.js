@@ -15,29 +15,38 @@ var Schedule = require('./models/schedule_model').Schedule;
 router.get('/', function(req, res, next){
     let s = new Schedule();
     
-    let page = req.query.page;
+    // let page = req.query.page;
     let day = req.query.day;
     let type = req.query.type;
+    let menu_name = req.query.menu_name;
 
     logger.debug('day ' + day);
     logger.debug('type ' + type);
+    logger.debug('menu_name ' + menu_name);
     let selector = {};
     
     if(day && day >= 1 && day <= 7){
         selector = {'day' : parseInt(day)};
+    }else{
+        // s.findDistinct()
     }
 
     if(type){
         selector['type'] = type;
     }
-    
-    var promise;
-    if(page !== undefined && page > 0){
-        cursor = cursor.skip((page-1)*10).limit(10);
-        promise = s.find(selector, ((page-1)*10), 10);
-    }else{
-        promise = s.find(selector);
+
+    if(menu_name){
+        selector['menu_name'] = menu_name;
     }
+    
+    // var promise;
+    // if(page !== undefined && page > 0){
+    //     cursor = cursor.skip((page-1)*10).limit(10);
+    //     promise = s.find(selector, ((page-1)*10), 10);
+    // }else{
+    //     promise = s.find(selector);
+    // }
+    var promise = s.find(selector)
 
     promise.then(function(val){
         res.status(200).json(val);
@@ -47,7 +56,8 @@ router.get('/', function(req, res, next){
 });
 
 router.post('/', checkUserSessionIdHandler(true), 
-    inputChecker({'dish_id':'string','day':'number','type':'string'}, true), 
+    // inputChecker({'dish_id':'string','day':'number','type':'string', menu_name:'string'}, true), 
+    inputChecker({'day':'number','type':'string', 'menu':[{'name': 'string', 'dishes' : ['string']}]}, true), 
     function(req, res, next){
     
     let body = req.body;
@@ -81,9 +91,11 @@ router.post('/', checkUserSessionIdHandler(true),
         async.series([
             function(callback){
                 isExisted(body, callback);
+                // callback();
             }, 
             function(callback){
-                isIdValid(body, callback);
+                // isIdValid(body, callback);
+                callback();
             }, 
             function(callback){
                 insert(body, callback);
@@ -97,7 +109,7 @@ router.post('/', checkUserSessionIdHandler(true),
         });
     }
 
-    function insert(body){
+    function insert(body, callback){
         // let promise_result = db.insert('schedule', body);
 
         // promise_result.then(function(result, err){
@@ -115,10 +127,11 @@ router.post('/', checkUserSessionIdHandler(true),
         let promise = s.insert(body);
         promise.then(function(val){
             res.status(200).json(val);
+            callback();
         }).catch(function(err){
             let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(schedule)', err.message);
             logger.error(err.message);
-            next(new_err);
+            callback(new_err);
             return;
         })
     }
@@ -145,9 +158,10 @@ router.post('/', checkUserSessionIdHandler(true),
 
     function isExisted(body, callback){
         let data = {};
-        data['dish_id'] = body['dish_id'];
+        // data['dish_id'] = body['dish_id'];
         data['day'] = body['day'];
         data['type'] = body['type'];
+        // data['menu_name'] = body['menu_name'];
         
         if(data['day'] > 7 || data['day'] < 1){
             let error = new APIError(ErrorType.TYPE_ILLEGAL, 'day', 'Number');
@@ -156,22 +170,35 @@ router.post('/', checkUserSessionIdHandler(true),
             return;
         }
 
-        db.find('schedule', data).toArray(function(error, docments){
-            if(error){
-                let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(schedule)', error.message);
-                logger.error(error.message);
-                callback(new_err);
-                return;
-            }
+        let s = new Schedule();
+        let promise = s.find(data);
 
-            if(docments.length >= 1){
-                let error = new APIError(ErrorType.SCHEDULE_EXISTED, body['dish_id'], body['day'], body['type']);
-                logger.error(error.message);
-                callback(error);
-                return;
-            }
+        promise.then(function(val){
+            res.status(200).json(val);
             callback();
-        });    
+        }).catch(function(err){
+            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(schedule)', err.message);
+            logger.error(err.message);
+            callback(new_err);
+            return;
+        });
+
+        // db.find('schedule', data).toArray(function(error, docments){
+        //     if(error){
+        //         let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(schedule)', error.message);
+        //         logger.error(error.message);
+        //         callback(new_err);
+        //         return;
+        //     }
+
+        //     if(docments.length >= 1){
+        //         let error = new APIError(ErrorType.SCHEDULE_EXISTED, body['dish_id'], body['day'], body['type']);
+        //         logger.error(error.message);
+        //         callback(error);
+        //         return;
+        //     }
+        //     callback();
+        // });    
     }
 
 });

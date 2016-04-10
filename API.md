@@ -142,6 +142,7 @@ SHOULD set cookie in header
 * NEED ADMIN AND LOGON
 * day [1-7] represent from monday to sunday.
 ~~~
+#Deprecated
 [
     {
         dish_id : "abcdefa",
@@ -150,6 +151,21 @@ SHOULD set cookie in header
     ...
     ...
 ]
+~~~
+{
+    menu : [
+        {
+            name : menu name,
+            dishes : [
+                id1, id2...
+            ]
+        }
+    ],
+    type : lunch,
+    day : 1
+}
+~~~
+
 ~~~
 
 ###OUTPUT
@@ -157,14 +173,19 @@ SHOULD set cookie in header
 * status 200
 
 ~~~
-[
-    {
-        dish_id : "abcdefa",
-        day : 1
-    },
-    ...
-    ...
-]
+{
+    menu : [
+        {
+            name : menu name,
+            dishes : [
+                id1, id2...
+            ]
+        }
+    ],
+    type : lunch,
+    day : 1,
+    _id : schedule_id
+}
 ~~~
 
 ## DELETE /\_\_api\_\_/schedule
@@ -188,12 +209,19 @@ SHOULD set cookie in header
 * NEED ADMIN AND LOGON
 
 ### INPUT
-
+ALL the element is optional.
 ~~~
 {
-    _id : string,
-    dish_id : string,
-    day : int[1-7]
+    menu : [
+        {
+            name : menu name,
+            dishes : [
+                id1, id2...
+            ]
+        }
+    ],
+    type : lunch,
+    day : 1
 }
 ~~~
 

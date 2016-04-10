@@ -87,7 +87,24 @@ if __name__ == '__main__':
     print("SESSION ", session)
 
     resp = HTTPSender.send(BASE_PATH + '/schedule', 
-                            values = {"dish_id":"56bedc9e4f85e44b5ea56e05", "type":"lunch", "day":2, 'menu_name':"menu1"}, 
+                            values = {
+                                        'menu' : [
+                                            {
+                                                'name' : 'AAA',
+                                                'dishes' : [
+                                                    '56bedaa867179ff15daee701', '56bedaa867179ff15daee702'
+                                                ]
+                                            },
+                                            {
+                                                'name' : 'BBB',
+                                                'dishes' : [
+                                                    '56bedb6d67179ff15daee704'
+                                                ]
+                                            },
+                                        ],
+                                        'type' : 'lunch',
+                                        'day' : 1
+                                    }, 
                             header={'cookie':session},
                             method = 'POST') 
     print("RESPONSE: ", resp.body)
