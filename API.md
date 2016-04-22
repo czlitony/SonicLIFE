@@ -133,24 +133,26 @@ SHOULD set cookie in header
 ]
 ~~~
 
-#schedule API
+#rule API
 
-## POST /\_\_api\_\_/schedule
+## POST /\_\_api\_\_/rule
 
 ###INPUT
 
 * NEED ADMIN AND LOGON
 * day [1-7] represent from monday to sunday.
+Pharse 1
+
 ~~~
-#Deprecated
-[
-    {
-        dish_id : "abcdefa",
-        day : 1
-    },
-    ...
-    ...
-]
+{
+    menu : vender_name,
+    type : lunch,
+    day : 1
+}
+~~~
+
+Pharse 2
+
 ~~~
 {
     menu : [
@@ -166,29 +168,27 @@ SHOULD set cookie in header
 }
 ~~~
 
-~~~
-
 ###OUTPUT
 
 * status 200
 
 ~~~
-{
-    menu : [
-        {
-            name : menu name,
-            dishes : [
-                id1, id2...
-            ]
-        }
-    ],
-    type : lunch,
-    day : 1,
-    _id : schedule_id
-}
+[
+    {
+        "_id":"571a3698899fcd2d11116a4a",
+        "type":"lunch",
+        "day":1,"menu":"guolan"
+    },
+    {
+        "_id":"571a39237125e9f711681695",
+        "menu":"guolan",
+        "day":2,
+        "type":"lunch"
+    }
+]
 ~~~
 
-## DELETE /\_\_api\_\_/schedule
+## DELETE /\_\_api\_\_/rule
 
 * NEED ADMIN AND LOGON
 
@@ -196,7 +196,7 @@ SHOULD set cookie in header
 
 ~~~
 {
-    schedule_list : [id1,id2,id3]
+    rule_list : [id1,id2,id3]
 }
 ~~~
 
@@ -204,7 +204,7 @@ SHOULD set cookie in header
 
 * status 200
 
-## PUT /\_\_api\_\_/schedule
+## PUT /\_\_api\_\_/rule
 
 * NEED ADMIN AND LOGON
 
@@ -212,14 +212,8 @@ SHOULD set cookie in header
 ALL the element is optional.
 ~~~
 {
-    menu : [
-        {
-            name : menu name,
-            dishes : [
-                id1, id2...
-            ]
-        }
-    ],
+    rule_id : id,
+    menu : vender_name,
     type : lunch,
     day : 1
 }

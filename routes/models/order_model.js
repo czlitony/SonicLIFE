@@ -3,14 +3,21 @@ var db = require('../db');
 var logger = require('../log').logger; 
 var ObjectID = require('mongodb').ObjectID;
 var APIError = require('../error').APIError,
-    ErrorType = require('../error').ErrorType;
+    ErrorType = require('../error').ErrorType,
+    Base = require('./base_model').Base;
 
 exports.Order = Order;
 
-function Order(){}
+function Order(){
+    this.collection_name = "order";
+}
+
+Order.prototype = Object.create(Base.prototype);
+Order.prototype.constructor = Order;
 
 Order.prototype.find = function(selector, skip, limit){
-    let cursor = db.find('order', selector);
+    let inst = this;
+    let cursor = db.find(inst.collection_name, selector);
 
     if(skip){
         cursor = cursor.skip(skip);
@@ -92,6 +99,8 @@ Order.prototype.find = function(selector, skip, limit){
 }
 
 Order.prototype.insert = function(obj){
+    let inst = this;
+
     let promise = new Promise(function(resolve, reject){
 
         if(obj.dish_id === undefined){
@@ -108,7 +117,7 @@ Order.prototype.insert = function(obj){
             return;
         }
 
-        db.find('order', {'dish_id':obj['dish_id'],'username':obj['username'],'type':obj['type'],'expired':false}).toArray(function(error, documents){
+        db.find(inst.collection_name, {'dish_id':obj['dish_id'],'username':obj['username'],'type':obj['type'],'expired':false}).toArray(function(error, documents){
             if(error){
                 let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(menu)', error.message);
                 logger.error(error.message);
@@ -132,7 +141,7 @@ Order.prototype.insert = function(obj){
                 if(documents.length == 1){
                     obj = Object.assign(obj, {dish : documents[0]['dish'], 
                                                 vender : documents[0]['vender']});
-                    db.insert('order', obj).
+                    db.insert(inst.collection_name, obj).
                         then(function(result, err){
                             if(err){
                                 let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(order)', err.message);

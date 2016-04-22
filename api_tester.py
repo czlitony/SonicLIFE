@@ -86,29 +86,25 @@ if __name__ == '__main__':
     session = resp.get_header_by_name('set-cookie')
     print("SESSION ", session)
 
-    resp = HTTPSender.send(BASE_PATH + '/schedule', 
+    resp = HTTPSender.send(BASE_PATH + '/menu', 
                             values = {
-                                        'menu' : [
-                                            {
-                                                'name' : 'AAA',
-                                                'dishes' : [
-                                                    '56bedaa867179ff15daee701', '56bedaa867179ff15daee702'
-                                                ]
-                                            },
-                                            {
-                                                'name' : 'BBB',
-                                                'dishes' : [
-                                                    '56bedb6d67179ff15daee704'
-                                                ]
-                                            },
-                                        ],
-                                        'type' : 'lunch',
-                                        'day' : 1
+                                        'vender' : 'guolan',
+                                        'dish' : 'dish2'
                                     }, 
                             header={'cookie':session},
                             method = 'POST') 
     print("RESPONSE: ", resp.body)
 
-    resp = HTTPSender.send(BASE_PATH + '/schedule',  method = 'GET') 
+    resp = HTTPSender.send(BASE_PATH + '/rule', 
+                            values = {
+                                        'menu' : 'guolan',
+                                        'type' : 'lunch',
+                                        'day' : 2
+                                    }, 
+                            header={'cookie':session},
+                            method = 'POST') 
+    print("RESPONSE: ", resp.body)
+
+    resp = HTTPSender.send(BASE_PATH + '/rule',  header={'cookie':session}, method = 'GET') 
     print("RESPONSE: ", resp.body)
 

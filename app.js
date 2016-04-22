@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var logon = require('./routes/logon');
 var menu = require('./routes/menu');
 var schedule = require('./routes/schedule');
+var rule = require('./routes/rule');
 var commets = require('./routes/commets');
 var order = require('./routes/order');
 var log = require('./routes/log');
@@ -36,6 +37,7 @@ app.use('/__api__/menu', menu);
 app.use('/__api__/schedule', schedule);
 app.use('/__api__/order', order);
 app.use('/__api__/comment', commets);
+app.use('/__api__/rule', rule);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

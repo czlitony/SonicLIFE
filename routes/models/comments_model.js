@@ -3,13 +3,17 @@ var db = require('../db');
 var logger = require('../log').logger; 
 var ObjectID = require('mongodb').ObjectID;
 var APIError = require('../error').APIError,
-    ErrorType = require('../error').ErrorType;
+    ErrorType = require('../error').ErrorType,
+    Base = require('./base_model').Base;
 
 exports.Comment = Comment;
 
 function Comment(){
-
+    this.collection_name = "comments";
 }
+
+Comment.prototype = Object.create(Base.prototype);
+Comment.prototype.constructor = Comment;
 
 Comment.prototype.insert = function(obj){
 
@@ -52,28 +56,28 @@ Comment.prototype.insert = function(obj){
     return promise;
 }
 
-Comment.prototype.find = function(selector, skip, limit){
-    let promise = new Promise(function(resolve, reject){
-        let cursor = db.find('comments',selector);
-        if(skip){
-            cursor = cursor.skip(skip);
-        }
+// Comment.prototype.find = function(selector, skip, limit){
+//     let promise = new Promise(function(resolve, reject){
+//         let cursor = db.find('comments',selector);
+//         if(skip){
+//             cursor = cursor.skip(skip);
+//         }
 
-        if(limit){
-            cursor = cursor.limit(limit);
-        }
+//         if(limit){
+//             cursor = cursor.limit(limit);
+//         }
 
-        cursor.toArray(function(error, documents){
-            if(error){
-                let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(Comment)', error.message);
-                logger.error(error.message);
-                reject(new_err);
-                return;
-            }
+//         cursor.toArray(function(error, documents){
+//             if(error){
+//                 let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(Comment)', error.message);
+//                 logger.error(error.message);
+//                 reject(new_err);
+//                 return;
+//             }
 
-            resolve(documents);
-        });
-    });
+//             resolve(documents);
+//         });
+//     });
 
-    return promise;
-}
+//     return promise;
+// }
