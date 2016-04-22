@@ -1,0 +1,371 @@
+[2016-04-22 22:11:50.106] [DEBUG] dateFileLog - null
+[2016-04-22 22:11:50.109] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:11:50.110] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:11:50.111] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:11:50.111] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:11:50.111] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:11:50.111] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:11:50.111] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:11:50.111] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:11:50.111] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:11:50.111] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:11:50.111] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:11:50.111] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:11:50.111] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:11:50.111] [DEBUG] dateFileLog - [ '{1}', '{2}', '{3}' ]
+[2016-04-22 22:11:50.112] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:11:50.112] [DEBUG] dateFileLog - null
+[2016-04-22 22:11:50.112] [DEBUG] dateFileLog - null
+[2016-04-22 22:11:50.112] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:11:50.112] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:16:03.152] [INFO] dateFileLog - User found: [object Object]
+[2016-04-22 22:16:03.154] [INFO] dateFileLog - user admin logon.
+[2016-04-22 22:16:03.163] [DEBUG] dateFileLog - POST /__api__/logon
+[2016-04-22 22:16:03.170] [DEBUG] dateFileLog - Cookies is: s:OcQtLHiAtFNPxO7gjO_i40FJS-dxPpN2.CUrLsDkprgFQ/nUiVoYocmGTAOTTSG6S1ZyiweTl3rk
+[2016-04-22 22:16:03.170] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:16:03.181] [DEBUG] dateFileLog - { result: { ok: 1, n: 1 },
+  ops: 
+   [ { vender: 'guolan',
+       dish: 'dish1',
+       rate: [Object],
+       _id: 571a3223cbdf9e7f0f547f0a } ],
+  insertedCount: 1,
+  insertedIds: [ [ '0' ], 571a3223cbdf9e7f0f547f0a ] }
+[2016-04-22 22:16:03.195] [DEBUG] dateFileLog - POST /__api__/menu
+[2016-04-22 22:16:03.204] [DEBUG] dateFileLog - Cookies is: s:OcQtLHiAtFNPxO7gjO_i40FJS-dxPpN2.CUrLsDkprgFQ/nUiVoYocmGTAOTTSG6S1ZyiweTl3rk
+[2016-04-22 22:16:03.204] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:16:03.207] [DEBUG] dateFileLog - POST /__api__/rule
+[2016-04-22 22:16:03.214] [DEBUG] dateFileLog - Cookies is: undefined
+[2016-04-22 22:16:03.215] [ERROR] dateFileLog - can't restore a session
+[2016-04-22 22:16:03.215] [DEBUG] dateFileLog - undefined
+[2016-04-22 22:16:03.216] [DEBUG] dateFileLog - finalMsg: check sid 'undefined' fail, it's unauthenticated.
+[2016-04-22 22:16:03.216] [ERROR] dateFileLog - { error_code: 4,
+  message: 'check sid \'undefined\' fail, it\'s unauthenticated.' }
+[2016-04-22 22:16:03.216] [DEBUG] dateFileLog - finalMsg: check sid 'undefined' fail, it's unauthenticated.
+[2016-04-22 22:16:03.218] [DEBUG] dateFileLog - GET /__api__/rule
+[2016-04-22 22:20:04.615] [INFO] dateFileLog - User found: [object Object]
+[2016-04-22 22:20:04.615] [INFO] dateFileLog - user admin logon.
+[2016-04-22 22:20:04.616] [DEBUG] dateFileLog - POST /__api__/logon
+[2016-04-22 22:20:04.620] [DEBUG] dateFileLog - Cookies is: s:lDww-SkohYW4cZW8PZq1BfjRBDagH5l2.4eNzO0RiiN//qPtlofrjDCR84UwfIqeWIRbmyAhgRiI
+[2016-04-22 22:20:04.620] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:20:04.622] [ERROR] dateFileLog - 
+[2016-04-22 22:20:04.622] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish1' existed.
+[2016-04-22 22:20:04.622] [ERROR] dateFileLog - { error_code: 9,
+  message: 'vender \'guolan\' dish \'dish1\' existed.' }
+[2016-04-22 22:20:04.622] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish1' existed.
+[2016-04-22 22:20:04.625] [DEBUG] dateFileLog - POST /__api__/menu
+[2016-04-22 22:20:04.630] [DEBUG] dateFileLog - Cookies is: s:lDww-SkohYW4cZW8PZq1BfjRBDagH5l2.4eNzO0RiiN//qPtlofrjDCR84UwfIqeWIRbmyAhgRiI
+[2016-04-22 22:20:04.630] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:20:04.631] [DEBUG] dateFileLog - POST /__api__/rule
+[2016-04-22 22:20:04.635] [DEBUG] dateFileLog - Cookies is: s:lDww-SkohYW4cZW8PZq1BfjRBDagH5l2.4eNzO0RiiN//qPtlofrjDCR84UwfIqeWIRbmyAhgRiI
+[2016-04-22 22:20:04.635] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:20:04.637] [DEBUG] dateFileLog - /__api__/rule 
+[2016-04-22 22:20:04.638] [DEBUG] dateFileLog - GET /__api__/rule
+[2016-04-22 22:32:43.024] [DEBUG] dateFileLog - null
+[2016-04-22 22:32:43.026] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:43.027] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:43.027] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:43.027] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - [ '{1}', '{2}', '{3}' ]
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - null
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - null
+[2016-04-22 22:32:43.028] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:43.029] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:32:57.871] [INFO] dateFileLog - User found: [object Object]
+[2016-04-22 22:32:57.872] [INFO] dateFileLog - user admin logon.
+[2016-04-22 22:32:57.880] [DEBUG] dateFileLog - POST /__api__/logon
+[2016-04-22 22:32:57.885] [DEBUG] dateFileLog - Cookies is: s:x1JkuNsRwvz8zJ706sU6h3J99UaE_8gK.GccogPrM4oMz8Kqa1wMPsIcWVsis7P9p9lQabejQS2I
+[2016-04-22 22:32:57.886] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:32:57.887] [ERROR] dateFileLog - 
+[2016-04-22 22:32:57.888] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish1' existed.
+[2016-04-22 22:32:57.888] [ERROR] dateFileLog - { error_code: 9,
+  message: 'vender \'guolan\' dish \'dish1\' existed.' }
+[2016-04-22 22:32:57.896] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish1' existed.
+[2016-04-22 22:32:57.899] [DEBUG] dateFileLog - POST /__api__/menu
+[2016-04-22 22:32:57.902] [DEBUG] dateFileLog - Cookies is: s:x1JkuNsRwvz8zJ706sU6h3J99UaE_8gK.GccogPrM4oMz8Kqa1wMPsIcWVsis7P9p9lQabejQS2I
+[2016-04-22 22:32:57.902] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:32:57.906] [DEBUG] dateFileLog - POST /__api__/rule
+[2016-04-22 22:32:57.910] [DEBUG] dateFileLog - Cookies is: s:x1JkuNsRwvz8zJ706sU6h3J99UaE_8gK.GccogPrM4oMz8Kqa1wMPsIcWVsis7P9p9lQabejQS2I
+[2016-04-22 22:32:57.910] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:32:57.911] [DEBUG] dateFileLog - /__api__/rule 
+[2016-04-22 22:32:57.912] [DEBUG] dateFileLog - GET /__api__/rule
+[2016-04-22 22:34:12.955] [DEBUG] dateFileLog - null
+[2016-04-22 22:34:12.957] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:34:12.958] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}', '{2}', '{3}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:34:12.959] [DEBUG] dateFileLog - null
+[2016-04-22 22:34:12.960] [DEBUG] dateFileLog - null
+[2016-04-22 22:34:12.960] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:34:12.960] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:35:04.423] [INFO] dateFileLog - User found: [object Object]
+[2016-04-22 22:35:04.424] [INFO] dateFileLog - user admin logon.
+[2016-04-22 22:35:04.432] [DEBUG] dateFileLog - POST /__api__/logon
+[2016-04-22 22:35:04.438] [DEBUG] dateFileLog - Cookies is: s:3YEoIhhDvkvIpn9jfPnTnOMvxGTsAhD-.1s2nk1crnRZ6u0dSqEDbC0qdobLXItKVhadI7e9XfKs
+[2016-04-22 22:35:04.439] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:35:04.440] [ERROR] dateFileLog - 
+[2016-04-22 22:35:04.441] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish1' existed.
+[2016-04-22 22:35:04.441] [ERROR] dateFileLog - { error_code: 9,
+  message: 'vender \'guolan\' dish \'dish1\' existed.' }
+[2016-04-22 22:35:04.451] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish1' existed.
+[2016-04-22 22:35:04.453] [DEBUG] dateFileLog - POST /__api__/menu
+[2016-04-22 22:35:04.457] [DEBUG] dateFileLog - Cookies is: s:3YEoIhhDvkvIpn9jfPnTnOMvxGTsAhD-.1s2nk1crnRZ6u0dSqEDbC0qdobLXItKVhadI7e9XfKs
+[2016-04-22 22:35:04.457] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:35:04.470] [DEBUG] dateFileLog - { result: { ok: 1, n: 1 },
+  ops: 
+   [ { type: 'lunch',
+       day: 1,
+       menu: 'guolan',
+       _id: 571a3698899fcd2d11116a4a } ],
+  insertedCount: 1,
+  insertedIds: [ [ '0' ], 571a3698899fcd2d11116a4a ] }
+[2016-04-22 22:35:04.473] [DEBUG] dateFileLog - POST /__api__/rule
+[2016-04-22 22:35:04.490] [DEBUG] dateFileLog - Cookies is: s:3YEoIhhDvkvIpn9jfPnTnOMvxGTsAhD-.1s2nk1crnRZ6u0dSqEDbC0qdobLXItKVhadI7e9XfKs
+[2016-04-22 22:35:04.490] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:35:04.494] [DEBUG] dateFileLog - /__api__/rule [object Object]
+[2016-04-22 22:35:04.496] [DEBUG] dateFileLog - GET /__api__/rule
+[2016-04-22 22:35:13.225] [INFO] dateFileLog - User found: [object Object]
+[2016-04-22 22:35:13.225] [INFO] dateFileLog - user admin logon.
+[2016-04-22 22:35:13.226] [DEBUG] dateFileLog - POST /__api__/logon
+[2016-04-22 22:35:13.231] [DEBUG] dateFileLog - Cookies is: s:dkLG1wJFv6H9gpFEECFQ4NcXvZzsKHuU.vGtqSlRnp7Bwbw1xY63jW78szxYEnyWx71h5rO3eGyw
+[2016-04-22 22:35:13.231] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:35:13.232] [ERROR] dateFileLog - 
+[2016-04-22 22:35:13.232] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish1' existed.
+[2016-04-22 22:35:13.232] [ERROR] dateFileLog - { error_code: 9,
+  message: 'vender \'guolan\' dish \'dish1\' existed.' }
+[2016-04-22 22:35:13.232] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish1' existed.
+[2016-04-22 22:35:13.233] [DEBUG] dateFileLog - POST /__api__/menu
+[2016-04-22 22:35:13.238] [DEBUG] dateFileLog - Cookies is: s:dkLG1wJFv6H9gpFEECFQ4NcXvZzsKHuU.vGtqSlRnp7Bwbw1xY63jW78szxYEnyWx71h5rO3eGyw
+[2016-04-22 22:35:13.238] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:35:13.239] [ERROR] dateFileLog - 
+[2016-04-22 22:35:13.240] [DEBUG] dateFileLog - finalMsg: '{"type":"lunch","day":1,"menu":"guolan"}' existed in Rule collection
+[2016-04-22 22:35:13.240] [ERROR] dateFileLog - { error_code: 19,
+  message: '\'{"type":"lunch","day":1,"menu":"guolan"}\' existed in Rule collection' }
+[2016-04-22 22:35:13.240] [DEBUG] dateFileLog - finalMsg: '{"type":"lunch","day":1,"menu":"guolan"}' existed in Rule collection
+[2016-04-22 22:35:13.241] [DEBUG] dateFileLog - POST /__api__/rule
+[2016-04-22 22:35:13.246] [DEBUG] dateFileLog - Cookies is: s:dkLG1wJFv6H9gpFEECFQ4NcXvZzsKHuU.vGtqSlRnp7Bwbw1xY63jW78szxYEnyWx71h5rO3eGyw
+[2016-04-22 22:35:13.246] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:35:13.248] [DEBUG] dateFileLog - /__api__/rule [object Object]
+[2016-04-22 22:35:13.248] [DEBUG] dateFileLog - GET /__api__/rule
+[2016-04-22 22:36:01.675] [DEBUG] dateFileLog - null
+[2016-04-22 22:36:01.677] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:01.678] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:01.678] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:01.678] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}', '{2}', '{3}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - null
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - null
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:01.679] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:36:06.115] [INFO] dateFileLog - User found: [object Object]
+[2016-04-22 22:36:06.115] [INFO] dateFileLog - user admin logon.
+[2016-04-22 22:36:06.124] [DEBUG] dateFileLog - POST /__api__/logon
+[2016-04-22 22:36:06.130] [DEBUG] dateFileLog - Cookies is: s:ZBJFWQGtpaaUd_mENaFzWzHI2g3nexzz.r4NZLMGNi6fxQ/bz2hy8pk8ZVxy+CIJdCseg+y1QO88
+[2016-04-22 22:36:06.131] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:36:06.132] [ERROR] dateFileLog - 
+[2016-04-22 22:36:06.133] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish1' existed.
+[2016-04-22 22:36:06.133] [ERROR] dateFileLog - { error_code: 9,
+  message: 'vender \'guolan\' dish \'dish1\' existed.' }
+[2016-04-22 22:36:06.142] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish1' existed.
+[2016-04-22 22:36:06.144] [DEBUG] dateFileLog - POST /__api__/menu
+[2016-04-22 22:36:06.147] [DEBUG] dateFileLog - Cookies is: s:ZBJFWQGtpaaUd_mENaFzWzHI2g3nexzz.r4NZLMGNi6fxQ/bz2hy8pk8ZVxy+CIJdCseg+y1QO88
+[2016-04-22 22:36:06.147] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:36:06.150] [ERROR] dateFileLog - 
+[2016-04-22 22:36:06.151] [DEBUG] dateFileLog - finalMsg: '{"day":1,"menu":"guolan","type":"lunch"}' existed in Rule collection
+[2016-04-22 22:36:06.151] [ERROR] dateFileLog - { error_code: 19,
+  message: '\'{"day":1,"menu":"guolan","type":"lunch"}\' existed in Rule collection' }
+[2016-04-22 22:36:06.151] [DEBUG] dateFileLog - finalMsg: '{"day":1,"menu":"guolan","type":"lunch"}' existed in Rule collection
+[2016-04-22 22:36:06.152] [DEBUG] dateFileLog - POST /__api__/rule
+[2016-04-22 22:36:06.159] [DEBUG] dateFileLog - Cookies is: s:ZBJFWQGtpaaUd_mENaFzWzHI2g3nexzz.r4NZLMGNi6fxQ/bz2hy8pk8ZVxy+CIJdCseg+y1QO88
+[2016-04-22 22:36:06.159] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:36:06.160] [DEBUG] dateFileLog - /__api__/rule [object Object]
+[2016-04-22 22:36:06.161] [DEBUG] dateFileLog - GET /__api__/rule
+[2016-04-22 22:45:04.918] [DEBUG] dateFileLog - null
+[2016-04-22 22:45:04.920] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:04.921] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}', '{2}', '{3}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - null
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - null
+[2016-04-22 22:45:04.922] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:04.923] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:45:12.065] [INFO] dateFileLog - User found: [object Object]
+[2016-04-22 22:45:12.066] [INFO] dateFileLog - user admin logon.
+[2016-04-22 22:45:12.076] [DEBUG] dateFileLog - POST /__api__/logon
+[2016-04-22 22:45:12.088] [DEBUG] dateFileLog - Cookies is: s:ap7GFPoWmEJMH_0gjliGYs4mKKwG8ufS.50RdfpmDM5jifv9rlSVbBQxhr+vkbrbwlYpho8hg+mM
+[2016-04-22 22:45:12.088] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:45:12.090] [ERROR] dateFileLog - 
+[2016-04-22 22:45:12.091] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish1' existed.
+[2016-04-22 22:45:12.091] [ERROR] dateFileLog - { error_code: 9,
+  message: 'vender \'guolan\' dish \'dish1\' existed.' }
+[2016-04-22 22:45:12.101] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish1' existed.
+[2016-04-22 22:45:12.103] [DEBUG] dateFileLog - POST /__api__/menu
+[2016-04-22 22:45:12.107] [DEBUG] dateFileLog - Cookies is: s:ap7GFPoWmEJMH_0gjliGYs4mKKwG8ufS.50RdfpmDM5jifv9rlSVbBQxhr+vkbrbwlYpho8hg+mM
+[2016-04-22 22:45:12.107] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:45:12.111] [ERROR] dateFileLog - 
+[2016-04-22 22:45:12.112] [DEBUG] dateFileLog - finalMsg: '{"type":"lunch","menu":"guolan","day":1}' existed in Rule collection
+[2016-04-22 22:45:12.112] [ERROR] dateFileLog - { error_code: 19,
+  message: '\'{"type":"lunch","menu":"guolan","day":1}\' existed in Rule collection' }
+[2016-04-22 22:45:12.113] [DEBUG] dateFileLog - finalMsg: '{"type":"lunch","menu":"guolan","day":1}' existed in Rule collection
+[2016-04-22 22:45:12.120] [DEBUG] dateFileLog - POST /__api__/rule
+[2016-04-22 22:45:12.127] [DEBUG] dateFileLog - Cookies is: s:ap7GFPoWmEJMH_0gjliGYs4mKKwG8ufS.50RdfpmDM5jifv9rlSVbBQxhr+vkbrbwlYpho8hg+mM
+[2016-04-22 22:45:12.127] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:45:12.128] [DEBUG] dateFileLog - /__api__/rule [object Object]
+[2016-04-22 22:45:12.130] [DEBUG] dateFileLog - GET /__api__/rule
+[2016-04-22 22:45:55.894] [INFO] dateFileLog - User found: [object Object]
+[2016-04-22 22:45:55.895] [INFO] dateFileLog - user admin logon.
+[2016-04-22 22:45:55.899] [DEBUG] dateFileLog - POST /__api__/logon
+[2016-04-22 22:45:55.902] [DEBUG] dateFileLog - Cookies is: s:4TtBJ4oQNeU-GyXVvn24LKgDemXRDd8p.jWRD1Ck2jEkikIzjZBIuBrZCza68xW0ap3PBVd49m4U
+[2016-04-22 22:45:55.902] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:45:55.908] [DEBUG] dateFileLog - { result: { ok: 1, n: 1 },
+  ops: 
+   [ { vender: 'guolan',
+       dish: 'dish2',
+       rate: [Object],
+       _id: 571a39237125e9f711681694 } ],
+  insertedCount: 1,
+  insertedIds: [ [ '0' ], 571a39237125e9f711681694 ] }
+[2016-04-22 22:45:55.910] [DEBUG] dateFileLog - POST /__api__/menu
+[2016-04-22 22:45:55.914] [DEBUG] dateFileLog - Cookies is: s:4TtBJ4oQNeU-GyXVvn24LKgDemXRDd8p.jWRD1Ck2jEkikIzjZBIuBrZCza68xW0ap3PBVd49m4U
+[2016-04-22 22:45:55.914] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:45:55.917] [DEBUG] dateFileLog - { result: { ok: 1, n: 1 },
+  ops: 
+   [ { menu: 'guolan',
+       day: 2,
+       type: 'lunch',
+       _id: 571a39237125e9f711681695 } ],
+  insertedCount: 1,
+  insertedIds: [ [ '0' ], 571a39237125e9f711681695 ] }
+[2016-04-22 22:45:55.918] [DEBUG] dateFileLog - POST /__api__/rule
+[2016-04-22 22:45:55.921] [DEBUG] dateFileLog - Cookies is: s:4TtBJ4oQNeU-GyXVvn24LKgDemXRDd8p.jWRD1Ck2jEkikIzjZBIuBrZCza68xW0ap3PBVd49m4U
+[2016-04-22 22:45:55.921] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:45:55.922] [DEBUG] dateFileLog - /__api__/rule [object Object],[object Object]
+[2016-04-22 22:45:55.923] [DEBUG] dateFileLog - GET /__api__/rule
+[2016-04-22 22:50:49.858] [DEBUG] dateFileLog - null
+[2016-04-22 22:50:49.860] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:49.862] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:49.862] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:49.862] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:49.862] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:50:49.862] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:50:49.862] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:49.863] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:50:49.863] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:49.863] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:49.863] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:49.863] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:49.863] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:49.863] [DEBUG] dateFileLog - [ '{1}', '{2}', '{3}' ]
+[2016-04-22 22:50:49.863] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:49.863] [DEBUG] dateFileLog - null
+[2016-04-22 22:50:49.863] [DEBUG] dateFileLog - null
+[2016-04-22 22:50:49.863] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:49.864] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:50:53.332] [INFO] dateFileLog - User found: [object Object]
+[2016-04-22 22:50:53.333] [INFO] dateFileLog - user admin logon.
+[2016-04-22 22:50:53.341] [DEBUG] dateFileLog - POST /__api__/logon
+[2016-04-22 22:50:53.348] [DEBUG] dateFileLog - Cookies is: s:keLrJZc4RLqK1SNbPM_0cE0Bg3GXLkLg.eeAHxMJDCqnboa4mK9rd8KiuPWwXRugTua+3KKysQ3Y
+[2016-04-22 22:50:53.348] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:50:53.350] [ERROR] dateFileLog - 
+[2016-04-22 22:50:53.350] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish2' existed.
+[2016-04-22 22:50:53.350] [ERROR] dateFileLog - { error_code: 9,
+  message: 'vender \'guolan\' dish \'dish2\' existed.' }
+[2016-04-22 22:50:53.360] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish2' existed.
+[2016-04-22 22:50:53.362] [DEBUG] dateFileLog - POST /__api__/menu
+[2016-04-22 22:50:53.365] [DEBUG] dateFileLog - Cookies is: s:keLrJZc4RLqK1SNbPM_0cE0Bg3GXLkLg.eeAHxMJDCqnboa4mK9rd8KiuPWwXRugTua+3KKysQ3Y
+[2016-04-22 22:50:53.365] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:50:53.369] [ERROR] dateFileLog - 
+[2016-04-22 22:50:53.369] [DEBUG] dateFileLog - finalMsg: '{"menu":"guolan","type":"lunch","day":2}' existed in Rule collection
+[2016-04-22 22:50:53.369] [ERROR] dateFileLog - { error_code: 19,
+  message: '\'{"menu":"guolan","type":"lunch","day":2}\' existed in Rule collection' }
+[2016-04-22 22:50:53.370] [DEBUG] dateFileLog - finalMsg: '{"menu":"guolan","type":"lunch","day":2}' existed in Rule collection
+[2016-04-22 22:50:53.371] [DEBUG] dateFileLog - POST /__api__/rule
+[2016-04-22 22:50:53.378] [DEBUG] dateFileLog - Cookies is: s:keLrJZc4RLqK1SNbPM_0cE0Bg3GXLkLg.eeAHxMJDCqnboa4mK9rd8KiuPWwXRugTua+3KKysQ3Y
+[2016-04-22 22:50:53.379] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:50:53.380] [DEBUG] dateFileLog - /__api__/rule [object Object],[object Object]
+[2016-04-22 22:50:53.381] [DEBUG] dateFileLog - GET /__api__/rule
+[2016-04-22 22:51:48.728] [DEBUG] dateFileLog - null
+[2016-04-22 22:51:48.730] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:48.731] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:48.731] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}', '{2}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}', '{2}', '{3}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - null
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - null
+[2016-04-22 22:51:48.732] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:48.733] [DEBUG] dateFileLog - [ '{1}' ]
+[2016-04-22 22:51:51.344] [INFO] dateFileLog - User found: [object Object]
+[2016-04-22 22:51:51.345] [INFO] dateFileLog - user admin logon.
+[2016-04-22 22:51:51.354] [DEBUG] dateFileLog - POST /__api__/logon
+[2016-04-22 22:51:51.360] [DEBUG] dateFileLog - Cookies is: s:G6gSYqkRT7d9FyA178HMOvFk8m2MqlCI.wmhipkeKvVjtjHJ4wewZwXuqszYDOygFreAD6Ggv5RQ
+[2016-04-22 22:51:51.360] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:51:51.362] [ERROR] dateFileLog - 
+[2016-04-22 22:51:51.363] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish2' existed.
+[2016-04-22 22:51:51.363] [ERROR] dateFileLog - { error_code: 9,
+  message: 'vender \'guolan\' dish \'dish2\' existed.' }
+[2016-04-22 22:51:51.371] [DEBUG] dateFileLog - finalMsg: vender 'guolan' dish 'dish2' existed.
+[2016-04-22 22:51:51.373] [DEBUG] dateFileLog - POST /__api__/menu
+[2016-04-22 22:51:51.376] [DEBUG] dateFileLog - Cookies is: s:G6gSYqkRT7d9FyA178HMOvFk8m2MqlCI.wmhipkeKvVjtjHJ4wewZwXuqszYDOygFreAD6Ggv5RQ
+[2016-04-22 22:51:51.377] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:51:51.380] [ERROR] dateFileLog - 
+[2016-04-22 22:51:51.380] [DEBUG] dateFileLog - finalMsg: '{"type":"lunch","day":2}' existed in Rule collection
+[2016-04-22 22:51:51.380] [ERROR] dateFileLog - { error_code: 19,
+  message: '\'{"type":"lunch","day":2}\' existed in Rule collection' }
+[2016-04-22 22:51:51.381] [DEBUG] dateFileLog - finalMsg: '{"type":"lunch","day":2}' existed in Rule collection
+[2016-04-22 22:51:51.381] [DEBUG] dateFileLog - POST /__api__/rule
+[2016-04-22 22:51:51.386] [DEBUG] dateFileLog - Cookies is: s:G6gSYqkRT7d9FyA178HMOvFk8m2MqlCI.wmhipkeKvVjtjHJ4wewZwXuqszYDOygFreAD6Ggv5RQ
+[2016-04-22 22:51:51.386] [DEBUG] dateFileLog - successfuly restore a admin session
+[2016-04-22 22:51:51.388] [DEBUG] dateFileLog - /__api__/rule [object Object],[object Object]
+[2016-04-22 22:51:51.390] [DEBUG] dateFileLog - GET /__api__/rule
