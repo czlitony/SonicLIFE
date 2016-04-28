@@ -21,7 +21,8 @@ var ErrorType = {
     NEED_A_ID : 17,
     HAVE_ORDERED : 18,
     RULE_EXIST : 19,
-    INVAILD_VENDOR_NAME : 20
+    INVAILD_VENDOR_NAME : 20,
+    NO_RULE : 21
 }
 
 var ErrorMap = {};
@@ -46,6 +47,7 @@ ErrorMap[ErrorType.NEED_A_ID] = {'code' : 500, 'error_code':17, 'msg' : 'Need a 
 ErrorMap[ErrorType.HAVE_ORDERED] = {'code' : 500, 'error_code':18, 'msg' : 'you have already ordered.'};
 ErrorMap[ErrorType.RULE_EXIST] = {'code' : 500, 'error_code':19, 'msg' : '\'{1}\' existed in Rule collection'};
 ErrorMap[ErrorType.INVAILD_VENDOR_NAME] = {'code' : 500, 'error_code':20, 'msg' : 'vendor name \'{1}\' not exist in menu collection'};
+ErrorMap[ErrorType.NO_RULE] = {'code' : 500, 'error_code':21, 'msg' : 'No rule for \'{1}\''};
 
 var keys = Object.keys(ErrorMap);
 keys.forEach(function(item){

@@ -55,153 +55,153 @@ router.get('/', function(req, res, next){
     })
 });
 
-router.post('/', checkUserSessionIdHandler(true), 
-    // inputChecker({'dish_id':'string','day':'number','type':'string', menu_name:'string'}, true), 
-    inputChecker({'day':'number','type':'string', 'menu':[{'name': 'string', 'dishes' : ['string']}]}, true), 
-    function(req, res, next){
+// router.post('/', checkUserSessionIdHandler(true), 
+//     // inputChecker({'dish_id':'string','day':'number','type':'string', menu_name:'string'}, true), 
+//     inputChecker({'day':'number','type':'string', 'menu':[{'name': 'string', 'dishes' : ['string']}]}, true), 
+//     function(req, res, next){
     
-    let body = req.body;
+//     let body = req.body;
 
-    if(body instanceof Array){
-        async.each(body, function(bodyItem, callback){
-            async.series([
-                function(callback){
-                    isExisted(bodyItem, callback);
-                }, 
-                function(callback){
-                    isIdValid(bodyItem, callback);
-                }
-            ],
-            function(err, result){
-                if(err){
-                    callback(err);
-                    return;
-                }
-                callback();
-            });
+//     if(body instanceof Array){
+//         async.each(body, function(bodyItem, callback){
+//             async.series([
+//                 function(callback){
+//                     isExisted(bodyItem, callback);
+//                 }, 
+//                 function(callback){
+//                     isIdValid(bodyItem, callback);
+//                 }
+//             ],
+//             function(err, result){
+//                 if(err){
+//                     callback(err);
+//                     return;
+//                 }
+//                 callback();
+//             });
             
-        }, function(err, result){
-            if(err){
-                next(err);
-                return;
-            }
-            insert(body);
-        });
-    }else{
-        async.series([
-            function(callback){
-                isExisted(body, callback);
-                // callback();
-            }, 
-            function(callback){
-                // isIdValid(body, callback);
-                callback();
-            }, 
-            function(callback){
-                insert(body, callback);
-            }
-        ],
-        function(err, result){
-            if(err){
-                next(err);
-                return;
-            }
-        });
-    }
+//         }, function(err, result){
+//             if(err){
+//                 next(err);
+//                 return;
+//             }
+//             insert(body);
+//         });
+//     }else{
+//         async.series([
+//             function(callback){
+//                 isExisted(body, callback);
+//                 // callback();
+//             }, 
+//             function(callback){
+//                 // isIdValid(body, callback);
+//                 callback();
+//             }, 
+//             function(callback){
+//                 insert(body, callback);
+//             }
+//         ],
+//         function(err, result){
+//             if(err){
+//                 next(err);
+//                 return;
+//             }
+//         });
+//     }
 
-    function insert(body, callback){
-        // let promise_result = db.insert('schedule', body);
+//     function insert(body, callback){
+//         // let promise_result = db.insert('schedule', body);
 
-        // promise_result.then(function(result, err){
-        //     if(err){
-        //         let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(schedule)', err.message);
-        //         logger.error(err.message);
-        //         next(new_err);
-        //         return;
-        //     }
-        //     logger.debug(result);
-        //     res.status(200).json(result['ops']);
-        // });
+//         // promise_result.then(function(result, err){
+//         //     if(err){
+//         //         let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(schedule)', err.message);
+//         //         logger.error(err.message);
+//         //         next(new_err);
+//         //         return;
+//         //     }
+//         //     logger.debug(result);
+//         //     res.status(200).json(result['ops']);
+//         // });
 
-        let s = new Schedule();
-        let promise = s.insert(body);
-        promise.then(function(val){
-            res.status(200).json(val);
-            callback();
-        }).catch(function(err){
-            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(schedule)', err.message);
-            logger.error(err.message);
-            callback(new_err);
-            return;
-        })
-    }
+//         let s = new Schedule();
+//         let promise = s.insert(body);
+//         promise.then(function(val){
+//             res.status(200).json(val);
+//             callback();
+//         }).catch(function(err){
+//             let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'INSERT(schedule)', err.message);
+//             logger.error(err.message);
+//             callback(new_err);
+//             return;
+//         })
+//     }
 
-    function isIdValid(item, callback){
-        let data = {'_id' : ObjectID.createFromHexString(item['dish_id'])};
-        db.find('menu', data).toArray(function(error, docments){
-            if(error){
-                let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(menu)', error.message);
-                logger.error(error.message);
-                callback(new_err);
-                return;
-            }
+//     function isIdValid(item, callback){
+//         let data = {'_id' : ObjectID.createFromHexString(item['dish_id'])};
+//         db.find('menu', data).toArray(function(error, docments){
+//             if(error){
+//                 let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(menu)', error.message);
+//                 logger.error(error.message);
+//                 callback(new_err);
+//                 return;
+//             }
 
-            if(docments.length != 1){
-                let error = new APIError(ErrorType.INVAILD_MENU_ID, item['dish_id']);
-                logger.error(error.message);
-                callback(error);
-                return;
-            }
-            callback();
-        }); 
-    }
+//             if(docments.length != 1){
+//                 let error = new APIError(ErrorType.INVAILD_MENU_ID, item['dish_id']);
+//                 logger.error(error.message);
+//                 callback(error);
+//                 return;
+//             }
+//             callback();
+//         }); 
+//     }
 
-    function isExisted(body, callback){
-        let data = {};
-        // data['dish_id'] = body['dish_id'];
-        data['day'] = body['day'];
-        data['type'] = body['type'];
-        // data['menu_name'] = body['menu_name'];
+//     function isExisted(body, callback){
+//         let data = {};
+//         // data['dish_id'] = body['dish_id'];
+//         data['day'] = body['day'];
+//         data['type'] = body['type'];
+//         // data['menu_name'] = body['menu_name'];
         
-        if(data['day'] > 7 || data['day'] < 1){
-            let error = new APIError(ErrorType.TYPE_ILLEGAL, 'day', 'Number');
-            logger.error(error.toJSON());
-            callback(error);
-            return;
-        }
+//         if(data['day'] > 7 || data['day'] < 1){
+//             let error = new APIError(ErrorType.TYPE_ILLEGAL, 'day', 'Number');
+//             logger.error(error.toJSON());
+//             callback(error);
+//             return;
+//         }
 
-        let s = new Schedule();
-        let promise = s.find(data);
+//         let s = new Schedule();
+//         let promise = s.find(data);
 
-        promise.then(function(val){
-            res.status(200).json(val);
-            callback();
-        }).catch(function(err){
-            let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(schedule)', err.message);
-            logger.error(err.message);
-            callback(new_err);
-            return;
-        });
+//         promise.then(function(val){
+//             res.status(200).json(val);
+//             callback();
+//         }).catch(function(err){
+//             let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(schedule)', err.message);
+//             logger.error(err.message);
+//             callback(new_err);
+//             return;
+//         });
 
-        // db.find('schedule', data).toArray(function(error, docments){
-        //     if(error){
-        //         let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(schedule)', error.message);
-        //         logger.error(error.message);
-        //         callback(new_err);
-        //         return;
-        //     }
+//         // db.find('schedule', data).toArray(function(error, docments){
+//         //     if(error){
+//         //         let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'FIND(schedule)', error.message);
+//         //         logger.error(error.message);
+//         //         callback(new_err);
+//         //         return;
+//         //     }
 
-        //     if(docments.length >= 1){
-        //         let error = new APIError(ErrorType.SCHEDULE_EXISTED, body['dish_id'], body['day'], body['type']);
-        //         logger.error(error.message);
-        //         callback(error);
-        //         return;
-        //     }
-        //     callback();
-        // });    
-    }
+//         //     if(docments.length >= 1){
+//         //         let error = new APIError(ErrorType.SCHEDULE_EXISTED, body['dish_id'], body['day'], body['type']);
+//         //         logger.error(error.message);
+//         //         callback(error);
+//         //         return;
+//         //     }
+//         //     callback();
+//         // });    
+//     }
 
-});
+// });
 
 router.delete('/', checkUserSessionIdHandler(true), inputChecker({'schedule_id':['string']}, true), function(req, res, next){
     let delete_list = req.body['schedule_id'];
@@ -235,61 +235,61 @@ router.delete('/', checkUserSessionIdHandler(true), inputChecker({'schedule_id':
         });
 });
 
-router.put('/', 
-            checkUserSessionIdHandler(true), 
-            inputChecker({'_id':'string', 'dish_id':'string','day':'number', 'type':'string'}, false), 
-            function(req, res, next){
-    if(!req.body['_id']){
-        let error = new APIError(ErrorType.NEED_A_ID);
-        logger.error(error.message);
-        next(error);
-        return;
-    }
+// router.put('/', 
+//             checkUserSessionIdHandler(true), 
+//             inputChecker({'_id':'string', 'dish_id':'string','day':'number', 'type':'string'}, false), 
+//             function(req, res, next){
+//     if(!req.body['_id']){
+//         let error = new APIError(ErrorType.NEED_A_ID);
+//         logger.error(error.message);
+//         next(error);
+//         return;
+//     }
 
-    if(data['day'] > 7 || data['day'] < 1){
-        let error = new APIError(ErrorType.TYPE_ILLEGAL, 'day', 'Number');
-        logger.error(error.toJSON());
-        callback(error);
-        return;
-    }
+//     if(data['day'] > 7 || data['day'] < 1){
+//         let error = new APIError(ErrorType.TYPE_ILLEGAL, 'day', 'Number');
+//         logger.error(error.toJSON());
+//         callback(error);
+//         return;
+//     }
 
-    // let selector = {'_id' : ObjectID.createFromHexString(req.body['_id'])};
-    try{
-        var selector = {'_id' : ObjectID.createFromHexString(req.body['_id'])}
-    }catch(e){
-        let error = new APIError(ErrorType.CAN_NOT_CREATE_OBJECTID, req.body['_id']);
-        logger.error(error.message);
-        next(error);
-        return;
-    }
+//     // let selector = {'_id' : ObjectID.createFromHexString(req.body['_id'])};
+//     try{
+//         var selector = {'_id' : ObjectID.createFromHexString(req.body['_id'])}
+//     }catch(e){
+//         let error = new APIError(ErrorType.CAN_NOT_CREATE_OBJECTID, req.body['_id']);
+//         logger.error(error.message);
+//         next(error);
+//         return;
+//     }
 
-    let target = {};
-    if(req.body['dish_id']){
-        target['dish_id'] = req.body['dish_id'];
-    }
+//     let target = {};
+//     if(req.body['dish_id']){
+//         target['dish_id'] = req.body['dish_id'];
+//     }
 
-    if(req.body['day']){
-        target['day'] = req.body['day'];
-    }
+//     if(req.body['day']){
+//         target['day'] = req.body['day'];
+//     }
 
-    if(req.body['type']){
-        target['type'] = req.body['type'];
-    }
+//     if(req.body['type']){
+//         target['type'] = req.body['type'];
+//     }
 
-    db.update('schedule', selector, {'$set': target}, {})
-        .then(function(update_result, error){
-            if(error){
-                let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'UPDATE(schedule)', error.message);
-                logger.error(error.message);
-                next(new_err);
-                return;
-            }
-            logger.debug(update_result);
-            res.sendStatus(200);
-        });
+//     db.update('schedule', selector, {'$set': target}, {})
+//         .then(function(update_result, error){
+//             if(error){
+//                 let new_err = new APIError(ErrorType.DB_OPERATE_FAIL, 'UPDATE(schedule)', error.message);
+//                 logger.error(error.message);
+//                 next(new_err);
+//                 return;
+//             }
+//             logger.debug(update_result);
+//             res.sendStatus(200);
+//         });
 
 
-    res.sendStatus(200);
-});
+//     res.sendStatus(200);
+// });
 
 module.exports = router;

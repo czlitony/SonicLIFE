@@ -48,5 +48,18 @@ Base.prototype.find = function(selector, skip, limit){
 }
 
 Base.prototype.insert = function(obj){
+    let inst = this;
+    let promise = new Promise(function(resolve, reject){
+        let promise_result = db.insert(inst.collection_name, obj);
 
+        //FIXME: the input sequence is different with the offical document.
+        //Offical docs: function(err, result)
+        //Actual: function(result, err)
+        promise_result.then(function(result){
+            resolve(result['ops']);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+    return promise;
 }

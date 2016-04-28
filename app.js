@@ -15,6 +15,8 @@ var session = require('express-session');
 var APIError = require('./routes/error').APIError;
 var ErrorType = require('./routes/error').ErrorType;
 
+var Schedule = require('./routes/models/schedule_model').Schedule;
+
 var app = express();
 log.use(app); 
 
@@ -55,5 +57,27 @@ app.use(function(err, req, res, next) {
     }
 });
 
+var today = null;
+function scheduleSpawn(){
+    let date = new Date();
+
+    if(today == date.getDay()){
+        log.logger.debug("Have generate schedule for today, skip...");
+        return;
+    }else{
+        let s = new Schedule();
+        s.generate(date.getDay(),'lunch').then(function(val){
+            log.logger.debug("Spawn schedule: " + JSON.stringify(val));
+            today = date.getDay();
+        }).catch(function(err){
+            //Can't handle the self defined Error type here.
+            log.logger.error("Spawn schedule error: " + err.message);
+        });
+    }
+}
+
+//Check every 1 hour
+setInterval(scheduleSpawn, 1000*60*60);
+// setInterval(scheduleSpawn, 1000*10);
 
 module.exports = app;

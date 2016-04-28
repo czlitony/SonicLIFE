@@ -95,11 +95,33 @@ if __name__ == '__main__':
                             method = 'POST') 
     print("RESPONSE: ", resp.body)
 
+
+
     resp = HTTPSender.send(BASE_PATH + '/rule', 
                             values = {
                                         'menu' : 'guolan',
                                         'type' : 'lunch',
-                                        'day' : 2
+                                        'day' : 5
+                                    }, 
+                            header={'cookie':session},
+                            method = 'POST') 
+    print("RESPONSE: ", resp.body)
+
+    resp = HTTPSender.send(BASE_PATH + '/rule', 
+                            values = {
+                                        'menu' : 'guolan',
+                                        'type' : 'supper',
+                                        'day' : 5
+                                    }, 
+                            header={'cookie':session},
+                            method = 'POST') 
+    print("RESPONSE: ", resp.body)
+
+    resp = HTTPSender.send(BASE_PATH + '/rule', 
+                            values = {
+                                        'menu' : 'guolan',
+                                        'type' : 'breakfast',
+                                        'day' : 5
                                     }, 
                             header={'cookie':session},
                             method = 'POST') 
