@@ -18,9 +18,9 @@
 
 ~~~
 {
-    "authenticated":true,
-    "role":"admin",
-    "username":"admin"
+  "authenticated": true,
+  "role": "admin",
+  "username": "admin"
 }
 ~~~
 
@@ -155,16 +155,18 @@ Pharse 2
 
 ~~~
 {
-    menu : [
-        {
-            name : menu name,
-            dishes : [
-                id1, id2...
-            ]
-        }
-    ],
-    type : lunch,
-    day : 1
+  "menu": [
+    {
+      "name": "menu name",
+      "dishes": [
+        "id1",
+        "id2",
+        ....
+      ]
+    }
+  ],
+  "type": "lunch",
+  "day": 1
 }
 ~~~
 
@@ -174,17 +176,18 @@ Pharse 2
 
 ~~~
 [
-    {
-        "_id":"571a3698899fcd2d11116a4a",
-        "type":"lunch",
-        "day":1,"menu":"guolan"
-    },
-    {
-        "_id":"571a39237125e9f711681695",
-        "menu":"guolan",
-        "day":2,
-        "type":"lunch"
-    }
+  {
+    "_id": "571a3698899fcd2d11116a4a",
+    "type": "lunch",
+    "day": 1,
+    "menu": "guolan"
+  },
+  {
+    "_id": "571a39237125e9f711681695",
+    "menu": "guolan",
+    "day": 2,
+    "type": "lunch"
+  }
 ]
 ~~~
 
@@ -222,6 +225,42 @@ ALL the element is optional.
 ### OUTPUT
 
 * status 200
+
+# Schedule API
+
+## GET /\_\_api\_\_/schedule
+
+### OUTPUT
+
+~~~
+{
+  "_id": "572238f609777fe25387f4ae",
+  "time": "2016-04-28T16:23:18.907Z",
+  "day": 5,
+  "type": "breakfast",
+  "menu": [
+    {
+      "_id": "571a3223cbdf9e7f0f547f0a",
+      "vender": "guolan",
+      "dish": "dish1",
+      "rate": {
+        "times": 0,
+        "result": 0
+      }
+    },
+    {
+      "_id": "571a39237125e9f711681694",
+      "vender": "guolan",
+      "dish": "dish2",
+      "rate": {
+        "times": 0,
+        "result": 0
+      }
+    }
+  ]
+}
+~~~
+
 
 # Comment API
 
