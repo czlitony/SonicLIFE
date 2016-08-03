@@ -108,12 +108,13 @@ function ldapAuthenticate(req, res, next){
 }
 
 var authenticate = localAuthenticate;
+
 console.log('ENV USE_LDAP '+process.env.USE_LDAP);
 if(process.env.USE_LDAP == 1){
     console.log('USE LDAP');
     authenticate = ldapAuthenticate;
 }
-
+// authenticate = ldapAuthenticate;
 router.post('/', inputChecker({'username':'string', 'password':'string'}, true), authenticate);
 
 router.get('/', checkUserSessionIdHandler(false), function(req, res, next) {

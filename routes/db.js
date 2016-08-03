@@ -80,6 +80,7 @@ DataBase.prototype.remove = function(collection, selector, options){
 var dataBase = new DataBase();
 
 module.exports = dataBase;
+
 // Use connect method to connect to the Server
 
 // function test() {

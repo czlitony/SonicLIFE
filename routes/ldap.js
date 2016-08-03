@@ -9,7 +9,7 @@ var config = {
   debug: false
 },
 username = 'shgao',
-password = '#gs198667'
+password = '#gs198669'
 
 function authenticate(username, password){
   lib.verifyUser(config, username, password, function(err, data){
