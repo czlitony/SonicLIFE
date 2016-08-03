@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en" ng-app="dinnerBookingApp">
+<head>
+  <meta charset="utf-8">
+  <title>订餐</title>
+  <!--<link href="css/bootstrap.css" rel="stylesheet">-->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/dinnerBooking.css">
+
+  <!--<script src="js/jquery.js"></script>-->
+  <script src="js/jquery-3.1.0.min.js"></script>
+  <script src="js/angular.js"></script>
+  <script src="js/angular-route.js"></script>
+  <script src="js/angular-resource.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+
+  <script src="js/dinnerBooking.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/services.js"></script>
+                  
+  <script type="text/javascript">
+    angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
+  </script>
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="col-md-2 column">
+		</div>
+
+    <div class="col-md-8 column">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">SonicWeb</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="loginControl">
+        <ul class="nav navbar-nav navbar-right">
+          <li ng-click="modal.show=true"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div>
+
+    <div class="col-md-2 column">
+		</div>
+  </nav>
+
+  <div class="row clearfix">
+    <div class="col-md-2 column">
+		</div>
+		
+    <div class="col-md-8 column">
+      <div class="tabbable" id="tabs-409766">
+        <ul class="nav nav-tabs">
+          <li>
+            <a href="#panel-vendor" data-toggle="tab">商家管理</a>
+          </li>
+          <li class="active">
+            <a href="#panel-menu" data-toggle="tab">菜单管理</a>
+          </li>
+          <li>
+            <a href="#panel-order" data-toggle="tab">订单管理</a>
+          </li>
+          <li>
+            <a href="#panel-schedule" data-toggle="tab">一周食谱</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade" id="panel-vendor">
+
+            <button type="button" class="btn btn-default">添加</button>
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>商家名称</th>
+                  <th>联系人</th>
+                  <th>联系电话</th>
+                  <th>店铺地址</th>
+                  <th>店铺简介</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>国兰</td>
+                  <td>XX</td>
+                  <td>123123123123</td>
+                  <td>杨浦区国泰路</td>
+                  <td>**********</td>
+                  <td>
+                    <!--<button type="button" class="btn btn-default">编辑</button>-->
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" 
+                      data-target="#vendorModal">
+                      编辑
+                    </button>
+                    
+                  </td>
+                </tr>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="tab-pane fade in active" id="panel-menu">
+            <div class="btn-group">
+              <button class="btn btn-default">商家</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="#">池上</a>
+                </li>
+                <li>
+                  <a href="#">国兰</a>
+                </li>
+                <li>
+                  <a href="#">阿牛哥</a>
+                </li>
+              </ul>
+            </div>
+
+            <button type="button" class="btn btn-default">添加</button>
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>名称</th>
+                  <th>图片</th>
+                  <th>添加时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>台式酱鸭饭</td>
+                  <td>N/A</td>
+                  <td>01/08/2016</td>
+                  <td>
+                    <!--<button type="button" class="btn btn-default">编辑</button>-->
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" 
+                      data-target="#menuModal">
+                      编辑
+                    </button>
+                    
+                  </td>
+                </tr>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-pane fade" id="panel-order">
+            <p>
+              Howdy, I'm in Section 2.
+            </p>
+          </div>
+          <div class="tab-pane fade" id="panel-schedule">
+            <p>
+              Howdy, I'm in Section 3.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="col-md-2 column">
+		</div>
+  </div>
+
+  <div class="view-container">
+    <div ng-view class="view-frame"></div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="vendorModal" tabindex="-1" role="dialog" 
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" 
+                data-dismiss="modal" aria-hidden="true">
+                    &times;
+              </button>
+              <h4 class="modal-title" id="myModalLabel">
+                编辑
+              </h4>
+          </div>
+          <div class="modal-body">
+              在这里添加一些文本1
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default" 
+                data-dismiss="modal">关闭
+              </button>
+              <button type="button" class="btn btn-primary">
+                提交更改
+              </button>
+          </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="menuModal" tabindex="-1" role="dialog" 
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" 
+                data-dismiss="modal" aria-hidden="true">
+                    &times;
+              </button>
+              <h4 class="modal-title" id="myModalLabel">
+                编辑
+              </h4>
+          </div>
+          <div class="modal-body">
+              在这里添加一些文本
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default" 
+                data-dismiss="modal">关闭
+              </button>
+              <button type="button" class="btn btn-primary">
+                提交更改
+              </button>
+          </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+  </div>
+
+</body>
+</html>

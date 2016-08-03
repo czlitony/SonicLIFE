@@ -1,12 +1,12 @@
 'use strict';
 
-var dinnerBookingApp = angular.module('dinnerBookingApp', [
+var managementApp = angular.module('managementApp', [
   'ngRoute',
-  'menuScheduleControllers',
-  'menuScheduleServices'
+  'managementControllers',
+  'managementServices'
 ]);
 
-dinnerBookingApp.config(['$routeProvider', '$locationProvider',
+managementApp.config(['$routeProvider', '$locationProvider',
                 function ($routeProvider, $locationProvider) {
                   $routeProvider
                     // .when('/', {
@@ -16,6 +16,10 @@ dinnerBookingApp.config(['$routeProvider', '$locationProvider',
                     .when('/', {
                       templateUrl : 'view/login.html',
                       controller : 'loginControl'
+                    })
+                    .when('/management', {
+                      templateUrl : 'view/management.html',
+                      // controller : 'loginControl'
                     })
                     .otherwise({
                       redirectTo : '/'

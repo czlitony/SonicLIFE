@@ -1,21 +1,21 @@
 'use strict';
 
-var menuScheduleServices = angular.module('menuScheduleServices', ['ngResource']);
+var managementServices = angular.module('managementServices', ['ngResource']);
 
-menuScheduleServices.factory('menuSchedule', 
+managementServices.factory('menuSchedule', 
                              ['$resource', function ($resource) {
                                return $resource('__api__/schedule/:menuScheduleID');
                              }]);
 
-menuScheduleServices.factory('order', 
+managementServices.factory('order', 
                              ['$resource', function ($resource) {
                                return $resource('__api__/order/:orderID');
                              }]);
 
-menuScheduleServices.factory('login', 
+managementServices.factory('login', 
                              ['$resource', function ($resource) {
                                var ret = $resource('__api__/logon');
                                
-                               ret.loginModal = {show: false};
+                              //  ret.loginModal = {show: false};
                                return ret;
                              }]);

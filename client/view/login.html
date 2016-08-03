@@ -1,0 +1,66 @@
+<!-- Modal -->
+<!--<div class="modal fade" id="myModal" role="dialog" ng-class="{'in':modal.show,'show-modal':modal.show}">
+  <div class="modal-dialog">
+    
+    <div class="loginmodal-container">
+      <button type="button" class="close loginmodal-x" aria-label="Close" ng-click="modal.show=false">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h1>Login to Your Account</h1><br>
+      <form>
+        <input type="text" name="user" placeholder="Username" ng-model="user.name">
+        <input type="password" name="pass" placeholder="Password" ng-model="user.password">
+        <input type="submit" name="login" class="login loginmodal-submit" value="Login" ng-click="login(user)">
+      </form>
+    </div>
+    
+  </div>
+</div>-->
+
+	<div class="loginbox">
+		<div class="logo-a">
+			<a href="https://www.sonicwall.com/" title="登录">
+				<img src="images/Sonicwalllogo.png">
+			</a>
+		</div>
+		<div class="login-content">
+			<div class="loginbox-title">
+				<h3>登录</h3>
+			</div>
+			<form id="signupForm">
+        <div class="login-error"></div>
+        <div class="row">
+          <!--<label class="field">用户名</label>-->
+          <!--<input type="text" class="input-text-user input-click" name="email" id="email">-->
+          <input type="text" class="input-text-user" autocomplete="off" name="user" placeholder="Username" ng-model="user.name"/>
+        </div>
+        <div class="row">
+          <!--<label class="field">密码</label>-->
+          <!--<input type="password" class="input-text-password input-click" name="password" id="password">-->
+          <input type="password" class="input-text-password" name="pass" placeholder="Password" ng-model="user.password"/>
+        </div>
+        <div class="row btnArea">
+          <!--<a class="login-btn" id="submit" ng-click="login(user)">登录</a>-->
+          <button type="button" class="login-btn" ng-click="login(user)">登录</button>
+        </div>
+        <div class="row tips">
+          <a href="forget.jsp" class="link">忘记密码</a>
+        </div>
+			</form>
+      <p>{{test}}</p>
+		</div>
+		<div class="go-regist">
+			还没有账号？请
+			<a href="regist.jsp">立即注册</a>
+		</div>
+	</div>
+	
+  <div id="footer">
+    <div class="dblock">
+      <div class="inline-block"><img src="images/Sonicwalllogo.png"></div>
+      <div class="inline-block copyright">
+        <p><a href="#">关于我们</a> | <a href="#">微博</a> | <a href="#">隐私政策</a> | <a href="#">人员招聘</a></p>
+        <p> Copyright © 2016 SonicWALL</p>
+      </div>
+    </div>
+  </div>
