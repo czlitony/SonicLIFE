@@ -1,33 +1,40 @@
 <!doctype html>
 <html lang="en" ng-app="managementApp">
+
 <head>
-  <meta charset="utf-8">
-  <title>订餐</title>
-  <!--<link href="css/bootstrap.css" rel="stylesheet">-->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/management.css">
-  <link href="css/login.css" rel="stylesheet" type="text/css">
+    <meta charset="utf-8">
+    <title>订餐</title>
+    <!--<link href="css/bootstrap.css" rel="stylesheet">-->
+    <!--<link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/management.css">-->
+    <link href="css/login.css" rel="stylesheet" type="text/css">
 
-  <!--<script src="js/jquery.js"></script>-->
-  <script src="js/jquery-3.1.0.min.js"></script>
-  <script src="js/angular.js"></script>
-  <script src="js/angular-route.js"></script>
-  <script src="js/angular-resource.js"></script>
-  <script src="js/bootstrap.min.js"></script>
 
-  <script src="js/management.js"></script>
-  <script src="js/management_controllers.js"></script>
-  <script src="js/management_services.js"></script>
-                  
-  <script type="text/javascript">
-    angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
-  </script>
+    <!--<script src="js/jquery.js"></script>-->
+    <script src="js/jquery-3.1.0.min.js"></script>
+    <script src="js/angular.js"></script>
+    <script src="js/angular-route.js"></script>
+    <script src="js/angular-resource.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="js/management.js"></script>
+    <script src="js/management_controllers.js"></script>
+    <script src="js/management_services.js"></script>
+
+    <script type="text/javascript">
+        angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
+    </script>
 </head>
+
 <body>
 
-  <div class="view-container">
-    <div ng-view class="view-frame"></div>
-  </div>
+    <div class="view-container">
+        <div ng-view class="view-frame"></div>
+    </div>
+
 
 </body>
+
+<!-- END BODY -->
+
 </html>

@@ -81,7 +81,7 @@ class HTTPSender:
 
 if __name__ == '__main__':
 
-    resp = HTTPSender.send(BASE_PATH + '/logon', values = {'username': 'admin', 'password' : 'password'}, method = 'POST')
+    resp = HTTPSender.send(BASE_PATH + '/logon', values = {'username': 'abc', 'password' : 'abb'}, method = 'POST')
     print("RESPONSE: ", resp.body)
     session = resp.get_header_by_name('set-cookie')
     print("SESSION ", session)

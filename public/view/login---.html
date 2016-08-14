@@ -1,0 +1,38 @@
+<div class="loginbox">
+    <div class="logo">
+        <img src="images/rice.png" class="logo-image">
+    </div>
+    <div class="login-content">
+        <div class="loginbox-title">
+            <h3>登录</h3>
+        </div>
+        <form id="signupForm">
+            <div class="row">
+                <input type="text" class="input-text-user" name="user" placeholder="Username" ng-model="user.username" />
+            </div>
+            <div class="row">
+                <input type="password" class="input-text-password" name="pass" placeholder="Password" ng-model="user.password" />
+            </div>
+            <div class="row btnArea">
+                <button type="button" class="btn-primary login-btn" ng-click="login(user)">登录</button>
+            </div>
+            <div class="row tips">
+                <a href="#" class="link">忘记密码</a>
+            </div>
+        </form>
+    </div>
+    <div class="go-regist">
+        还没有账号？请
+        <a href="#">立即注册</a>
+    </div>
+</div>
+
+<div id="footer">
+    <div class="dblock">
+        <div class="inline-block"><img src="images/Sonicwalllogo.png"></div>
+        <div class="inline-block copyright">
+            <p><a href="#">关于我们</a> | <a href="#">微博</a> | <a href="#">隐私政策</a> | <a href="#">人员招聘</a></p>
+            <p> Copyright © 2016 SonicWALL</p>
+        </div>
+    </div>
+</div>
