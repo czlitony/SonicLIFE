@@ -71,7 +71,35 @@ app.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('management', {
             url: '/management',
-            templateUrl: 'view/management.html',
+            // templateUrl: 'view/management.html',
+            controller: '',
+            views: { //是指ng-view
+
+                // 模板
+                '': { templateUrl: 'view/management.html' },
+
+                // 名称为columnOne的ng-view,viewName@stateName
+                'sidebar@management': {
+                    templateUrl: 'view/mgmt_sidebar.html',
+                    controller: ''
+                },
+
+                // 名称为columnTow的ng-view,viewName@stateName
+                'menu@management': {
+                    templateUrl: 'view/mgmt_menu.html',
+                    controller: ''
+                }
+            }
+
+        })
+        .state('management.mgmt_sidebar', {
+            url: '/sidebar',
+            templateUrl: 'view/mgmt_sidebar.html',
+            controller: ''
+        })
+        .state('management.mgmt_menu', {
+            url: '/menu',
+            templateUrl: 'view/mgmt_menu.html',
             controller: ''
         })
 });

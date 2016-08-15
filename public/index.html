@@ -4,6 +4,9 @@
 <head>
     <meta charset="utf-8">
     <title>订餐</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
     <!--<link href="css/bootstrap.css" rel="stylesheet">-->
     <!--<link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/management.css">-->
@@ -33,11 +36,11 @@
 
     <!-- BEGIN PAGE LEVEL STYLES -->
 
-    <!--start index news-->
+    <!--start home news-->
 
     <link href="media/css/news.css" rel="stylesheet" type="text/css" />
 
-    <!--end index news-->
+    <!--end home news-->
 
     <!--start login-->
 
@@ -68,22 +71,8 @@
 
     <div ui-view></div>
 
-    <!--<script src="js/jquery.js"></script>-->
-    <script src="js/jquery-3.1.0.min.js"></script>
-    <script src="js/angular.js"></script>
-    <script src="js/angular-ui-router.min.js"></script>
-    <script src="js/angular-resource.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-
-    <script src="js/app.js"></script>
-    <script src="js/controllers.js"></script>
-    <script src="js/services.js"></script>
-
-    <script type="text/javascript">
-        angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
-    </script>
-
     <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+
     <!-- BEGIN CORE PLUGINS -->
 
     <script src="media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
@@ -91,6 +80,7 @@
     <script src="media/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
 
     <!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+
     <script src="media/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
 
     <script src="media/js/bootstrap.min.js" type="text/javascript"></script>
@@ -113,19 +103,11 @@
 
     <!-- END CORE PLUGINS -->
 
-    <!-- BEGIN PAGE LEVEL SCRIPTS -->
-
-    <script src="media/js/app.js" type="text/javascript"></script>
-
-    <!--start index-->
-
-    <script src="media/js/index.js" type="text/javascript"></script>
-
-    <!--end index-->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
 
     <!--start login-->
 
-    <script src="media/js/login.js" type="text/javascript"></script>
+    <script src="media/js/jquery.validate.min.js" type="text/javascript"></script>
 
     <!--end login-->
 
@@ -139,19 +121,50 @@
 
     <!--end management-->
 
-    <!-- END PAGE LEVEL SCRIPTS -->
+    <!-- END PAGE LEVEL PLUGINS -->
+
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+
+    <script src="media/js/app.js"></script>
+
+    <!--start login-->
+
+    <script src="media/js/login.js" type="text/javascript"></script>
+
+    <!--end login-->
+
+    <!--start management-->
+
+    <script src="media/js/table-editable.js"></script>
+
+    <!--end management-->
 
     <script>
         jQuery(document).ready(function() {
 
             App.init();
 
-            // Login.init();
+            Login.init();
 
-            // TableEditable.init();
+            TableEditable.init();
 
         });
     </script>
+
+    <!--<script src="js/jquery.js"></script>-->
+    <!--<script src="js/jquery-3.1.0.min.js"></script>-->
+    <script src="js/angular.js"></script>
+    <script src="js/angular-ui-router.min.js"></script>
+    <script src="js/angular-resource.js"></script>
+    <!--<script src="js/bootstrap.min.js"></script>-->
+
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/services.js"></script>
+
+    <!--<script type="text/javascript">
+        angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
+    </script>-->
 
     <!-- END JAVASCRIPTS -->
 
@@ -170,6 +183,7 @@
             s.parentNode.insertBefore(ga, s);
         })();
     </script>
+
 </body>
 
 </html>
