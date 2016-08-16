@@ -72,34 +72,50 @@ app.config(function($stateProvider, $urlRouterProvider) {
         .state('management', {
             url: '/management',
             // templateUrl: 'view/management.html',
-            controller: '',
-            views: { //是指ng-view
-
-                // 模板
-                '': { templateUrl: 'view/management.html' },
-
-                // 名称为columnOne的ng-view,viewName@stateName
+            // controller: '',
+            views: {
+                '': {
+                    templateUrl: 'view/management.html',
+                    controller: ''
+                },
+                'header@management': {
+                    url: '/header',
+                    templateUrl: 'view/header.html',
+                    controller: ''
+                },
                 'sidebar@management': {
+                    url: '/sidebar',
                     templateUrl: 'view/mgmt_sidebar.html',
                     controller: ''
                 },
-
-                // 名称为columnTow的ng-view,viewName@stateName
-                'menu@management': {
-                    templateUrl: 'view/mgmt_menu.html',
+                'content@management': {
+                    template: '<div ui-view></div>'
+                },
+                'footer@management': {
+                    url: '/footer',
+                    templateUrl: 'view/footer.html',
                     controller: ''
                 }
             }
-
         })
-        .state('management.mgmt_sidebar', {
-            url: '/sidebar',
-            templateUrl: 'view/mgmt_sidebar.html',
+        .state('management.menu', {
+            url: '/management/menu',
+            templateUrl: 'view/mgmt_menu.html',
             controller: ''
         })
-        .state('management.mgmt_menu', {
-            url: '/menu',
-            templateUrl: 'view/mgmt_menu.html',
+        .state('management.order', {
+            url: '/management/order',
+            templateUrl: 'view/mgmt_order.html',
+            controller: ''
+        })
+        .state('management.schedule', {
+            url: '/management/schedule',
+            templateUrl: 'view/mgmt_schedule.html',
+            controller: ''
+        })
+        .state('management.status', {
+            url: '/management/status',
+            templateUrl: 'view/mgmt_status.html',
             controller: ''
         })
 });
